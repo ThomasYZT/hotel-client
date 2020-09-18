@@ -19,3 +19,23 @@ html,body{
     background: rgba(0,0,0, .3);
   }
 }
+
+.normal-width-btn {
+  width: 108px;
+  margin-right: 10px;
+  &:last-child {
+    margin: 0;
+  }
+}
+
+//dialog
+.dialog-footer {
+  @include flex_layout(row, space-around, center);
+
+  .dialog-cancel-btn {
+    width: 40%;
+  }
+  .dialog-confirm-btn {
+    width: 40%;
+  }
+}

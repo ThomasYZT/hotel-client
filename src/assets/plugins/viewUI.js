@@ -11,7 +11,11 @@ import {
   Message,
   Menu,
   MenuItem,
-  Submenu
+  Submenu,
+  Breadcrumb,
+  BreadcrumbItem,
+  Select,
+  Option
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';
@@ -25,6 +29,8 @@ export default {
     Vue.component(FormItem.name, FormItem);
     Vue.component(Menu.name, Menu);
     Vue.component(Submenu.name, Submenu);
+    Vue.component(Select.name, Select);
+    Vue.component(Option.name, Option);
 
     Vue.component('iForm', Form);
     Vue.component('iInput', Input);
@@ -32,8 +38,11 @@ export default {
     Vue.component('iCheckbox', Checkbox);
     Vue.component('iMenuItem', MenuItem);
     Vue.component('Message', Message);
-
-    Vue.prototype.$Message = Message;
+    Vue.component('iBreadcrumb', Breadcrumb);
+    Vue.component('iBreadcrumbItem', BreadcrumbItem);
+    Vue.component('iSelect', Select);
+    Vue.component('iOption', Option);
+    Vue.prototype.$message = Message;
 
     Message.config({
       top: 70,

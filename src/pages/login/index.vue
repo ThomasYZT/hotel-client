@@ -153,21 +153,23 @@ export default {
     },
     formSubmit (formName) {
       if (formName === 'loginForm') {
+        // 登录
         this.login({
           tip: false,
           ...this.loginFormData
         }).then(() => {
-          this.$Message.success('登录成功');
+          this.$message.success('登录成功');
         }).catch(({ err, type }) => {
           if (type === 'loginError') {
-            this.$Message.error(`登录失败：${err.msg || JSON.stringify(err)}`);
+            this.$message.error(`登录失败：${err.msg || JSON.stringify(err)}`);
           } else if (type === 'permissionError') {
-            this.$Message.error(`获取权限失败：${err.msg || JSON.stringify(err)}`);
+            this.$message.error(`获取权限失败：${err.msg || JSON.stringify(err)}`);
           }
         }).finally(() => {
           this.isLoading = false;
         });
       } else if (formName === 'registForm') {
+        // 注册
         ajax.post('').then(res => {
 
         }).catch(() => {

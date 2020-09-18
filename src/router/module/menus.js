@@ -8,7 +8,8 @@ export default {
     meta: {
       menuName: '菜单管理',
       iconClass: '',
-      activePath: `${topName}`
+      activePath: `${topName}`,
+      isMenu: false
     },
     children: {
       // 菜单列表
@@ -17,6 +18,7 @@ export default {
         name: 'menuList',
         component: () => import('../../pages/menuManager/child/menuList.vue'),
         meta: {
+          menuName: '菜单列表',
           isMenu: false
         }
       }

@@ -5,6 +5,7 @@ import defautsDeep from 'lodash/defaultsDeep';
 import store from '../../store';
 
 const domain = 'http://139.155.42.50:8080';
+const isProduct = process.env.NODE_ENV === 'production';
 // 创建自定义axios实例
 const instance = axios.create({
   baseURL: '',
@@ -70,7 +71,9 @@ export default {
   get (apiKey, params, config = null, withRequiredParams = true, loading = true) {
     loading && store.dispatch('loading');
     let myConfig = {
-      params: {}
+      params: {
+        env: isProduct ? '' : 'test'
+      }
     };
 
     if (withRequiredParams) {
@@ -90,7 +93,7 @@ export default {
 
     return instance.get(`${domain}${apiList[apiKey]}`, myConfig).then(res => {
       if (res.code === 1) {
-        return res;
+        return res.data;
       } else {
         return Promise.reject(res);
       }

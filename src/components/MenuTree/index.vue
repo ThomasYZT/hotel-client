@@ -1,8 +1,7 @@
 <template>
   <div class="menu-tree">
-    <Menu active-name="1"
-          width="100%"
-          :accordion="false">
+    <Menu  width="100%"
+           :accordion="false">
       <template v-for="(item) in treeData">
         <menu-com :menu-data="item" :key="item.name" ></menu-com>
       </template>

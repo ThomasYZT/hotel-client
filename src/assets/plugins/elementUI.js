@@ -3,7 +3,10 @@ import {
   Checkbox,
   Table,
   TableColumn,
-  Pagination
+  Pagination,
+  Icon,
+  Tree,
+  Dialog
 } from 'element-ui';
 import '../../assets/styles/theme/elementTheme/index.scss';
 
@@ -12,5 +15,9 @@ export default {
     Vue.use(Checkbox);
     Vue.use(Table);
     Vue.use(TableColumn);
+    Vue.use(Pagination);
+    Vue.use(Icon);
+    Vue.use(Tree);
+    Vue.use(Dialog);
   }
 };
