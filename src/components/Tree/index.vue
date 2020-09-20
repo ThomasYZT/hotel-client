@@ -1,12 +1,26 @@
 <template>
   <div class="tree-wrapper">
-    <el-tree :props="props"
-             :data="data"
-             :render-content="renderContent"
-             node-key="id"
+    <el-tree :data="data"
+             :node-key="nodeKey"
              default-expand-all
-             @node-click="nodeClick">
-
+             :expand-on-click-node="expandOnClickNode">
+      <span class="tree-node" slot-scope="{ node, data }">
+        <span>{{ node.label }}</span>
+        <span>
+          <el-button
+              type="text"
+              size="mini"
+              @click="() => append(data)">
+            Append
+          </el-button>
+          <el-button
+              type="text"
+              size="mini"
+              @click="() => remove(node, data)">
+            Delete
+          </el-button>
+        </span>
+      </span>
     </el-tree>
   </div>
 </template>
@@ -21,13 +35,13 @@ export default {
         return {};
       }
     },
-    nodeClick: {
+    nodeKey: {
       type: Function,
       default () {
         return () => {};
       }
     },
-    renderContent: {
+    expandOnClickNode: {
       type: Function,
       default () {
         return () => {};

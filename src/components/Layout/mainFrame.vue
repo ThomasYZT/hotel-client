@@ -77,7 +77,7 @@ export default {
       position: relative;
       flex: 1 0;
       height: 100%;
-      width: 100%;
+      width: calc(100% - 196px);
       overflow-y: auto;
     }
   }

@@ -13,16 +13,14 @@
                   :label-width="80"
                   label-position="left">
             <div class="form-item-wrapper">
-              <FormItem label="父级菜单" prop="parentId">
-                <i-select v-model="formData.parentId" placeholder="请选择父级菜单">
-                  <i-option v-for="item in menuList" :value="item.id" :key="item.id">{{ item.menuName }}</i-option>
-                </i-select>
-              </FormItem>
               <FormItem label="菜单名称" prop="menuName">
                 <i-input type="text" placeholder="菜单名称" v-model="formData.menuName" />
               </FormItem>
               <FormItem label="菜单链接" prop="url">
-                <i-input type="text" placeholder="url" v-model="formData.url" />
+                <i-input type="text" placeholder="菜单链接" v-model="formData.url" />
+              </FormItem>
+              <FormItem label="描述" prop="remark">
+                <i-input type="text" placeholder="描述" v-model="formData.remark" />
               </FormItem>
             </div>
           </i-form>
@@ -49,27 +47,20 @@ export default {
     }
   },
   data () {
-    const validateParentId = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请选择父级菜单'));
-      } else {
-        callback();
-      }
-    };
     return {
       visible: false,
       isLoading: false,
       type: '',
       editItem: {},
       formData: {
-        parentId: '0',
+        parentId: '',
         menuName: '',
-        url: ''
+        url: '',
+        remark: ''
       },
+      confirmFn: null,
+      cancelFn: null,
       formRule: {
-        parentId: [
-          { validator: validateParentId, trigger: 'blur' }
-        ],
         menuName: [
           { required: true, message: '请输入菜单名称', trigger: 'blur' }
         ],
@@ -80,42 +71,52 @@ export default {
     };
   },
   methods: {
-    show ({ type = '', item }) {
+    show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
-      if (type === 'edit') {
-        this.formData = defaultsDeep({}, item);
+      if (confirmFn) {
+        this.confirmFn = confirmFn;
       }
+      if (cancelFn) {
+        this.cancelFn = cancelFn;
+      }
+      this.formData = defaultsDeep({}, item, this.formData);
       this.type = type;
       this.visible = true;
     },
     cancel () {
+      this.cancelFn && this.cancelFn();
       this.reset();
     },
     confirm () {
       this.$refs.Form.validate(valid => {
         if (valid) {
-          this.addMenu();
+          this.submitForm();
         }
       });
     },
-    addMenu () {
-      const formData = {
-        ...this.formData
-      };
-      this.$ajax.get('menuAdd', formData, null, true, false).then(() => {
-        this.$message.success('添加成功');
+    submitForm () {
+      this.$ajax.post({
+        apiKey: this.type === 'add' ? 'menuAdd' : 'menuUpdate',
+        params: this.formData,
+        loading: false
+      }).then(() => {
+        this.$message.success(this.type === 'add' ? '添加成功' : '编辑成功');
+        this.confirmFn && this.confirmFn();
         this.reset();
       }).catch(err => {
-        this.$message.error(`添加失败${err.msg ? ': ' + err.msg : ''}`);
+        this.$message.error(`${this.type === 'add' ? '添加' : '编辑'}失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
-        parentId: '0',
+        parentId: '',
         menuName: '',
-        url: ''
+        url: '',
+        remark: ''
       };
+      this.confirmFn = null;
+      this.cancelFn = null;
       this.visible = false;
       this.editItem = {};
       this.isLoading = false;

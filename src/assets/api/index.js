@@ -31,24 +31,16 @@ instance.interceptors.response.use((res) => {
 
 export default {
   // post请求
-  post (apiKey, params, config = null, withRequiredParams = true, loading = true) {
+  post ({ apiKey, params = {}, config = null, withRequiredParams = true, loading = true }) {
     loading && store.dispatch('loading');
-
     const myConfig = {
-      params: {}
+      params: {
+        env: isProduct ? '' : 'test'
+      }
     };
 
-    // 自定义http配置
     if (config) {
       Object.assign(myConfig, config);
-    }
-
-    if (withRequiredParams) {
-      if (params) {
-        params = defautsDeep(params, store.state.commonParams);
-      } else {
-        params = store.state.commonParams;
-      }
     }
 
     const needStringify = !(myConfig.headers &&
@@ -57,7 +49,7 @@ export default {
 
     return instance.post(`${domain}${apiList[apiKey]}`, needStringify ? qs.stringify(params) : params, myConfig).then(res => {
       if (res.code === 1) {
-        return res;
+        return res.data;
       } else {
         return Promise.reject(res);
       }
@@ -68,23 +60,16 @@ export default {
     });
   },
   // get请求
-  get (apiKey, params, config = null, withRequiredParams = true, loading = true) {
+  get ({ apiKey, params = {}, config = null, withRequiredParams = true, loading = true }) {
     loading && store.dispatch('loading');
+
     let myConfig = {
       params: {
         env: isProduct ? '' : 'test'
       }
     };
 
-    if (withRequiredParams) {
-      if (params) {
-        myConfig = defautsDeep({ params: defautsDeep(params, store.state.commonParams) }, myConfig);
-      } else {
-        myConfig = defautsDeep({ params: store.state.commonParams }, myConfig);
-      }
-    } else {
-      myConfig = defautsDeep({ params: params }, myConfig);
-    }
+    myConfig = defautsDeep({ params: params }, myConfig);
 
     // 自定义http配置
     if (config) {

@@ -8,12 +8,8 @@ export const menuTableConfig = [
     label: '菜单名称'
   },
   {
-    prop: 'createTime',
-    label: '创建时间'
-  },
-  {
-    prop: 'updateTime',
-    label: '更新时间'
+    prop: 'remark',
+    label: '描述'
   },
   {
     prop: 'operate',

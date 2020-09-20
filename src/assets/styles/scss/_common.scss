@@ -5,23 +5,82 @@ html,body{
   font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Hiragino Sans GB,Microsoft Yahei,Microsoft Jhenghei,sans-serif !important;
 }
 
-.page-container {
-  height: 100%;
-  width: 100%;
-}
-
 ::-webkit-scrollbar {
   z-index: 11;
   width: 2px;
+  height: 2px;
   &-thumb {
-    border-radius: 5px;
     width: 2px;
     background: rgba(0,0,0, .3);
   }
 }
 
+//page
+.page-container {
+  padding: 10px 20px 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background-color: #FFFFFF;
+
+  .page-header {
+    @include flex_layout(row, flex-start, center);
+    height: 50px;
+    width: 100%;
+  }
+  .page-content {
+    height: calc(100% - 50px);
+    width: 100%;
+    .tool-wrapper {
+      padding-bottom: 10px;
+      width: 100%;
+    }
+  }
+}
+
+//flex-box
+.flex-box {
+  @include flex_layout(row, center, center);
+  .left-box {
+    @include flex_set(0, 1);
+    height: 100%;
+  }
+
+  .right-box {
+    @include flex_set(1, 0);
+    height: 100%;
+  }
+}
+//table
+.operate-block {
+  @include flex_layout(row, flex-start, center);
+  flex-wrap: nowrap;
+}
+.table-btn {
+  margin-right: 10px;
+}
+.filter-block {
+  margin-bottom: 10px;
+  .filter-item {
+    @include flex_layout(row, flex-start, center);
+    width: 300px;
+    margin-right: 10px;
+    .filter-label {
+      margin-right: 10px;
+      font-size: 14px;
+    }
+  }
+}
+
+//btn
 .normal-width-btn {
   width: 108px;
+  margin-right: 10px;
+  &:last-child {
+    margin: 0;
+  }
+}
+.tree-btn {
   margin-right: 10px;
   &:last-child {
     margin: 0;

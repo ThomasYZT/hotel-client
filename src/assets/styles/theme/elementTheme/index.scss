@@ -13,11 +13,18 @@
 @import "~element-ui/packages/theme-chalk/src/icon";
 @import "~element-ui/packages/theme-chalk/src/tree";
 @import "~element-ui/packages/theme-chalk/src/dialog";
+@import "~element-ui/packages/theme-chalk/src/cascader";
+@import "~element-ui/packages/theme-chalk/src/cascader-panel";
+@import "~element-ui/packages/theme-chalk/src/pagination";
 /*----------------
   自定义组件样式
 -----------------*/
 //...
 @import "./components/tree";
+
+.el-cascader-menu {
+  max-height: 200px;
+}
 
 
 

@@ -34,6 +34,12 @@ export default {
           activePath: 'agentManager'
         },
         {
+          path: '/roleManager',
+          menuName: '角色管理',
+          iconClass: 'asd',
+          activePath: 'roleManager'
+        },
+        {
           path: '/brandManager',
           menuName: '品牌管理',
           iconClass: 'asd',
@@ -44,6 +50,49 @@ export default {
           menuName: '酒店管理',
           iconClass: 'asd',
           activePath: 'hotelManager'
+        },
+
+        {
+          path: '/agreementManager',
+          menuName: '协议客户管理',
+          iconClass: 'asd',
+          activePath: 'agreementManager'
+        },
+        {
+          path: '/customerManager',
+          menuName: '客户管理',
+          iconClass: 'asd',
+          activePath: 'customerManager'
+        },
+        {
+          path: '/hotelblackListManager',
+          menuName: '酒店黑名单管理',
+          iconClass: 'asd',
+          activePath: 'hotelblackListManager'
+        },
+        {
+          path: '/hotelUserManager',
+          menuName: '酒店用户管理',
+          iconClass: 'asd',
+          activePath: 'hotelUserManager'
+        },
+        {
+          path: '/roomManager',
+          menuName: '房间管理',
+          iconClass: 'asd',
+          activePath: 'roomManager'
+        },
+        {
+          path: '/storageManager',
+          menuName: '行李寄存管理',
+          iconClass: 'asd',
+          activePath: 'storageManager'
+        },
+        {
+          path: '/vipManager',
+          menuName: '会员管理',
+          iconClass: 'asd',
+          activePath: 'vipManager'
         }
       ]
     };

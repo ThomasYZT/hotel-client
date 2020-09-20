@@ -6,9 +6,10 @@ export default {
     component: () => import('../../pages/agentManager/index.vue'),
     redirect: () => { return { name: 'agentList' }; },
     meta: {
-      iconClass: '',
       menuName: '代理商管理',
-      activePath: `${topName}`
+      iconClass: '',
+      activePath: `${topName}`,
+      isMenu: false
     },
     children: {
       // 菜单列表
@@ -17,6 +18,7 @@ export default {
         name: 'agentList',
         component: () => import('../../pages/agentManager/child/agentList.vue'),
         meta: {
+          menuName: '代理商列表',
           isMenu: false
         }
       }

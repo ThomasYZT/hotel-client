@@ -2,12 +2,7 @@
   <div class="table-wrapper">
     <el-table size="medium"
               :data="data"
-              :height="height"
-              :rowKey="rowKey"
-              :treeProps="treeProps"
-              :lazy="lazy"
-              :loadFn="loadFn"
-              :indent="indent"
+              :height="hasPage && data.length > 0 ? 'calc(100% - 50px)' : '100%'"
               header-row-class-name="custom-header-row"
               header-cell-class-name="custom-header-cell"
               row-class-name="custom-row"
@@ -16,6 +11,8 @@
             :item="item"
             :name="`col${index}`">
         <el-table-column :key="index"
+                         :fixed="item.fixed"
+                         :min-width="item.minWidth"
                          :prop="item.prop"
                          :label="item.label"
                          :width="item.width || ''">
@@ -30,13 +27,12 @@
     </el-table>
 
     <div v-if="hasPage && data.length > 0" class="pagination-wrapper">
-      <el-pagination @size-change="sizeChange"
-                     @current-change="getList"
+      <el-pagination @current-change="getList"
                      :current-page.sync="curPage"
-                     :page-size.sync="pageSize"
+                     :page-size.sync="curSize"
                      :page-sizes="[10, 20, 30]"
-                     layout="全部, 页码, prev, pager, next, jumper"
-                     :total="totalCount" />
+                     :total="totalSize"
+                     layout="total, prev, pager, next"/>
     </div>
   </div>
 </template>
@@ -65,7 +61,7 @@ export default {
       type: Number,
       default: 10
     },
-    totalCount: {
+    totalSize: {
       type: Number,
       default: 0
     },
@@ -111,16 +107,27 @@ export default {
   },
   data () {
     return {
-      curPage: 1
+      curPage: 1,
+      curSize: 10
     };
   },
   methods: {
-    sizeChange (val) {
-      this.$emit('pageSize:update', val);
-    }
+
   },
   created () {
     this.getList();
+  },
+  watch: {
+    curSize: {
+      handler (val) {
+        this.$emit('pageSize:update', val);
+      }
+    },
+    curPage: {
+      handler (val) {
+        this.$emit('pageNum:update', val);
+      }
+    }
   }
 };
 </script>
@@ -129,28 +136,15 @@ export default {
 @import "~@/assets/styles/scss/base";
 .table-wrapper {
   width: 100%;
-  height: 100%;
 
   .empty-content {
+    @include flex_layout(row, center, center);
     width: 100%;
     height: 100%;
-    @include flex_layout(row, center, center);
   }
-
-  /deep/ .custom-header-row {
-    .custom-header-cell {
-       .cell {
-        padding: 0 ;
-      }
-    }
-  }
-
-  /deep/ .custom-row {
-    .custom-cell {
-      .cell {
-        padding: 0;
-      }
-    }
+  .pagination-wrapper {
+    @include flex_layout(row, flex-start, center);
+    height: 50px;
   }
 }
 </style>

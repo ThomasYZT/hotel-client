@@ -6,9 +6,10 @@ export default {
     component: () => import('../../pages/hotelManager/index.vue'),
     redirect: () => { return { name: 'hotelList' }; },
     meta: {
-      iconClass: '',
       menuName: '酒店管理',
-      activePath: `${topName}`
+      iconClass: '',
+      activePath: `${topName}`,
+      isMenu: false
     },
     children: {
       // 菜单列表
@@ -17,6 +18,7 @@ export default {
         name: 'hotelList',
         component: () => import('../../pages/hotelManager/child/hotelList.vue'),
         meta: {
+          menuName: '酒店列表',
           isMenu: false
         }
       }

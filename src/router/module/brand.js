@@ -6,9 +6,10 @@ export default {
     component: () => import('../../pages/brandManager/index.vue'),
     redirect: () => { return { name: 'brandList' }; },
     meta: {
-      iconClass: '',
       menuName: '品牌管理',
-      activePath: `${topName}`
+      iconClass: '',
+      activePath: `${topName}`,
+      isMenu: false
     },
     children: {
       // 菜单列表
@@ -17,6 +18,7 @@ export default {
         name: 'brandList',
         component: () => import('../../pages/brandManager/child/brandList.vue'),
         meta: {
+          menuName: '品牌列表',
           isMenu: false
         }
       }

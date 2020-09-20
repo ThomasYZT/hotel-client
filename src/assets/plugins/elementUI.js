@@ -6,7 +6,8 @@ import {
   Pagination,
   Icon,
   Tree,
-  Dialog
+  Dialog,
+  Cascader
 } from 'element-ui';
 import '../../assets/styles/theme/elementTheme/index.scss';
 
@@ -19,5 +20,6 @@ export default {
     Vue.use(Icon);
     Vue.use(Tree);
     Vue.use(Dialog);
+    Vue.use(Cascader);
   }
 };

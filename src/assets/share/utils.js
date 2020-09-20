@@ -1,5 +1,5 @@
 export const arrayToTree = ({
-  data, rootId = 0, idKey = 'id', pidKey = 'parentId', childKey = 'children', childHandler = () => {}
+  data, rootId = 0, idKey = 'id', pidKey = 'parentId', childKey = 'children', nodeHandler = () => {}
 }) => {
   if (!Array.isArray(data)) return data;
 
@@ -24,7 +24,7 @@ export const arrayToTree = ({
     item.forEach(item => {
       item[childKey] = makeTree(map, item[idKey]);
       tree.push(item);
-      childHandler(item[pidKey] === rootId ? null : item, item[childKey]);
+      nodeHandler(item);
     });
 
     return tree;

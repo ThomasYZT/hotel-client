@@ -74,7 +74,7 @@ const actions = {
         password: params.password
       };
       // 登陆
-      ajax.get('userLogin', loginParams, null, true, false).then(data => {
+      ajax.get('userInfoLogin', loginParams, null, true, false).then(data => {
         dispatch('setUserInfo', data);
         params.tip && dispatch('showMessage', { type: 'success', msg: '登录成功' });
         // 获取权限

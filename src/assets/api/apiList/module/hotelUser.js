@@ -1,11 +1,12 @@
 export default {
-  module: 'user',
+  module: 'userInfo',
 
   add: '/hotelUser/add',
-  pageList: '/hotelUser/pageList',
   delete: '/hotelUser/delete',
-  get: '/hotelUser/get',
   update: '/hotelUser/update',
+  pageList: '/hotelUser/pageList',
+
+  get: '/hotelUser/get',
   login: '/hotelUser/login',
   modifyPassword: '/hotelUser/modifyPassword',
   setUserRole: '/hotelUser/setUserRole',
