@@ -34,7 +34,7 @@
                             @click="handleSubmit('loginForm')">登 陆</i-button>
                 </div>
               </TabPane>
-              <TabPane label="注 册" name="register" :disabled="isLoading">
+              <!--<TabPane label="注 册" name="register" :disabled="isLoading">
                 <div class="register-box">
                   <i-form ref="registForm"
                           :disabled="isLoading"
@@ -52,7 +52,7 @@
                   <i-button :loading="isLoading" type="primary" class="submit-btn"
                             @click="handleSubmit('registForm')">注 册</i-button>
                 </div>
-              </TabPane>
+              </TabPane>-->
             </Tabs>
           </div>
         </div>

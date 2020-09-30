@@ -68,16 +68,15 @@ export default {
     height: calc(100% - 38px);
     width: 100%;
 
-    >>> .frame-aside {
-      height: calc(100% - 38px);
-      flex: 1 0;
+    .frame-aside {
+      @include flex_set(0, 1, 196px);
+      height: 100%;
     }
 
     .router-com {
       position: relative;
-      flex: 1 0;
+      flex: 1 0 calc(100% - 196px);
       height: 100%;
-      width: calc(100% - 196px);
       overflow-y: auto;
     }
   }

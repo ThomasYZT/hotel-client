@@ -20,12 +20,12 @@ export default {
 .frame-aside {
   position: relative;
   height: 100%;
-  width: 196px;
+  width: 100%;
   background-color: $normalGreen;
   overflow: hidden;
   .menu-list {
     height: 100%;
-    width: 196px;
+    width: 100%;
     overflow-y: auto;
   }
 }
