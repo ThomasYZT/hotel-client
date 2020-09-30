@@ -9,7 +9,7 @@ export default {
       menuName: '代理商管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       // 菜单列表
@@ -19,6 +19,7 @@ export default {
         component: () => import('../../pages/agentManager/child/agentList.vue'),
         meta: {
           menuName: '代理商列表',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

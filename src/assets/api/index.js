@@ -15,7 +15,7 @@ const instance = axios.create({
   },
   headers: {
     // 设置发送内容格式
-    'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
     // 设置接受内容格式
     Accept: 'application/json'
   }
@@ -42,11 +42,7 @@ export default {
     if (config) {
       Object.assign(myConfig, config);
     }
-
-    const needStringify = !(myConfig.headers &&
-            (myConfig.headers['content-type'].includes('application/json') ||
-                myConfig.headers['content-type'].includes('multipart/form-data')));
-
+    const needStringify = myConfig.headers ? myConfig.headers['Content-Type'] !== 'application/json;charset-UTF-8' : true;
     return instance.post(`${domain}${apiList[apiKey]}`, needStringify ? qs.stringify(params) : params, myConfig).then(res => {
       if (res.code === 1) {
         return res.data;

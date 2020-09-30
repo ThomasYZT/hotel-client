@@ -1,6 +1,6 @@
 
 export default {
-  module: 'role',
+  module: 'vip',
 
   add: '/hotelVip/add',
   pageList: '/hotelVip/pageList',

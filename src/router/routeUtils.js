@@ -1,4 +1,5 @@
 import store from '../store';
+import routes from './module/index';
 
 export const nvllRouterAuth = (to) => {
   if (store.getters.userInfo && store.getters.routeInfo) {
@@ -12,8 +13,12 @@ export const nvllRouterAuth = (to) => {
   }
 };
 
-export const generateRoutes = (orgInfo) => {
+export const generateRoutes = (menuInfo) => {
+  if (menuInfo === 'all') {
+    return routes;
+  } else {
 
+  }
 };
 
 export const goRoute = (routerInfo) => {

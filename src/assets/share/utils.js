@@ -32,3 +32,14 @@ export const arrayToTree = ({
 
   return makeTree(childMap);
 };
+
+export const treeTraverse = (tree, condition) => {
+  let len = tree.length;
+  while (len--) {
+    if (condition(tree[len])) return true;
+    if (tree[len].children) {
+      if (treeTraverse(tree[len].children, condition)) return true;
+    }
+  }
+  return false;
+};

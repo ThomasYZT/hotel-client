@@ -1,20 +1,17 @@
 // import { userInfo } from '../persistence';
-import ajax from '../../assets/api';
-import router, { resetRouter } from '../../router';
 import { generateRoutes } from '../../router/routeUtils';
+import { userType, storageKey } from '../../assets/enums';
+import { resetRouter } from '../../router';
+import ajax from '../../assets/api';
 
 const state = {
-  userInfo: sessionStorage.getItem('userInfo') || null,
-  permissionInfo: null,
+  userInfo: JSON.parse(sessionStorage.getItem(storageKey.userInfo)) || null,
   routeInfo: null
 };
 
 const getters = {
   userInfo: state => {
     return state.userInfo;
-  },
-  permissionInfo: state => {
-    return state.permissionInfo;
   },
   routeInfo: state => {
     return state.routeInfo;
@@ -24,11 +21,7 @@ const getters = {
 const mutations = {
   UPDATE_USERINFO (state, data) {
     state.userInfo = data;
-    sessionStorage.setItem('userInfo', data);
-    // userInfo.set(data);
-  },
-  UPDATE_PERMISSIONINFO (state, data) {
-    state.permissionInfo = data;
+    sessionStorage.setItem(storageKey.userInfo, JSON.stringify(data));
   },
   UPDATE_ROUTEINFO (state, data) {
     state.routeInfo = data;
@@ -42,10 +35,10 @@ const actions = {
   validUserInfo ({ commit }, data) {
     // ajax.get()
   },
-  generateRouteInfo ({ commit }, orgInfo) {
+  generateRouteInfo ({ commit }, menuInfo) {
     return new Promise((resolve, reject) => {
       try {
-        const _routes = generateRoutes(orgInfo);
+        const _routes = generateRoutes(menuInfo);
         resetRouter(_routes);
         commit('UPDATE_ROUTEINFO', _routes);
         resolve(_routes[0]);
@@ -54,17 +47,23 @@ const actions = {
       }
     });
   },
-  getPermissionInfo ({ commit, dispatch }, { tip, userInfo }) {
+  getMenuList ({ commit, dispatch }, { tip, userInfo }) {
     return new Promise((resolve, reject) => {
-      ajax.get('userMenuList', {
-        hotelUserId: userInfo.id
-      }).then(data => {
-        commit('UPDATE_PERMISSIONINFO', data);
-        resolve(dispatch('generateRouteInfo', data));
-      }).catch(err => {
-        tip && dispatch('showMessage', { type: 'error', msg: '获取权限失败' });
-        reject({ type: 'permissionError', err });
-      });
+      if (userInfo.type === userType.admin) {
+        // 超级管理员
+        resolve(dispatch('generateRouteInfo', 'all'));
+      } else {
+        // 非超级管理员
+        ajax.get({
+          apiKey: 'userMenuList',
+          params: { hotelUserId: userInfo.id }
+        }).then(data => {
+          resolve(dispatch('generateRouteInfo', data));
+        }).catch(err => {
+          tip && dispatch('showMessage', { type: 'error', msg: '获取权限失败' });
+          reject({ type: 'permissionError', err });
+        });
+      }
     });
   },
   login ({ commit, dispatch }, params) {
@@ -74,11 +73,15 @@ const actions = {
         password: params.password
       };
       // 登陆
-      ajax.get('userInfoLogin', loginParams, null, true, false).then(data => {
+      ajax.post({
+        apiKey: 'userLogin',
+        params: loginParams,
+        loading: false
+      }).then(data => {
         dispatch('setUserInfo', data);
         params.tip && dispatch('showMessage', { type: 'success', msg: '登录成功' });
         // 获取权限
-        resolve(dispatch('getPermissionInfo', { tip: !!params.tip, userInfo: data }));
+        resolve(dispatch('getMenuList', { tip: !!params.tip, userInfo: data }));
       }).catch(err => {
         params.tip && dispatch('showMessage', { type: 'error', msg: `登录失败：${err.msg || err.toString()}` });
         reject({ type: 'loginError', err });

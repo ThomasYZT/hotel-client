@@ -9,7 +9,7 @@ export default {
       menuName: '房间管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       // 菜单列表
@@ -19,6 +19,7 @@ export default {
         component: () => import('../../pages/roomManager/child/roomList.vue'),
         meta: {
           menuName: '房间列表',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

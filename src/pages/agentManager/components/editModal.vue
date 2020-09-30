@@ -14,8 +14,8 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="代理商名称" prop="agentName">
-                  <i-input type="text" placeholder="代理商名称" v-model="formData.agentName" />
+                <FormItem label="代理商名称" prop="name">
+                  <i-input type="text" placeholder="代理商名称" v-model="formData.name" />
                 </FormItem>
                 <FormItem label="联系人名称" prop="contactName">
                   <i-input type="text" placeholder="联系人名称" v-model="formData.contactName" />
@@ -75,7 +75,7 @@ export default {
       isLoading: false,
       type: '',
       formData: {
-        agentName: '',
+        name: '',
         contactName: '',
         phone: '',
         area: [],
@@ -90,7 +90,7 @@ export default {
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        agentName: [
+        name: [
           { required: true, message: '请输入代理商名称', trigger: 'blur' }
         ],
         contactName: [
@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
-      if (!type || (type === 'edit' && !item)) return;
+      if (!item) return;
       if (type === 'edit') {
         this.formData = defaultsDeep({}, item, this.formData);
         setTimeout(() => {
@@ -157,7 +157,7 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
-        agentName: '',
+        name: '',
         contactName: '',
         phone: '',
         area: [],

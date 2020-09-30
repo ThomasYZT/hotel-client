@@ -1,19 +1,23 @@
 export const tableConfig = [
   {
-    prop: 'roleName',
-    label: '角色名称'
+    prop: 'roomNumber',
+    label: '房号'
+  },
+  {
+    prop: 'roomTypeId',
+    label: '房间类型'
+  },
+  {
+    prop: 'floorId',
+    label: '楼层'
   },
   {
     prop: 'remark',
     label: '描述'
   },
   {
-    prop: 'createTime',
-    label: '创建时间'
-  },
-  {
-    prop: 'updateTime',
-    label: '更新时间'
+    prop: 'phoneExt',
+    label: '分机号'
   },
   {
     prop: 'operate',

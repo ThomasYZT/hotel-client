@@ -13,11 +13,6 @@
                   :label-width="80"
                   label-position="left">
             <div class="form-item-wrapper">
-              <FormItem v-if="type === 'add'" label="代理商" prop="agentId">
-                <i-select v-model="formData.agentId">
-                  <i-option v-for="item in agentList" :value="item.id" :key="item.id">{{ item.agentName }}</i-option>
-                </i-select>
-              </FormItem>
               <FormItem label="角色名称" prop="roleName">
                 <i-input type="text" placeholder="角色名称" v-model="formData.roleName" />
               </FormItem>
@@ -45,7 +40,6 @@ export default {
       isLoading: false,
       type: '',
       editItem: {},
-      agentList: [],
       formData: {
         agentId: '',
         roleName: '',
@@ -54,9 +48,6 @@ export default {
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        agentId: [
-          { required: true, message: '请选择代理商', trigger: 'blur' }
-        ],
         roleName: [
           { required: true, message: '请输入角色名称', trigger: 'blur' }
         ]
@@ -65,10 +56,9 @@ export default {
   },
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
-      if (!type || (type === 'edit' && !item)) return;
-      if (type === 'edit') {
-        this.formData = defaultsDeep({}, item, this.formData);
-      }
+      if (!item) return;
+      this.formData = defaultsDeep({}, item, this.formData);
+      this.$util.valueToStr(this.formData);
 
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -117,23 +107,7 @@ export default {
       this.editItem = {};
       this.isLoading = false;
       this.type = '';
-    },
-    getAgentList () {
-      this.$ajax.get({
-        apiKey: 'agentGetAllList',
-        loading: false
-      }).then(data => {
-        this.agentList = data;
-        this.agentList.forEach(item => {
-          item.id = String(item.id);
-        });
-      }).catch(err => {
-        this.$message.error(`获取代理商列表失败${err.msg ? ': ' + err.msg : ''}`);
-      });
     }
-  },
-  created () {
-    this.getAgentList();
   }
 };
 </script>

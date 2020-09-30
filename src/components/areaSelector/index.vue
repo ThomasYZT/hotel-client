@@ -1,6 +1,6 @@
 <template>
   <div class="area-selector">
-    <el-cascader v-if="!reset" ref="ElCascader" :options="options" size="mini" v-model="area" :props="propsConfig"></el-cascader>
+    <el-cascader v-if="!reset" ref="ElCascader" clearable :options="options" size="mini" v-model="area" :props="propsConfig"></el-cascader>
   </div>
 </template>
 

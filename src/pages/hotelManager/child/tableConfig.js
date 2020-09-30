@@ -18,7 +18,7 @@ export const tableConfig = [
   {
     prop: 'reservePhone',
     label: '预定房间电话',
-    minWidth: '100px'
+    minWidth: '110px'
   },
   {
     prop: 'hotelPhone',
@@ -43,6 +43,16 @@ export const tableConfig = [
   {
     prop: 'introduce',
     label: '酒店简介',
+    minWidth: '100px'
+  },
+  {
+    prop: 'baiduX',
+    label: '百度X坐标',
+    minWidth: '100px'
+  },
+  {
+    prop: 'baiduY',
+    label: '百度Y坐标',
     minWidth: '100px'
   },
   {

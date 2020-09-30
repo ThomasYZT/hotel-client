@@ -1,49 +1,64 @@
 export const tableConfig = [
   {
     prop: 'name',
-    label: '酒店名称',
+    label: '姓名',
     fixed: 'left',
     minWidth: '100px'
   },
   {
-    prop: 'address',
-    label: '酒店地址',
+    prop: 'sex',
+    label: '性别',
     minWidth: '100px'
   },
   {
-    prop: 'roomCount',
-    label: '房间数量',
-    minWidth: '100px'
-  },
-  {
-    prop: 'reservePhone',
-    label: '预定房间电话',
-    minWidth: '100px'
-  },
-  {
-    prop: 'hotelPhone',
-    label: '酒店电话',
-    minWidth: '100px'
-  },
-  {
-    prop: 'contactName',
-    label: '联系人名称',
-    minWidth: '100px'
-  },
-  {
-    prop: 'mobilePhone',
+    prop: 'phone',
     label: '联系电话',
+    minWidth: '150px'
+  },
+  {
+    prop: 'idCard',
+    label: '身份证号',
+    minWidth: '150px'
+  },
+  {
+    prop: 'consignTime',
+    label: '寄存时间',
+    minWidth: '200px'
+  },
+  {
+    prop: 'retrieveTime',
+    label: '取回时间',
+    minWidth: '200px'
+  },
+  {
+    prop: 'consignType',
+    label: '寄存类型',
     minWidth: '100px'
   },
   {
-    prop: 'openYear',
-    label: '开业年份',
+    prop: 'level',
+    label: '会员等级',
     minWidth: '100px'
   },
   {
-    prop: 'introduce',
-    label: '酒店简介',
+    prop: 'province',
+    label: '省',
     minWidth: '100px'
+  },
+  {
+    prop: 'city',
+    label: '市',
+    minWidth: '100px'
+  },
+  {
+    prop: 'remark',
+    label: '描述',
+    minWidth: '100px'
+  },
+  {
+    prop: 'birthday',
+    label: '生日',
+    minWidth: '150px'
   },
   {
     prop: 'operate',

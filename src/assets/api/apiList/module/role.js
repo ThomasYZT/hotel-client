@@ -5,5 +5,7 @@ export default {
   add: '/role/add',
   pageList: '/role/pageList',
   delete: '/role/delete',
-  update: '/role/update'
+  update: '/role/update',
+  menuList: '/role/roleMenuList',
+  setMenu: '/role/setRoleMenu'
 };

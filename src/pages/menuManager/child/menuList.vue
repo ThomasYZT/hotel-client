@@ -34,18 +34,12 @@
 <script>
 import { arrayToTree } from '../../../assets/share/utils';
 import menuEditModal from '../components/menuEditModal';
-import { menuTableConfig } from './tableConfig.js';
 export default {
   components: {
     menuEditModal
   },
   data () {
     return {
-      treeProps: {
-        children: 'children',
-        label: 'menuName'
-      },
-      menuTableConfig,
       tableData: []
     };
   },

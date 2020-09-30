@@ -9,7 +9,7 @@ export default {
       menuName: '角色管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       // 菜单列表
@@ -19,6 +19,7 @@ export default {
         component: () => import('../../pages/roleManager/child/roleList.vue'),
         meta: {
           menuName: '角色列表',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

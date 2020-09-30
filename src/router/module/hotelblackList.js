@@ -9,15 +9,16 @@ export default {
       menuName: '酒店黑名单管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       menuList: {
-        path: '/agentManager/list',
+        path: '/hotelBlackListManager/list',
         name: 'hotelBlackList',
         component: () => import('../../pages/hotelBlackListManager/child/hotelBlackList.vue'),
         meta: {
           menuName: '酒店黑名单列表',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

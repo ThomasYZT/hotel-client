@@ -9,15 +9,16 @@ export default {
       menuName: '行李寄存管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       menuList: {
-        path: '/agentManager/list',
+        path: '/storageManager/list',
         name: 'storageList',
         component: () => import('../../pages/storageManager/child/storageList.vue'),
         meta: {
           menuName: '行李寄存列表',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

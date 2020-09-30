@@ -1,64 +1,24 @@
 export const tableConfig = [
   {
-    prop: 'agentName',
-    label: '代理商名称',
+    prop: 'companyName',
+    label: '公司名称',
     fixed: 'left',
     minWidth: '100px'
   },
   {
-    prop: 'address',
-    label: '地址',
+    prop: 'name',
+    label: '联系人',
     minWidth: '100px'
   },
   {
     prop: 'phone',
-    label: '手机号',
+    label: '联系电话',
     minWidth: '100px'
   },
   {
-    prop: 'provincesName',
-    label: '省',
-    minWidth: '100px'
-  },
-  {
-    prop: 'cityName',
-    label: '市',
-    minWidth: '100px'
-  },
-  {
-    prop: 'countyName',
-    label: '区',
-    minWidth: '100px'
-  },
-  {
-    prop: 'contactName',
-    label: '联系人名称',
-    minWidth: '100px'
-  },
-  {
-    prop: 'email',
-    label: '邮箱',
-    minWidth: '100px'
-  },
-  {
-    prop: 'appId',
-    label: 'appId',
-    minWidth: '100px'
-  },
-  {
-    prop: 'mchId',
-    label: '微信支付商户号',
+    prop: 'signedTime',
+    label: '签订时间',
     minWidth: '150px'
-  },
-  {
-    prop: 'companyKey',
-    label: '商户平台支付密钥',
-    minWidth: '150px'
-  },
-  {
-    prop: 'secret',
-    label: '密钥',
-    minWidth: '100px'
   },
   {
     prop: 'remark',

@@ -1,54 +1,49 @@
 export const tableConfig = [
   {
     prop: 'name',
-    label: '酒店名称',
+    label: '姓名',
     fixed: 'left',
     minWidth: '100px'
   },
   {
-    prop: 'address',
-    label: '酒店地址',
+    prop: 'sex',
+    label: '性别',
     minWidth: '100px'
   },
   {
-    prop: 'roomCount',
-    label: '房间数量',
+    prop: 'level',
+    label: '会员等级',
     minWidth: '100px'
   },
   {
-    prop: 'reservePhone',
-    label: '预定房间电话',
-    minWidth: '100px'
-  },
-  {
-    prop: 'hotelPhone',
-    label: '酒店电话',
-    minWidth: '100px'
-  },
-  {
-    prop: 'contactName',
-    label: '联系人名称',
-    minWidth: '100px'
-  },
-  {
-    prop: 'mobilePhone',
-    label: '联系电话',
-    minWidth: '100px'
-  },
-  {
-    prop: 'openYear',
-    label: '开业年份',
-    minWidth: '100px'
-  },
-  {
-    prop: 'introduce',
-    label: '酒店简介',
-    minWidth: '100px'
-  },
-  {
-    prop: 'operate',
-    label: '操作',
-    fixed: 'right',
+    prop: 'openId',
+    label: '小程序身份号',
     minWidth: '150px'
+  },
+  {
+    prop: 'unionId',
+    label: '微信身份号',
+    minWidth: '150px'
+  },
+  {
+    prop: 'phone',
+    label: '手机号',
+    minWidth: '150px'
+  },
+  {
+    prop: 'province',
+    label: '省',
+    minWidth: '100px'
+  },
+  {
+    prop: 'city',
+    label: '城市',
+    minWidth: '100px'
+  },
+  {
+    prop: 'birthday',
+    label: '出生日期',
+    minWidth: '150px',
+    fixed: 'right'
   }
 ];

@@ -1,54 +1,54 @@
 export const tableConfig = [
   {
     prop: 'name',
-    label: '酒店名称',
+    label: '姓名',
     fixed: 'left',
     minWidth: '100px'
   },
   {
-    prop: 'address',
-    label: '酒店地址',
+    prop: 'gender',
+    label: '性别',
     minWidth: '100px'
   },
   {
-    prop: 'roomCount',
-    label: '房间数量',
+    prop: 'mobile',
+    label: '手机号',
     minWidth: '100px'
   },
   {
-    prop: 'reservePhone',
-    label: '预定房间电话',
+    prop: 'cardNo',
+    label: '身份证',
     minWidth: '100px'
   },
   {
-    prop: 'hotelPhone',
-    label: '酒店电话',
+    prop: 'birthday',
+    label: '生日',
     minWidth: '100px'
   },
   {
-    prop: 'contactName',
-    label: '联系人名称',
+    prop: 'password',
+    label: '密码',
     minWidth: '100px'
   },
   {
-    prop: 'mobilePhone',
-    label: '联系电话',
+    prop: 'position',
+    label: '职位',
     minWidth: '100px'
   },
   {
-    prop: 'openYear',
-    label: '开业年份',
+    prop: 'userName',
+    label: '登录名',
     minWidth: '100px'
   },
   {
-    prop: 'introduce',
-    label: '酒店简介',
-    minWidth: '100px'
+    prop: 'createTime',
+    label: '创建时间',
+    minWidth: '150px'
   },
   {
     prop: 'operate',
     label: '操作',
     fixed: 'right',
-    minWidth: '150px'
+    minWidth: '200px'
   }
 ];

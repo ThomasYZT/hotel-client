@@ -1,6 +1,8 @@
 <template>
   <div class="table-wrapper">
-    <el-table size="medium"
+    <el-table ref="Table"
+              v-if="!reset"
+              size="medium"
               :data="data"
               :height="hasPage && data.length > 0 ? 'calc(100% - 50px)' : '100%'"
               header-row-class-name="custom-header-row"
@@ -38,6 +40,7 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce';
 export default {
   name: 'TableCom',
   props: {
@@ -108,14 +111,26 @@ export default {
   data () {
     return {
       curPage: 1,
-      curSize: 10
+      curSize: 10,
+      reset: false
     };
   },
   methods: {
-
+    doLayout: debounce(function () {
+      this.reset = true;
+      this.$nextTick(() => {
+        this.reset = false;
+      });
+    }, 500)
   },
   created () {
     this.getList();
+  },
+  mounted () {
+    window.addEventListener('resize', this.doLayout);
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.doLayout);
   },
   watch: {
     curSize: {
@@ -136,6 +151,8 @@ export default {
 @import "~@/assets/styles/scss/base";
 .table-wrapper {
   width: 100%;
+  height: 100%;
+  max-width: 100%;
 
   .empty-content {
     @include flex_layout(row, center, center);

@@ -15,7 +15,11 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Select,
-  Option
+  Option,
+  Switch,
+  Upload,
+  Icon,
+  Transfer
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';
@@ -42,6 +46,10 @@ export default {
     Vue.component('iBreadcrumbItem', BreadcrumbItem);
     Vue.component('iSelect', Select);
     Vue.component('iOption', Option);
+    Vue.component('iSwitch', Switch);
+    Vue.component('iUpload', Upload);
+    Vue.component('iIcon', Icon);
+    Vue.component('iTransfer', Transfer);
     Vue.prototype.$message = Message;
 
     Message.config({

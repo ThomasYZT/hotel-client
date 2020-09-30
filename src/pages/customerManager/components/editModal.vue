@@ -1,6 +1,6 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加品牌' : '编辑品牌'"
+    <el-dialog :title="type === 'add' ? '添加客户' : '编辑客户'"
                :visible.sync="visible"
                width="35%"
                center>
@@ -94,7 +94,7 @@ export default {
         county: this.formData.area[2]
       };
       this.$ajax.post({
-        apiKey: this.type === 'add' ? 'brandAdd' : 'brandUpdate',
+        apiKey: this.type === 'add' ? 'customerAdd' : 'customerUpdate',
         params: formData,
         loading: false
       }).then(() => {

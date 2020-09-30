@@ -1,8 +1,8 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加酒店' : '编辑酒店'"
+    <el-dialog :title="type === 'add' ? '新增行李寄存' : '编辑寄存信息'"
                :visible.sync="visible"
-               width="50%"
+               width="40%"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
@@ -10,41 +10,29 @@
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
-                  :label-width="120"
+                  :label-width="80"
                   label-position="left">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="品牌" prop="name">
-                  <i-input type="text" placeholder="品牌" v-model="formData.brandId" />
+                <FormItem label="寄存类型" prop="consignType">
+                  <i-input type="text" placeholder="寄存类型" v-model="formData.consignType" />
                 </FormItem>
-                <FormItem label="酒店名称" prop="name">
-                  <i-input type="text" placeholder="酒店名称" v-model="formData.name" />
+                <FormItem label="寄存时间" prop="consignTime">
+                  <i-input type="text" placeholder="寄存时间" v-model="formData.consignTime" />
                 </FormItem>
-                <FormItem label="酒店电话" prop="hotelPhone">
-                  <i-input type="text" placeholder="酒店电话" v-model="formData.hotelPhone" />
-                </FormItem>
-                <FormItem label="预定房间电话" prop="reservePhone">
-                  <i-input type="text" placeholder="预定房间电话" v-model="formData.reservePhone" />
-                </FormItem>
-                <FormItem label="酒店地址" prop="address">
-                  <i-input type="text" placeholder="酒店地址" v-model="formData.address" />
+                <FormItem label="取出时间" prop="retrieveTime">
+                  <i-input type="text" placeholder="取出时间" v-model="formData.retrieveTime" />
                 </FormItem>
               </div>
               <div class="form-item-block">
-                <FormItem label="联系人名称" prop="contactName">
-                  <i-input type="text" placeholder="联系人名称" v-model="formData.contactName" />
+                <FormItem label="状态" prop="status">
+                  <i-input type="text" placeholder="状态" v-model="formData.status" />
                 </FormItem>
-                <FormItem label="联系电话" prop="mobilePhone">
-                  <i-input type="text" placeholder="联系电话" v-model="formData.mobilePhone" />
+                <FormItem label="会员ID" prop="vipId">
+                  <i-input type="text" placeholder="会员ID" v-model="formData.vipId" />
                 </FormItem>
-                <FormItem label="房间数量" prop="roomCount">
-                  <i-input type="text" placeholder="房间数量" v-model="formData.roomCount" />
-                </FormItem>
-                <FormItem label="开业年份" prop="openYear">
-                  <i-input type="text" placeholder="开业年份" v-model="formData.openYear" />
-                </FormItem>
-                <FormItem label="酒店简介" prop="introduce">
-                  <i-input type="text" placeholder="酒店简介" v-model="formData.introduce" />
+                <FormItem label="描述" prop="remark">
+                  <i-input type="text" placeholder="描述" v-model="formData.remark" />
                 </FormItem>
               </div>
             </div>
@@ -68,39 +56,29 @@ export default {
       isLoading: false,
       type: '',
       formData: {
-        brandId: '',
-        name: '',
-        hotelPhone: '',
-        reservePhone: '',
-        contactName: '',
-        mobilePhone: '',
-        address: '',
-        roomCount: '',
-        openYear: '',
-        introduce: ''
+        consignType: '',
+        consignTime: '',
+        retrieveTime: '',
+        status: '',
+        vipId: '',
+        remark: ''
       },
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        brandId: [
+        consignType: [
           { required: true, message: '请输入代理商名称', trigger: 'blur' }
         ],
-        name: [
+        consignTime: [
           { required: true, message: '请输入联系人名称', trigger: 'blur' }
         ],
-        hotelPhone: [
+        retrieveTime: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
         ],
-        reservePhone: [
+        status: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
         ],
-        address: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
-        ],
-        contactName: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
-        ],
-        mobilePhone: [
+        vipId: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
         ]
       }
@@ -109,9 +87,7 @@ export default {
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
-      if (type === 'edit') {
-        this.formData = defaultsDeep({}, item, this.formData);
-      }
+      this.formData = defaultsDeep({}, item, this.formData);
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -135,13 +111,10 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData,
-        provinces: this.formData.area[0],
-        city: this.formData.area[1],
-        county: this.formData.area[2]
+        ...this.formData
       };
       this.$ajax.post({
-        apiKey: this.type === 'add' ? 'hotelAdd' : 'hotelUpdate',
+        apiKey: this.type === 'add' ? 'storageAdd' : 'storageUpdate',
         params: formData,
         loading: false
       }).then(() => {
@@ -155,15 +128,12 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
-        name: '',
-        address: '',
-        roomCount: '',
-        reservePhone: '',
-        hotelPhone: '',
-        contactName: '',
-        mobilePhone: '',
-        openYear: '',
-        introduce: ''
+        consignType: '',
+        consignTime: '',
+        retrieveTime: '',
+        status: '',
+        vipId: '',
+        remark: ''
       };
       this.confirmFn = null;
       this.cancelFn = null;

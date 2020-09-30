@@ -9,15 +9,16 @@ export default {
       menuName: '会员管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       menuList: {
-        path: '/agentManager/list',
+        path: '/vipManager/list',
         name: 'vipList',
         component: () => import('../../pages/vipManager/child/vipList.vue'),
         meta: {
           menuName: '会员列表',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

@@ -9,7 +9,7 @@ export default {
       menuName: '协议客户管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       // 菜单列表
@@ -19,6 +19,7 @@ export default {
         component: () => import('../../pages/agreementManager/child/agreementList.vue'),
         meta: {
           menuName: '协议客户管理',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

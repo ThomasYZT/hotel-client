@@ -1,6 +1,6 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加代理商' : '编辑代理商'"
+    <el-dialog :title="type === 'add' ? '添加协议客户' : '编辑协议客户'"
                :visible.sync="visible"
                width="50%"
                center>
@@ -14,41 +14,35 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="代理商名称" prop="agentName">
-                  <i-input type="text" placeholder="代理商名称" v-model="formData.agentName" />
+                <FormItem label="公司名称" prop="companyName">
+                  <i-input type="text" placeholder="公司名称" v-model="formData.companyName" />
                 </FormItem>
-                <FormItem label="联系人名称" prop="contactName">
-                  <i-input type="text" placeholder="联系人名称" v-model="formData.contactName" />
+                <FormItem label="联系人" prop="name">
+                  <i-input type="text" placeholder="联系人" v-model="formData.name" />
                 </FormItem>
                 <FormItem label="联系电话" prop="phone">
                   <i-input type="text" placeholder="联系电话" v-model="formData.phone" />
                 </FormItem>
-                <FormItem label="地区" prop="area">
-                  <areaSelector ref="areaSelector" v-model="formData.area"></areaSelector>
+                <FormItem label="签订时间" prop="signedTime">
+                  <i-input type="text" placeholder="签订时间" v-model="formData.signedTime" />
                 </FormItem>
-                <FormItem label="地址" prop="address">
-                  <i-input type="text" placeholder="地址" v-model="formData.address" />
+                <FormItem label="备注" prop="remark">
+                  <i-input type="text" placeholder="地址" v-model="formData.remark" />
                 </FormItem>
               </div>
               <div class="form-item-block">
-                <FormItem label="邮箱" prop="email">
-                  <i-input type="text" placeholder="邮箱" v-model="formData.email" />
-                </FormItem>
-                <FormItem label="小程序ID" prop="appId">
-                  <i-input type="text" placeholder="小程序ID" v-model="formData.appId" />
-                </FormItem>
-                <FormItem label="小程序密钥" prop="secret">
-                  <i-input type="text" placeholder="secret" v-model="formData.secret" />
-                </FormItem>
-                <FormItem label="微信支付商户号" prop="mchId">
-                  <i-input type="text" placeholder="微信支付商户号" v-model="formData.mchId" />
-                </FormItem>
-                <FormItem label="商户平台支付密钥" prop="roleName">
-                  <i-input type="text" placeholder="商户平台支付密钥" v-model="formData.companyKey" />
-                </FormItem>
-                <FormItem label="描述" prop="remark">
-                  <i-input type="text" placeholder="描述" v-model="formData.remark" />
-                </FormItem>
+                <div class="form-item-block-title">价格设置</div>
+                <div v-for="(item, index) in formData.priceList"
+                     class="dynamic-form-item"
+                     :key="item.id">
+                  <div >房间类型名称：{{item.typeName}}</div>
+                  <div>原始价格：{{item.originalPrice}}</div>
+                  <FormItem label="折扣价格"
+                            :prop="'priceList.' + index + '.discountPrice'"
+                            :rules="{required: true, message: `请输入${item.typeName}的折扣价格`, trigger: 'blur'}">
+                    <i-input type="text" placeholder="折扣价格" v-model="item.discountPrice" />
+                  </FormItem>
+                </div>
               </div>
             </div>
           </i-form>
@@ -63,66 +57,106 @@
 </template>
 
 <script>
-import areaSelector from '../../../components/areaSelector';
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
-  components: {
-    areaSelector
-  },
   data () {
     return {
       visible: false,
       isLoading: false,
       type: '',
       formData: {
-        agentName: '',
-        contactName: '',
+        companyName: '',
+        name: '',
         phone: '',
-        area: [],
-        address: '',
-        email: '',
-        appId: '',
-        secret: '',
-        mchId: '',
-        companyKey: '',
-        remark: ''
+        signedTime: '',
+        remark: '',
+        priceList: ''
       },
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        agentName: [
-          { required: true, message: '请输入代理商名称', trigger: 'blur' }
+        companyName: [
+          { required: true, message: '请输入公司名称', trigger: 'blur' }
         ],
-        contactName: [
-          { required: true, message: '请输入联系人名称', trigger: 'blur' }
+        name: [
+          { required: true, message: '请输入联系人', trigger: 'blur' }
         ],
         phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
         ],
-        area: [
-          { required: true, type: 'array', min: 3, message: '请选择区域', trigger: 'blur' }
+        signedTime: [
+          { required: true, message: '请选择签订协议时间', trigger: 'blur' }
         ]
       }
     };
   },
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
-      if (!type || (type === 'edit' && !item)) return;
-      if (type === 'edit') {
-        this.formData = defaultsDeep({}, item, this.formData);
-        setTimeout(() => {
-          this.$refs.areaSelector.setDefault([this.formData.provinces, this.formData.city, this.formData.county]);
-        }, 300);
-      }
+      if (!type || !item) return;
+      this.type = type;
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
-
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
-      this.type = type;
-      this.visible = true;
+      this.formData = defaultsDeep({}, item, this.formData);
+      if (type === 'add') {
+        this.getAllRoomType(item).then((data) => {
+          this.formData.priceList = data.map(item => {
+            return {
+              ...item,
+              originalPrice: String(item.price),
+              discountPrice: String(item.price)
+            };
+          });
+          this.visible = true;
+        }).catch(err => {
+          this.$message.error(`获取所有房间类型失败${err.msg ? ': ' + err.msg : ''}`);
+          this.reset();
+        });
+      } else {
+        this.getAgreementPrice(item).then(data => {
+          this.formData.priceList = data.map(item => {
+            return {
+              ...item,
+              discountPrice: String(item.discountPrice)
+            };
+          });
+          this.visible = true;
+        }).catch(() => {
+          this.$message.error('获取协议价格失败');
+          this.reset();
+        });
+      }
+    },
+    getAllRoomType (item) {
+      return new Promise((resolve, reject) => {
+        this.$ajax.get({
+          apiKey: 'roomTypeGetAllList',
+          params: {
+            hotelId: item.hotelId
+          }
+        }).then(data => {
+          resolve(data);
+        }).catch(err => {
+          reject(err);
+        });
+      });
+    },
+    getAgreementPrice (item) {
+      return new Promise((resolve, reject) => {
+        this.$ajax.get({
+          apiKey: 'agreementPriceGet',
+          params: {
+            agreementId: item.id
+          }
+        }).then(data => {
+          resolve(data);
+        }).catch(err => {
+          reject(err);
+        });
+      });
     },
     cancel () {
       this.cancelFn && this.cancelFn();
@@ -137,15 +171,15 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData,
-        provinces: this.formData.area[0],
-        city: this.formData.area[1],
-        county: this.formData.area[2]
+        ...this.formData
       };
       this.$ajax.post({
-        apiKey: this.type === 'add' ? 'agentAdd' : 'agentUpdate',
+        apiKey: this.type === 'add' ? 'agreementAdd' : 'agreementUpdate',
         params: formData,
-        loading: false
+        loading: false,
+        config: {
+          headers: { 'Content-Type': 'application/json;charset-UTF-8' }
+        }
       }).then(() => {
         this.$message.success(this.type === 'add' ? '添加成功' : '编辑成功');
         this.confirmFn && this.confirmFn();
@@ -181,18 +215,31 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
+/deep/ .el-dialog__body {
+  padding: 25px 0 30px;
+}
 .dialog-wrapper {
   @include flex_layout(row, center, flex-start);
-  max-height: 350px;
-  overflow-y: auto;
+  padding: 0 25px 0;
   .form-wrapper {
-    width: 90%;
+    width: 100%;
 
     .form-item-wrapper {
       @include flex_layout(row, space-between, flex-start);
 
       .form-item-block {
+        @include flex_set(1, 0);
+        padding-right: 25px;
         margin-right: 20px;
+        max-height: 350px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #333333;
+
+        .form-item-block-title {
+          font-size: 16px;
+          margin-bottom: 10px;
+        }
 
         &:last-child {
           margin: 0;

@@ -6,10 +6,15 @@
     <div class="page-content">
       <div class="tool-wrapper">
         <div class="filter-block">
-          <div class="filter-item">
+          <!--<div class="filter-item">
             <div class="filter-label">区域</div>
             <areaSelector v-model="filterPrams.area"></areaSelector>
+          </div>-->
+          <div class="filter-item">
+            <div class="filter-label">代理商名称</div>
+            <i-input size="small" v-model="filterPrams.name"></i-input>
           </div>
+          <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
         </div>
         <i-button class="normal-width-btn" type="primary" @click="addItem">添加代理商</i-button>
       </div>
@@ -43,12 +48,12 @@
 
 <script>
 import editModal from '../components/editModal';
-import areaSelector from '../../../components/areaSelector';
+// import areaSelector from '../../../components/areaSelector';
 import { tableConfig } from './tableConfig.js';
 export default {
   components: {
-    editModal,
-    areaSelector
+    editModal
+    // areaSelector
   },
   data () {
     return {
@@ -58,7 +63,8 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterPrams: {
-        area: ['', '', '']
+        // area: ['', '', ''],
+        name: ''
       }
     };
   },
@@ -70,6 +76,7 @@ export default {
       this.$ajax.post({
         apiKey: 'agentPageList',
         params: {
+          ...this.filterPrams,
           pageNum: this.pageNum,
           pageSize: this.pageSize
         }

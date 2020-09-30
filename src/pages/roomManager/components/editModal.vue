@@ -1,9 +1,10 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加角色' : '编辑角色'"
+    <el-dialog :title="type === 'add' ? '添加房间' : '编辑房间'"
                :visible.sync="visible"
                width="40%"
-               center>
+               center
+               @close="reset">
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"
@@ -13,13 +14,17 @@
                   :label-width="80"
                   label-position="left">
             <div class="form-item-wrapper">
-              <FormItem v-if="type === 'add'" label="代理商" prop="agentId">
-                <i-select v-model="formData.agentId">
-                  <i-option v-for="item in agentList" :value="item.id" :key="item.id">{{ item.agentName }}</i-option>
-                </i-select>
+              <FormItem label="房间号" prop="roomNumber">
+                <i-input type="text" placeholder="房间号" v-model="formData.roomNumber" />
               </FormItem>
-              <FormItem label="角色名称" prop="roleName">
-                <i-input type="text" placeholder="角色名称" v-model="formData.roleName" />
+              <FormItem label="房间类型" prop="roomTypeId">
+                <i-input type="text" placeholder="房间类型" v-model="formData.roomTypeId" />
+              </FormItem>
+              <FormItem label="楼层" prop="floorId">
+                <i-input type="text" placeholder="楼层" v-model="formData.floorId" />
+              </FormItem>
+              <FormItem label="分机号" prop="phoneExt">
+                <i-input type="text" placeholder="分机号" v-model="formData.phoneExt" />
               </FormItem>
               <FormItem label="描述" prop="remark">
                 <i-input type="text" placeholder="描述" v-model="formData.remark" />
@@ -45,20 +50,29 @@ export default {
       isLoading: false,
       type: '',
       editItem: {},
-      agentList: [],
       formData: {
-        agentId: '',
-        roleName: '',
-        remark: ''
+        roomNumber: '',
+        roomTypeId: '',
+        floorId: '',
+        phoneExt: '',
+        remark: '',
+        isAttribute: 1,
+        attributeList: []
       },
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        agentId: [
-          { required: true, message: '请选择代理商', trigger: 'blur' }
+        roomNumber: [
+          { required: true, message: '请输入房间号', trigger: 'blur' }
         ],
-        roleName: [
-          { required: true, message: '请输入角色名称', trigger: 'blur' }
+        roomTypeId: [
+          { required: true, message: '请选择房间类型', trigger: 'blur' }
+        ],
+        floorId: [
+          { required: true, message: '请选择楼层', trigger: 'blur' }
+        ],
+        phoneExt: [
+          { required: true, message: '请输入分机号', trigger: 'blur' }
         ]
       }
     };
@@ -66,9 +80,13 @@ export default {
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
-      if (type === 'edit') {
-        this.formData = defaultsDeep({}, item, this.formData);
-      }
+      this.formData = defaultsDeep({}, item, this.formData);
+      this.$util.valueToStr(this.formData);
+      this.formData.attributeList.push({
+        attributeValue: '12',
+        dictionaryId: '12',
+        roomId: item.id
+      });
 
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -93,9 +111,12 @@ export default {
     },
     submitForm () {
       this.$ajax.post({
-        apiKey: this.type === 'add' ? 'roleAdd' : 'roleUpdate',
+        apiKey: this.type === 'add' ? 'roomAdd' : 'roomUpdate',
         params: this.formData,
-        loading: false
+        loading: false,
+        config: {
+          headers: { 'Content-Type': 'application/json;charset-UTF-8' }
+        }
       }).then(() => {
         this.$message.success(this.type === 'add' ? '添加成功' : '编辑成功');
         this.confirmFn && this.confirmFn();
@@ -107,33 +128,18 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
-        agentId: '',
-        roleName: '',
-        remark: ''
+        roomNumber: '',
+        roomTypeId: '',
+        floorId: '',
+        isAttribute: 1,
+        attributeList: []
       };
       this.confirmFn = null;
       this.cancelFn = null;
       this.visible = false;
-      this.editItem = {};
       this.isLoading = false;
-      this.type = '';
-    },
-    getAgentList () {
-      this.$ajax.get({
-        apiKey: 'agentGetAllList',
-        loading: false
-      }).then(data => {
-        this.agentList = data;
-        this.agentList.forEach(item => {
-          item.id = String(item.id);
-        });
-      }).catch(err => {
-        this.$message.error(`获取代理商列表失败${err.msg ? ': ' + err.msg : ''}`);
-      });
+      this.type = '1';
     }
-  },
-  created () {
-    this.getAgentList();
   }
 };
 </script>

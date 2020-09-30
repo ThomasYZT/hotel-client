@@ -14,20 +14,20 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="品牌" prop="name">
-                  <i-input type="text" placeholder="品牌" v-model="formData.brandId" />
-                </FormItem>
                 <FormItem label="酒店名称" prop="name">
-                  <i-input type="text" placeholder="酒店名称" v-model="formData.name" />
+                  <i-input type="text" placeholder="品牌" v-model="formData.name" />
                 </FormItem>
-                <FormItem label="酒店电话" prop="hotelPhone">
-                  <i-input type="text" placeholder="酒店电话" v-model="formData.hotelPhone" />
+                <FormItem label="酒店地址" prop="address">
+                  <i-input type="text" placeholder="酒店地址" v-model="formData.address" />
+                </FormItem>
+                <FormItem label="房间数量" prop="roomCount">
+                  <i-input type="text" placeholder="房间数量" v-model="formData.roomCount" />
                 </FormItem>
                 <FormItem label="预定房间电话" prop="reservePhone">
                   <i-input type="text" placeholder="预定房间电话" v-model="formData.reservePhone" />
                 </FormItem>
-                <FormItem label="酒店地址" prop="address">
-                  <i-input type="text" placeholder="酒店地址" v-model="formData.address" />
+                <FormItem label="酒店电话" prop="hotelPhone">
+                  <i-input type="text" placeholder="酒店电话" v-model="formData.hotelPhone" />
                 </FormItem>
               </div>
               <div class="form-item-block">
@@ -37,14 +37,17 @@
                 <FormItem label="联系电话" prop="mobilePhone">
                   <i-input type="text" placeholder="联系电话" v-model="formData.mobilePhone" />
                 </FormItem>
-                <FormItem label="房间数量" prop="roomCount">
-                  <i-input type="text" placeholder="房间数量" v-model="formData.roomCount" />
-                </FormItem>
                 <FormItem label="开业年份" prop="openYear">
                   <i-input type="text" placeholder="开业年份" v-model="formData.openYear" />
                 </FormItem>
                 <FormItem label="酒店简介" prop="introduce">
                   <i-input type="text" placeholder="酒店简介" v-model="formData.introduce" />
+                </FormItem>
+                <FormItem label="X坐标" prop="baiduX">
+                  <i-input type="number" placeholder="职位" v-model="formData.baiduX" />
+                </FormItem>
+                <FormItem label="Y坐标" prop="baiduY">
+                  <i-input type="number" placeholder="Y坐标" v-model="formData.baiduY" />
                 </FormItem>
               </div>
             </div>
@@ -68,7 +71,6 @@ export default {
       isLoading: false,
       type: '',
       formData: {
-        brandId: '',
         name: '',
         hotelPhone: '',
         reservePhone: '',
@@ -77,31 +79,36 @@ export default {
         address: '',
         roomCount: '',
         openYear: '',
-        introduce: ''
+        introduce: '',
+        baiduX: '',
+        baiduY: ''
       },
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        brandId: [
-          { required: true, message: '请输入代理商名称', trigger: 'blur' }
-        ],
         name: [
-          { required: true, message: '请输入联系人名称', trigger: 'blur' }
+          { required: true, message: '请输入酒店名称', trigger: 'blur' }
         ],
         hotelPhone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入酒店电话', trigger: 'blur' }
         ],
         reservePhone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入房间预定电话', trigger: 'blur' }
         ],
         address: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入酒店地址', trigger: 'blur' }
         ],
         contactName: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入联系人名称', trigger: 'blur' }
         ],
         mobilePhone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' }
+        ],
+        baiduX: [
+          { required: true, message: '请输入X坐标', trigger: 'blur' }
+        ],
+        baiduY: [
+          { required: true, message: '请输入Y坐标', trigger: 'blur' }
         ]
       }
     };
@@ -109,9 +116,8 @@ export default {
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
-      if (type === 'edit') {
-        this.formData = defaultsDeep({}, item, this.formData);
-      }
+      this.formData = defaultsDeep({}, item, this.formData);
+
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -135,10 +141,7 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData,
-        provinces: this.formData.area[0],
-        city: this.formData.area[1],
-        county: this.formData.area[2]
+        ...this.formData
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'hotelAdd' : 'hotelUpdate',
@@ -163,7 +166,9 @@ export default {
         contactName: '',
         mobilePhone: '',
         openYear: '',
-        introduce: ''
+        introduce: '',
+        baiduX: 0,
+        baiduY: 0
       };
       this.confirmFn = null;
       this.cancelFn = null;

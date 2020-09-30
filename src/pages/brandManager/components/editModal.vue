@@ -13,9 +13,6 @@
                   :label-width="120"
                   label-position="left">
             <div class="form-item-wrapper">
-              <FormItem label="品牌ID" prop="agentId">
-                <i-input type="text" placeholder="品牌ID" v-model="formData.agentId" />
-              </FormItem>
               <FormItem label="品牌名称" prop="name">
                 <i-input type="text" placeholder="品牌名称" v-model="formData.name" />
               </FormItem>
@@ -50,9 +47,6 @@ export default {
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        agentId: [
-          { required: true, message: '请选择品牌ID', trigger: 'blur' }
-        ],
         name: [
           { required: true, message: '请输入品牌名称', trigger: 'blur' }
         ]
@@ -61,10 +55,9 @@ export default {
   },
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
-      if (!type || (type === 'edit' && !item)) return;
-      if (type === 'edit') {
-        this.formData = defaultsDeep({}, item, this.formData);
-      }
+      if (!item) return;
+      this.formData = defaultsDeep({}, item, this.formData);
+
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -88,10 +81,7 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData,
-        provinces: this.formData.area[0],
-        city: this.formData.area[1],
-        county: this.formData.area[2]
+        ...this.formData
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'brandAdd' : 'brandUpdate',

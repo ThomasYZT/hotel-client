@@ -1,5 +1,5 @@
 export default {
-  module: 'userInfo',
+  module: 'user',
 
   add: '/hotelUser/add',
   delete: '/hotelUser/delete',
@@ -9,7 +9,8 @@ export default {
   get: '/hotelUser/get',
   login: '/hotelUser/login',
   modifyPassword: '/hotelUser/modifyPassword',
-  setUserRole: '/hotelUser/setUserRole',
+  setRole: '/hotelUser/setUserRole',
   menuList: '/hotelUser/userMenuList',
-  roleList: '/hotelUser/userRoleList'
+  roleList: '/hotelUser/userRoleList',
+  getAllRoleList: '/hotelUser/getUserAllRoleList'
 };

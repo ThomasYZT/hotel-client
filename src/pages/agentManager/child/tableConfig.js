@@ -1,6 +1,6 @@
 export const tableConfig = [
   {
-    prop: 'agentName',
+    prop: 'name',
     label: '代理商名称',
     fixed: 'left',
     minWidth: '100px'

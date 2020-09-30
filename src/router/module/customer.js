@@ -9,7 +9,7 @@ export default {
       menuName: '客户管理',
       iconClass: '',
       activePath: `${topName}`,
-      isMenu: false
+      isMenu: true
     },
     children: {
       // 菜单列表
@@ -19,6 +19,7 @@ export default {
         component: () => import('../../pages/customerManager/child/customerList.vue'),
         meta: {
           menuName: '客户列表',
+          activePath: `${topName}`,
           isMenu: false
         }
       }

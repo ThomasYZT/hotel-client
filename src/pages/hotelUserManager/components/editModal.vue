@@ -1,6 +1,6 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加酒店' : '编辑酒店'"
+    <el-dialog :title="type === 'add' ? '添加用户' : '编辑用户'"
                :visible.sync="visible"
                width="50%"
                center>
@@ -10,41 +10,35 @@
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
-                  :label-width="120"
+                  :label-width="100"
                   label-position="left">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="品牌" prop="name">
-                  <i-input type="text" placeholder="品牌" v-model="formData.brandId" />
+                <FormItem label="生日" prop="birthday">
+                  <i-input type="text" placeholder="生日" v-model="formData.birthday" />
                 </FormItem>
-                <FormItem label="酒店名称" prop="name">
-                  <i-input type="text" placeholder="酒店名称" v-model="formData.name" />
+                <FormItem label="身份证" prop="cardNo">
+                  <i-input type="text" placeholder="身份证" v-model="formData.cardNo" />
                 </FormItem>
-                <FormItem label="酒店电话" prop="hotelPhone">
-                  <i-input type="text" placeholder="酒店电话" v-model="formData.hotelPhone" />
+                <FormItem label="性别" prop="gender">
+                  <i-input type="text" placeholder="性别" v-model="formData.gender" />
                 </FormItem>
-                <FormItem label="预定房间电话" prop="reservePhone">
-                  <i-input type="text" placeholder="预定房间电话" v-model="formData.reservePhone" />
+                <FormItem label="手机号" prop="mobile">
+                  <i-input type="text" placeholder="手机号" v-model="formData.mobile" />
                 </FormItem>
-                <FormItem label="酒店地址" prop="address">
-                  <i-input type="text" placeholder="酒店地址" v-model="formData.address" />
+                <FormItem label="姓名" prop="name">
+                  <i-input type="text" placeholder="姓名" v-model="formData.name" />
                 </FormItem>
               </div>
               <div class="form-item-block">
-                <FormItem label="联系人名称" prop="contactName">
-                  <i-input type="text" placeholder="联系人名称" v-model="formData.contactName" />
+                <FormItem label="密码" prop="password">
+                  <i-input type="text" placeholder="密码" v-model="formData.password" />
                 </FormItem>
-                <FormItem label="联系电话" prop="mobilePhone">
-                  <i-input type="text" placeholder="联系电话" v-model="formData.mobilePhone" />
+                <FormItem label="职位" prop="position">
+                  <i-input type="text" placeholder="职位" v-model="formData.position" />
                 </FormItem>
-                <FormItem label="房间数量" prop="roomCount">
-                  <i-input type="text" placeholder="房间数量" v-model="formData.roomCount" />
-                </FormItem>
-                <FormItem label="开业年份" prop="openYear">
-                  <i-input type="text" placeholder="开业年份" v-model="formData.openYear" />
-                </FormItem>
-                <FormItem label="酒店简介" prop="introduce">
-                  <i-input type="text" placeholder="酒店简介" v-model="formData.introduce" />
+                <FormItem label="登录名" prop="userName">
+                  <i-input type="text" placeholder="登录名" v-model="formData.userName" />
                 </FormItem>
               </div>
             </div>
@@ -68,40 +62,35 @@ export default {
       isLoading: false,
       type: '',
       formData: {
-        brandId: '',
+        birthday: '',
+        cardNo: '',
+        gender: '',
+        mobile: '',
         name: '',
-        hotelPhone: '',
-        reservePhone: '',
-        contactName: '',
-        mobilePhone: '',
-        address: '',
-        roomCount: '',
-        openYear: '',
-        introduce: ''
+        password: '',
+        position: '',
+        userName: ''
       },
       confirmFn: null,
       cancelFn: null,
       formRule: {
-        brandId: [
-          { required: true, message: '请输入代理商名称', trigger: 'blur' }
+        cardNo: [
+          { required: true, message: '请输入身份证', trigger: 'blur' }
+        ],
+        gender: [
+          { required: true, message: '请选择性别', trigger: 'blur' }
+        ],
+        mobile: [
+          { required: true, message: '请输入联系电话', trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '请输入联系人名称', trigger: 'blur' }
+          { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
-        hotelPhone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+        password: [
+          { required: false, message: '请输入密码', trigger: 'blur' }
         ],
-        reservePhone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
-        ],
-        address: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
-        ],
-        contactName: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
-        ],
-        mobilePhone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+        userName: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ]
       }
     };
@@ -109,8 +98,12 @@ export default {
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
+      this.formData = defaultsDeep({}, item, this.formData);
       if (type === 'edit') {
-        this.formData = defaultsDeep({}, item, this.formData);
+        delete this.formData.updateTime;
+        delete this.formData.createTime;
+        this.$util.valueToStr(this.formData);
+        this.formRule.password.required = true;
       }
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -135,13 +128,10 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData,
-        provinces: this.formData.area[0],
-        city: this.formData.area[1],
-        county: this.formData.area[2]
+        ...this.formData
       };
       this.$ajax.post({
-        apiKey: this.type === 'add' ? 'hotelAdd' : 'hotelUpdate',
+        apiKey: this.type === 'add' ? 'userAdd' : 'userUpdate',
         params: formData,
         loading: false
       }).then(() => {
@@ -155,15 +145,14 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
+        birthday: '',
+        cardNo: '',
+        gender: '',
+        mobile: '',
         name: '',
-        address: '',
-        roomCount: '',
-        reservePhone: '',
-        hotelPhone: '',
-        contactName: '',
-        mobilePhone: '',
-        openYear: '',
-        introduce: ''
+        password: '',
+        position: '',
+        userName: ''
       };
       this.confirmFn = null;
       this.cancelFn = null;

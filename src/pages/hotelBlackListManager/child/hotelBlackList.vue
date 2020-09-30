@@ -4,31 +4,44 @@
       <breadcrumb></breadcrumb>
     </div>
     <div class="page-content">
-      <div class="tool-wrapper">
-        <i-button class="normal-width-btn" type="primary" @click="addItem">添加酒店</i-button>
-      </div>
-      <table-com :data="tableData"
-                 :page-num.sync="pageNum"
-                 :page-size.sync="pageSize"
-                 :total-size="totalSize"
-                 :config="tableConfig"
-                 :getList="getList">
-        <template slot="col9"
-                  slot-scope="{ item }">
-          <el-table-column :prop="item.prop"
-                           :label="item.label"
-                           :fixed="item.fixed"
-                           :min-width="item.minWidth">
-            <template slot-scope="{ row }">
-              <div class="operate-block">
-                <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
-              </div>
-            </template>
-          </el-table-column>
-        </template>
 
-      </table-com>
+      <div class="flex-box">
+        <div class="left-box">
+          <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
+        </div>
+        <div class="right-box">
+          <div class="tool-wrapper">
+            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加黑名单</i-button>
+          </div>
+          <table-com v-if="showTable"
+                     :data="tableData"
+                     :page-num.sync="pageNum"
+                     :page-size.sync="pageSize"
+                     :total-size="totalSize"
+                     :config="tableConfig"
+                     :getList="getList">
+            <template slot="col5"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <div class="operate-block">
+                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                    <i-switch size="large" :true-value="1" :false-value="0" v-model="row.status"
+                              @on-change="statusChange($event, row)">
+                      <span slot="open">停用</span>
+                      <span slot="close">启用</span>
+                    </i-switch>
+                  </div>
+                </template>
+              </el-table-column>
+            </template>
+          </table-com>
+        </div>
+      </div>
     </div>
     <editModal ref="editModal"></editModal>
     <confirmModal ref="confirmModal"></confirmModal>
@@ -38,9 +51,44 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
+import { userType } from '../../../assets/enums';
+import { mapGetters } from 'vuex';
 export default {
   components: {
     editModal
+  },
+  computed: {
+    ...mapGetters([
+      'userInfo'
+    ]),
+    orgParams () {
+      let level;
+      switch (this.userInfo.type) {
+        case userType.admin:
+          level = 3;
+          break;
+        case userType.agent:
+          level = 2;
+          break;
+        case userType.brand:
+          level = 1;
+          break;
+      }
+      return {
+        typeId: this.userInfo.id,
+        type: this.userInfo.type,
+        level
+      };
+    },
+    showOrgTree () {
+      return [userType.admin, userType.agent, userType.brand].includes(this.userInfo.type);
+    },
+    showTable () {
+      return !this.showOrgTree || Object.keys(this.nodeData).length > 0;
+    },
+    showAddBtn () {
+      return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
+    }
   },
   data () {
     return {
@@ -50,18 +98,23 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterPrams: {
-        area: ['', '', '']
-      }
+        name: ''
+      },
+      nodeData: {}
     };
   },
   methods: {
-    addItem () {
-      this.$refs.editModal.show({ type: 'add', confirmFn: this.getList });
+    onNodeClick ({ data, isDefault }) {
+      this.nodeData = data;
+      if (!isDefault) {
+        this.getList();
+      }
     },
     getList () {
       this.$ajax.post({
-        apiKey: 'hotelPageList',
+        apiKey: 'blacklistPageList',
         params: {
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize
         }
@@ -72,13 +125,47 @@ export default {
         this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
+    statusChange (val, item) {
+      if (val === 0) {
+        this.$ajax.get({
+          apiKey: 'blacklistDisableBlacklist',
+          params: {
+            id: item.id
+          }
+        }).then(() => {
+          this.$message.success('停用成功');
+        }).catch(err => {
+          this.$message.success(`停用失败${err.msg ? ': ' + err.msg : ''}`);
+        });
+      } else {
+        this.$ajax.get({
+          apiKey: 'blacklistEnableBlacklist',
+          params: {
+            id: item.id
+          }
+        }).then(() => {
+          this.$message.success('启用成功');
+        }).catch(err => {
+          this.$message.success(`启用失败${err.msg ? ': ' + err.msg : ''}`);
+        });
+      }
+    },
+    addItem () {
+      this.$refs.editModal.show({
+        type: 'add',
+        item: {
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+        },
+        confirmFn: this.getList
+      });
+    },
     editItem (item) {
       this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
     },
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.agentName}`,
+        content: `是否删除 ${item.name}`,
         confirm: () => {
           this.delItem(item);
         }
@@ -86,7 +173,7 @@ export default {
     },
     delItem (item) {
       this.$ajax.get({
-        apiKey: 'hotelDelete',
+        apiKey: 'blacklistDelete',
         params: {
           id: item.id
         }
@@ -106,8 +193,10 @@ export default {
 
 <style scoped lang="scss">
   @import "~@/assets/styles/scss/base";
-  /deep/ .table-wrapper {
-    height: calc(100% - 42px);
+  .flex-box {
+    height: 100%;
+    /deep/ .table-wrapper{
+      height: calc(100% - 42px);
+    }
   }
-
 </style>

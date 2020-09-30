@@ -4,42 +4,77 @@
       <breadcrumb></breadcrumb>
     </div>
     <div class="page-content">
-      <div class="tool-wrapper">
-        <i-button class="normal-width-btn" type="primary" @click="addItem">添加角色</i-button>
-      </div>
-      <table-com :data="tableData"
-                 :page-num.sync="pageNum"
-                 :page-size.sync="pageSize"
-                 :total-size="totalSize"
-                 :config="tableConfig"
-                 :getList="getList">
-        <template slot="col4"
-                  slot-scope="{ item }">
-          <el-table-column :prop="item.prop"
-                           :label="item.label"
-                           :width="item.width || ''">
-            <template slot-scope="{ row }">
-              <div class="operate-block">
-                <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
-              </div>
+      <div class="flex-box">
+        <div class="left-box">
+          <org-tree v-if="showOrgTree" all-selectable :params="orgParams" @nodeClick="onNodeClick"></org-tree>
+        </div>
+        <div class="right-box">
+          <div class="tool-wrapper">
+            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加角色</i-button>
+          </div>
+          <table-com v-if="showTable"
+                     :data="tableData"
+                     :page-num.sync="pageNum"
+                     :page-size.sync="pageSize"
+                     :total-size="totalSize"
+                     :config="tableConfig"
+                     :getList="getList">
+            <template slot="col4"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <div class="operate-block">
+                    <i-button type="primary" class="table-btn" size="small" @click="editMenu(row)">编辑权限</i-button>
+                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                  </div>
+                </template>
+              </el-table-column>
             </template>
-          </el-table-column>
-        </template>
-
-      </table-com>
+          </table-com>
+        </div>
+      </div>
     </div>
     <editModal ref="editModal"></editModal>
     <confirmModal ref="confirmModal"></confirmModal>
+    <editMenuModal ref="editMenuModal"></editMenuModal>
   </div>
 </template>
 
 <script>
 import editModal from '../components/editModal';
+import editMenuModal from '../components/editMenuModal';
 import { tableConfig } from './tableConfig.js';
+import { userType } from '../../../assets/enums';
+import { mapGetters } from 'vuex';
 export default {
   components: {
-    editModal
+    editModal,
+    editMenuModal
+  },
+  computed: {
+    ...mapGetters([
+      'userInfo'
+    ]),
+    orgParams () {
+      return {
+        typeId: this.userInfo.id,
+        type: this.userInfo.type,
+        level: 1
+      };
+    },
+    showOrgTree () {
+      return [userType.admin].includes(this.userInfo.type);
+    },
+    showTable () {
+      return !this.showOrgTree || Object.keys(this.nodeData).length > 0;
+    },
+    showAddBtn () {
+      return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
+    }
   },
   data () {
     return {
@@ -47,17 +82,22 @@ export default {
       tableData: [],
       pageNum: 1,
       pageSize: 10,
-      totalSize: 0
+      totalSize: 0,
+      nodeData: {}
     };
   },
   methods: {
-    addItem () {
-      this.$refs.editModal.show({ type: 'add', confirmFn: this.getList });
+    onNodeClick ({ data, isDefault }) {
+      this.nodeData = data;
+      if (!isDefault) {
+        this.getList();
+      }
     },
     getList () {
       this.$ajax.get({
         apiKey: 'rolePageList',
         params: {
+          agentId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize
         }
@@ -68,8 +108,27 @@ export default {
         this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
+    addItem () {
+      this.$refs.editModal.show({
+        type: 'add',
+        item: {
+          agentId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+        },
+        confirmFn: this.getList
+      });
+    },
     editItem (item) {
-      this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
+      this.$refs.editModal.show({
+        type: 'edit',
+        item: {
+          ...item,
+          agentId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+        },
+        confirmFn: this.getList
+      });
+    },
+    editMenu (item) {
+      this.$refs.editMenuModal.show({ item });
     },
     delClick (item) {
       this.$refs.confirmModal.show({
@@ -102,7 +161,10 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
-/deep/ .table-wrapper {
-  height: calc(100% - 42px);
+.flex-box {
+  height: 100%;
+  /deep/ .table-wrapper{
+    height: calc(100% - 42px);
+  }
 }
 </style>

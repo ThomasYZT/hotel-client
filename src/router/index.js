@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '../store';
 import { nvllRouterAuth } from './routeUtils';
-import modules from './module';
+import { treeTraverse } from '../assets/share/utils';
 Vue.use(Router);
 
 const createRouter = () => new Router({
@@ -37,7 +37,6 @@ const createRouter = () => new Router({
       },
       component: () => import('../pages/noService/index')
     },
-    ...modules,
     {
       path: '*',
       component: () => import('../pages/404/index')
@@ -54,18 +53,35 @@ export const resetRouter = (routes) => {
 };
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.needPermission) {
-    const userInfo = store.getters.userInfo;
-    if (userInfo) {
-      next();
-    } else {
-      next({
-        name: 'login'
-      });
-    }
-  } else {
+  if (['login', 'noPermission', 'noService'].includes(to.name)) {
     next();
+  } else {
+    if (store.getters.userInfo) {
+      if (!store.getters.routeInfo) {
+        store.dispatch('getMenuList', {
+          tip: false,
+          userInfo: store.getters.userInfo
+        }).then(route => {
+          if (treeTraverse(store.getters.routeInfo, (item) => item.path === to.path)) {
+            setTimeout(() => {
+              next({ ...to, replace: true });
+            });
+          } else {
+            next({
+              name: route.name
+            });
+          }
+        }).catch(err => {
+          next({ name: 'login' });
+        });
+      } else {
+        next();
+      }
+    } else {
+      next({ name: 'login' });
+    }
   }
+
 });
 
 export default router;
