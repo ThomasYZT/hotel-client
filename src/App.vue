@@ -30,7 +30,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
   html, body {
     height: 100%;
     width: 100%;
