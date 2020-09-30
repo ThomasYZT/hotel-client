@@ -92,7 +92,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped lang="scss">
   .demo-upload-list{
     display: inline-block;
     width: 60px;
