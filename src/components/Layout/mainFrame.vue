@@ -63,7 +63,7 @@ export default {
   height: 100%;
   width: 100%;
   .frame-content {
-    @include flex_layout(row, center, center);
+    @include flex_layout(row, center, flex-start);
     position: relative;
     height: calc(100% - 38px);
     width: 100%;
