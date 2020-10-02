@@ -93,8 +93,8 @@ export default {
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
-      filterPrams: {
-        name: ''
+      filterParams: {
+
       },
       nodeData: {}
     };
@@ -112,7 +112,8 @@ export default {
         params: {
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          ...this.filterParams
         }
       }).then(data => {
         this.tableData = data.data || [];

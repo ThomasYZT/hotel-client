@@ -43,8 +43,20 @@ const actions = {
         commit('UPDATE_ROUTEINFO', _routes);
         resolve(_routes[0]);
       } catch (err) {
-        reject({ type: 'routeError', err });
+        reject(err);
       }
+    });
+  },
+  getDictionary ({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      ajax.get({
+        apiKey: 'dictionaryGetAllList',
+        params
+      }).then(data => {
+        resolve(data);
+      }).catch(err => {
+        reject(err);
+      });
     });
   },
   getMenuList ({ commit, dispatch }, { tip, userInfo }) {

@@ -10,14 +10,13 @@ export const tableConfig = [
     minWidth: '100px'
   },
   {
-    prop: 'phone',
+    prop: 'idCard',
     label: '身份证号',
     minWidth: '200px'
   },
   {
-    prop: 'remark',
+    prop: 'phone',
     label: '手机号',
-    minWidth: '100px',
-    fixed: 'right'
+    minWidth: '100px'
   }
 ];

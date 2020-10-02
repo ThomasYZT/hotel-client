@@ -10,6 +10,17 @@
           <org-tree v-if="showOrgTree" all-selectable :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
         <div class="right-box">
+          <div class="filter-block">
+            <div class="filter-item">
+              <div class="filter-label">身份证</div>
+              <i-input size="small" v-model="filterParams.cardNo"></i-input>
+            </div>
+            <div class="filter-item">
+              <div class="filter-label">手机号</div>
+              <i-input size="small" v-model="filterParams.mobile"></i-input>
+            </div>
+            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
+          </div>
           <div class="tool-wrapper">
             <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加用户</i-button>
           </div>
@@ -96,7 +107,7 @@ export default {
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
-      filterPrams: {
+      filterParams: {
         name: ''
       },
       nodeData: {}
@@ -126,7 +137,8 @@ export default {
           typeId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
           type: this.showOrgTree ? this.nodeData.type : this.userInfo.type,
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          ...this.filterParams
         }
       }).then(data => {
         this.tableData = data.data || [];
@@ -175,7 +187,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 42px);
+    height: calc(100% - 76px);
   }
 }
 </style>

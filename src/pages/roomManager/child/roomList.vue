@@ -10,6 +10,27 @@
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
         <div class="right-box">
+          <div class="filter-block">
+            <div class="filter-item">
+              <div class="filter-label">房号</div>
+              <i-input size="small" v-model="filterParams.roomNumber"></i-input>
+            </div>
+            <div class="filter-item">
+              <div class="filter-label">楼层</div>
+              <i-input size="small" v-model="filterParams.floorId"></i-input>
+            </div>
+            <div class="filter-item">
+              <div class="filter-label">房间类型</div>
+              <i-select size="small" v-model="filterParams.roomTypeId" style="width: 100%;">
+                <i-option v-for="item in roomTypeList"
+                          :value="item.id"
+                          :key="item.id">
+                  {{ item.typeName }}
+                </i-option>
+              </i-select>
+            </div>
+            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
+          </div>
           <div class="tool-wrapper">
             <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加房间</i-button>
           </div>
@@ -92,9 +113,12 @@ export default {
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
-      filterPrams: {
-        name: ''
+      filterParams: {
+        roomNumber: '',
+        floorId: 0,
+        roomTypeId: 0
       },
+      roomTypeList: [],
       nodeData: {}
     };
   },
@@ -106,18 +130,45 @@ export default {
       }
     },
     getList () {
-      this.$ajax.post({
-        apiKey: 'roomPageList',
-        params: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
-          pageNum: this.pageNum,
-          pageSize: this.pageSize
-        }
-      }).then(data => {
-        this.tableData = data.data || [];
-        this.totalSize = data.totalSize || 0;
-      }).catch(err => {
-        this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
+      this.getAllRoomType().then(() => {
+        this.$ajax.post({
+          apiKey: 'roomPageList',
+          params: {
+            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
+            pageNum: this.pageNum,
+            pageSize: this.pageSize,
+            ...this.filterParams
+          }
+        }).then(data => {
+          this.tableData = data.data || [];
+          this.totalSize = data.totalSize || 0;
+        }).catch(err => {
+          this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
+        });
+      }).catch(() => {
+        this.$message.error('获取房间类型失败');
+      });
+    },
+    getAllRoomType () {
+      return new Promise((resolve, reject) => {
+        this.$ajax.get({
+          apiKey: 'roomTypeGetAllList',
+          params: {
+            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+          },
+          loading: false
+        }).then(data => {
+          this.roomTypeList = data ? [{
+            id: 0,
+            typeName: '全部'
+          }].concat(data) : [{
+            id: 0,
+            typeName: '全部'
+          }];
+          resolve();
+        }).catch(err => {
+          reject(err);
+        });
       });
     },
     addItem () {
@@ -166,7 +217,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 42px);
+    height: calc(100% - 78px);
   }
 }
 </style>

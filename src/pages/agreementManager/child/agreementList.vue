@@ -10,6 +10,17 @@
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
         <div class="right-box">
+          <div class="filter-block">
+            <div class="filter-item">
+              <div class="filter-label">公司名称</div>
+              <i-input size="small" v-model="filterParams.companyName"></i-input>
+            </div>
+            <!--<div class="filter-item">
+              <div class="filter-label">联系人</div>
+              <i-input size="small" v-model="filterParams.name"></i-input>
+            </div>-->
+            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
+          </div>
           <div class="tool-wrapper">
             <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加协议客户</i-button>
           </div>
@@ -92,8 +103,9 @@ export default {
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
-      filterPrams: {
-        name: ''
+      filterParams: {
+        companyName: '',
+        // name: ''
       },
       nodeData: {}
     };
@@ -111,7 +123,8 @@ export default {
         params: {
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          ...this.filterParams
         }
       }).then(data => {
         this.tableData = data.data || [];
@@ -166,7 +179,7 @@ export default {
   .flex-box {
     height: 100%;
     /deep/ .table-wrapper{
-      height: calc(100% - 42px);
+      height: calc(100% - 76px);
     }
   }
 </style>

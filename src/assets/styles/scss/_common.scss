@@ -69,6 +69,7 @@ html,body{
   .filter-item {
     @include flex_layout(row, flex-start, center);
     margin-right: 10px;
+    width: 200px;
     .filter-label {
       margin-right: 10px;
       font-size: 14px;
