@@ -15,22 +15,22 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <FormItem label="商品名称" prop="name">
-                <i-input type="text" placeholder="商品名称" v-model="formData.name" />
+                <i-input type="text" placeholder="商品名称" v-model.trim="formData.name" />
               </FormItem>
               <FormItem label="商品代码" prop="code">
-                <i-input type="text" placeholder="商品代码" v-model="formData.code" />
+                <i-input type="text" placeholder="商品代码" v-model.trim="formData.code" />
               </FormItem>
               <FormItem label="商品数量" prop="number">
-                <i-input type="text" placeholder="商品数量" v-model="formData.number" />
+                <i-input type="text" placeholder="商品数量" v-model.trim="formData.number" />
               </FormItem>
               <FormItem label="单价" prop="unitPrice">
-                <i-input type="text" placeholder="单价" v-model="formData.unitPrice" />
+                <i-input type="text" placeholder="单价" v-model.trim="formData.unitPrice" />
               </FormItem>
               <FormItem label="单位" prop="unit">
-                <i-input type="text" placeholder="单位" v-model="formData.unit" />
+                <i-input type="text" placeholder="单位" v-model.trim="formData.unit" />
               </FormItem>
               <FormItem label="库存预警数量" prop="warnCount">
-                <i-input type="text" placeholder="库存预警数量" v-model="formData.warnCount" />
+                <i-input type="text" placeholder="库存预警数量" v-model.trim="formData.warnCount" />
               </FormItem>
               <FormItem label="商品状态" prop="status">
                 <i-switch size="large" :true-value="'1'" :false-value="'0'" v-model="formData.status">
@@ -42,7 +42,7 @@
                 <img-uploader></img-uploader>
               </FormItem>-->
               <FormItem label="描述" prop="remark">
-                <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
               </FormItem>
             </div>
           </i-form>
@@ -60,6 +60,23 @@
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   data () {
+    const validateNumber = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isNumber(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入数字'));
+      }
+    };
+
+    const validateMoney = (rule, value, callback) => {
+      if (!value) callback();
+      this.$validator.validateMoney(value).then(() => {
+        callback();
+      }).catch(err => {
+        callback(err);
+      });
+    };
     return {
       visible: false,
       isLoading: false,
@@ -85,16 +102,19 @@ export default {
           { required: true, message: '请输入商品代码', trigger: 'blur' }
         ],
         number: [
-          { required: true, message: '请输入数量', trigger: 'blur' }
+          { required: true, message: '请输入数量', trigger: 'blur' },
+          { validator: validateNumber, trigger: 'blur' }
         ],
         unitPrice: [
-          { required: true, message: '请选择楼层', trigger: 'blur' }
+          { required: true, message: '请选择楼层', trigger: 'blur' },
+          { validator: validateMoney, trigger: 'blur' }
         ],
         unit: [
           { required: true, message: '请输入单位', trigger: 'blur' }
         ],
         warnCount: [
-          { required: true, message: '请输入库存预警数量', trigger: 'blur' }
+          { required: true, message: '请输入库存预警数量', trigger: 'blur' },
+          { validator: validateNumber, trigger: 'blur' }
         ],
         status: [
           { required: true, message: '请选择商品状态', trigger: 'blur' }

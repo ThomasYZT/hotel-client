@@ -15,39 +15,39 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem label="代理商名称" prop="name">
-                  <i-input type="text" placeholder="代理商名称" v-model="formData.name" />
+                  <i-input type="text" placeholder="代理商名称" v-model.trim="formData.name" />
                 </FormItem>
                 <FormItem label="联系人名称" prop="contactName">
-                  <i-input type="text" placeholder="联系人名称" v-model="formData.contactName" />
+                  <i-input type="text" placeholder="联系人名称" v-model.trim="formData.contactName" />
                 </FormItem>
                 <FormItem label="联系电话" prop="phone">
-                  <i-input type="text" placeholder="联系电话" v-model="formData.phone" />
+                  <i-input type="text" placeholder="联系电话" v-model.trim="formData.phone" />
                 </FormItem>
                 <FormItem label="地区" prop="area">
                   <areaSelector ref="areaSelector" v-model="formData.area"></areaSelector>
                 </FormItem>
                 <FormItem label="地址" prop="address">
-                  <i-input type="text" placeholder="地址" v-model="formData.address" />
+                  <i-input type="text" placeholder="地址" v-model.trim="formData.address" />
                 </FormItem>
               </div>
               <div class="form-item-block">
                 <FormItem label="邮箱" prop="email">
-                  <i-input type="text" placeholder="邮箱" v-model="formData.email" />
+                  <i-input type="text" placeholder="邮箱" v-model.trim="formData.email" />
                 </FormItem>
                 <FormItem label="小程序ID" prop="appId">
-                  <i-input type="text" placeholder="小程序ID" v-model="formData.appId" />
+                  <i-input type="text" placeholder="小程序ID" v-model.trim="formData.appId" />
                 </FormItem>
                 <FormItem label="小程序密钥" prop="secret">
-                  <i-input type="text" placeholder="secret" v-model="formData.secret" />
+                  <i-input type="text" placeholder="secret" v-model.trim="formData.secret" />
                 </FormItem>
                 <FormItem label="微信支付商户号" prop="mchId">
-                  <i-input type="text" placeholder="微信支付商户号" v-model="formData.mchId" />
+                  <i-input type="text" placeholder="微信支付商户号" v-model.trim="formData.mchId" />
                 </FormItem>
                 <FormItem label="商户平台支付密钥" prop="roleName">
-                  <i-input type="text" placeholder="商户平台支付密钥" v-model="formData.companyKey" />
+                  <i-input type="text" placeholder="商户平台支付密钥" v-model.trim="formData.companyKey" />
                 </FormItem>
                 <FormItem label="描述" prop="remark">
-                  <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                  <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
             </div>
@@ -70,6 +70,24 @@ export default {
     areaSelector
   },
   data () {
+    // 校验邮箱
+    const validateEmail = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isEmail(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入正确邮箱地址'));
+      }
+    };
+
+    const validatePhoneNum = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isMobile(value) || this.$validator.isTelephone(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入正确的联系电话'));
+      }
+    };
     return {
       visible: false,
       isLoading: false,
@@ -97,17 +115,20 @@ export default {
           { required: true, message: '请输入联系人名称', trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
         ],
         area: [
           { required: true, type: 'array', min: 3, message: '请选择区域', trigger: 'blur' }
+        ],
+        email: [
+          { validator: validateEmail, trigger: 'blur' }
         ]
       }
     };
   },
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
-      if (!item) return;
       if (type === 'edit') {
         this.formData = defaultsDeep({}, item, this.formData);
         setTimeout(() => {

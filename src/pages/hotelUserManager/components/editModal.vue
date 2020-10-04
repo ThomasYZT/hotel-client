@@ -15,30 +15,34 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem label="生日" prop="birthday">
-                  <i-input type="text" placeholder="生日" v-model="formData.birthday" />
+                  <i-date-picker v-model="formData.birthday"
+                                 :editable="false"
+                                 transfer
+                                 format="yyyy-MM-dd"
+                                 placeholder="生日"></i-date-picker>
                 </FormItem>
                 <FormItem label="身份证" prop="cardNo">
-                  <i-input type="text" placeholder="身份证" v-model="formData.cardNo" />
+                  <i-input type="text" placeholder="身份证" v-model.trim="formData.cardNo" />
                 </FormItem>
                 <FormItem label="性别" prop="gender">
-                  <i-input type="text" placeholder="性别" v-model="formData.gender" />
+                  <i-input type="text" placeholder="性别" v-model.trim="formData.gender" />
                 </FormItem>
                 <FormItem label="手机号" prop="mobile">
-                  <i-input type="text" placeholder="手机号" v-model="formData.mobile" />
+                  <i-input type="text" placeholder="手机号" v-model.trim="formData.mobile" />
                 </FormItem>
                 <FormItem label="姓名" prop="name">
-                  <i-input type="text" placeholder="姓名" v-model="formData.name" />
+                  <i-input type="text" placeholder="姓名" v-model.trim="formData.name" />
                 </FormItem>
               </div>
               <div class="form-item-block">
                 <FormItem label="密码" prop="password">
-                  <i-input type="text" placeholder="密码" v-model="formData.password" />
+                  <i-input type="text" placeholder="密码" v-model.trim="formData.password" />
                 </FormItem>
                 <FormItem label="职位" prop="position">
-                  <i-input type="text" placeholder="职位" v-model="formData.position" />
+                  <i-input type="text" placeholder="职位" v-model.trim="formData.position" />
                 </FormItem>
                 <FormItem label="登录名" prop="userName">
-                  <i-input type="text" placeholder="登录名" v-model="formData.userName" />
+                  <i-input type="text" placeholder="登录名" v-model.trim="formData.userName" />
                 </FormItem>
               </div>
             </div>
@@ -57,6 +61,23 @@
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   data () {
+    const validatePhoneNum = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isMobile(value) || this.$validator.isTelephone(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入正确的联系电话'));
+      }
+    };
+    const validateIdCard = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isIdCard(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入正确身份证号码'));
+      }
+    };
+
     return {
       visible: false,
       isLoading: false,
@@ -75,13 +96,15 @@ export default {
       cancelFn: null,
       formRule: {
         cardNo: [
-          { required: true, message: '请输入身份证', trigger: 'blur' }
+          { required: true, message: '请输入身份证', trigger: 'blur' },
+          { validator: validateIdCard, trigger: 'blur' }
         ],
         gender: [
           { required: true, message: '请选择性别', trigger: 'blur' }
         ],
         mobile: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
         ],
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
@@ -128,7 +151,8 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData
+        ...this.formData,
+        birthday: this.$date(this.formData.birthday).format('YYYY-MM-DD')
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'userAdd' : 'userUpdate',

@@ -8,3 +8,18 @@ export const userType = {
 export const storageKey = {
   userInfo: 'hotel:userinfo'
 };
+
+export const storageStatusList = [
+  {
+    value: '0',
+    name: '寄存'
+  },
+  {
+    value: '1',
+    name: '取出'
+  },
+  {
+    value: '2',
+    name: '遗失'
+  }
+];

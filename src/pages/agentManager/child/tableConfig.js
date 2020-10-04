@@ -18,17 +18,17 @@ export const tableConfig = [
   {
     prop: 'provincesName',
     label: '省',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'cityName',
     label: '市',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'countyName',
     label: '区',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'contactName',

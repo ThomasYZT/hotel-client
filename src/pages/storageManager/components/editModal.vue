@@ -18,21 +18,37 @@
                   <i-input type="text" placeholder="寄存类型" v-model="formData.consignType" />
                 </FormItem>
                 <FormItem label="寄存时间" prop="consignTime">
-                  <i-input type="text" placeholder="寄存时间" v-model="formData.consignTime" />
+                  <i-date-picker v-model="formData.consignTime"
+                                 :editable="false"
+                                 transfer
+                                 type="datetime"
+                                 format="yyyy-MM-dd HH:mm"
+                                 placeholder="寄存时间"></i-date-picker>
                 </FormItem>
                 <FormItem label="取出时间" prop="retrieveTime">
-                  <i-input type="text" placeholder="取出时间" v-model="formData.retrieveTime" />
+                  <i-date-picker v-model="formData.retrieveTime"
+                                 :editable="false"
+                                 transfer
+                                 type="datetime"
+                                 format="yyyy-MM-dd HH:mm"
+                                 placeholder="取出时间"></i-date-picker>
                 </FormItem>
               </div>
               <div class="form-item-block">
                 <FormItem label="状态" prop="status">
-                  <i-input type="text" placeholder="状态" v-model="formData.status" />
+                  <i-select v-model="formData.status">
+                    <i-option v-for="item in storageStatusList"
+                              :value="String(item.value)"
+                              :key="item.value">
+                      {{ item.name }}
+                    </i-option>
+                  </i-select>
                 </FormItem>
                 <FormItem label="会员ID" prop="vipId">
-                  <i-input type="text" placeholder="会员ID" v-model="formData.vipId" />
+                  <i-input type="text" placeholder="会员ID" v-model.trim="formData.vipId" />
                 </FormItem>
                 <FormItem label="描述" prop="remark">
-                  <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                  <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
             </div>
@@ -49,9 +65,11 @@
 
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
+import { storageStatusList } from '../../../assets/enums';
 export default {
   data () {
     return {
+      storageStatusList,
       visible: false,
       isLoading: false,
       type: '',
@@ -67,19 +85,19 @@ export default {
       cancelFn: null,
       formRule: {
         consignType: [
-          { required: true, message: '请输入代理商名称', trigger: 'blur' }
+          { required: true, message: '请选择寄存类型', trigger: 'blur' }
         ],
         consignTime: [
-          { required: true, message: '请输入联系人名称', trigger: 'blur' }
+          { required: true, type: 'date', message: '请选择寄存时间', trigger: 'blur' }
         ],
         retrieveTime: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, type: 'date', message: '请选择取出时间', trigger: 'blur' }
         ],
         status: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请选择状态', trigger: 'blur' }
         ],
         vipId: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入会员ID', trigger: 'blur' }
         ]
       }
     };
@@ -88,6 +106,7 @@ export default {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
       this.formData = defaultsDeep({}, item, this.formData);
+      this.$util.valueToStr(this.formData);
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -111,7 +130,9 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData
+        ...this.formData,
+        consignTime: this.$date(this.formData.consignTime).format('YYYY-MM-DD HH:mm:ss'),
+        retrieveTime: this.$date(this.formData.retrieveTime).format('YYYY-MM-DD HH:mm:ss')
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'storageAdd' : 'storageUpdate',

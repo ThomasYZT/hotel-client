@@ -15,19 +15,19 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <FormItem label="房间号" prop="roomNumber">
-                <i-input type="text" placeholder="房间号" v-model="formData.roomNumber" />
+                <i-input type="text" placeholder="房间号" v-model.trim="formData.roomNumber" />
               </FormItem>
               <FormItem label="房间类型" prop="roomTypeId">
-                <i-input type="text" placeholder="房间类型" v-model="formData.roomTypeId" />
+                <i-input type="text" placeholder="房间类型" v-model.trim="formData.roomTypeId" />
               </FormItem>
               <FormItem label="楼层" prop="floorId">
-                <i-input type="text" placeholder="楼层" v-model="formData.floorId" />
+                <i-input type="text" placeholder="楼层" v-model.trim="formData.floorId" />
               </FormItem>
               <FormItem label="分机号" prop="phoneExt">
-                <i-input type="text" placeholder="分机号" v-model="formData.phoneExt" />
+                <i-input type="text" placeholder="分机号" v-model.trim="formData.phoneExt" />
               </FormItem>
               <FormItem label="描述" prop="remark">
-                <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
               </FormItem>
             </div>
           </i-form>

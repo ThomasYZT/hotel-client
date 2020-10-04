@@ -1,5 +1,6 @@
 import store from '../store';
 import routes from './module/index';
+import { treeTraverse } from '../assets/share/utils';
 
 export const nvllRouterAuth = (to) => {
   if (store.getters.userInfo && store.getters.routeInfo) {
@@ -17,7 +18,9 @@ export const generateRoutes = (menuInfo) => {
   if (menuInfo === 'all') {
     return routes;
   } else {
-
+    return routes.filter((routeConfig) => treeTraverse([routeConfig], (item) => {
+      return !!menuInfo.find(info => info.url === item.path);
+    }));
   }
 };
 

@@ -15,39 +15,43 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem label="酒店名称" prop="name">
-                  <i-input type="text" placeholder="品牌" v-model="formData.name" />
+                  <i-input type="text" placeholder="品牌" v-model.trim="formData.name" />
                 </FormItem>
                 <FormItem label="酒店地址" prop="address">
-                  <i-input type="text" placeholder="酒店地址" v-model="formData.address" />
+                  <i-input type="text" placeholder="酒店地址" v-model.trim="formData.address" />
                 </FormItem>
                 <FormItem label="房间数量" prop="roomCount">
-                  <i-input type="text" placeholder="房间数量" v-model="formData.roomCount" />
+                  <i-input type="text" placeholder="房间数量" v-model.trim="formData.roomCount" />
                 </FormItem>
                 <FormItem label="预定房间电话" prop="reservePhone">
-                  <i-input type="text" placeholder="预定房间电话" v-model="formData.reservePhone" />
+                  <i-input type="text" placeholder="预定房间电话" v-model.trim="formData.reservePhone" />
                 </FormItem>
                 <FormItem label="酒店电话" prop="hotelPhone">
-                  <i-input type="text" placeholder="酒店电话" v-model="formData.hotelPhone" />
+                  <i-input type="text" placeholder="酒店电话" v-model.trim="formData.hotelPhone" />
                 </FormItem>
               </div>
               <div class="form-item-block">
                 <FormItem label="联系人名称" prop="contactName">
-                  <i-input type="text" placeholder="联系人名称" v-model="formData.contactName" />
+                  <i-input type="text" placeholder="联系人名称" v-model.trim="formData.contactName" />
                 </FormItem>
                 <FormItem label="联系电话" prop="mobilePhone">
-                  <i-input type="text" placeholder="联系电话" v-model="formData.mobilePhone" />
+                  <i-input type="text" placeholder="联系电话" v-model.trim="formData.mobilePhone" />
                 </FormItem>
                 <FormItem label="开业年份" prop="openYear">
-                  <i-input type="text" placeholder="开业年份" v-model="formData.openYear" />
+                  <i-date-picker v-model="formData.openYear"
+                                 :editable="false"
+                                 transfer
+                                 format="yyyy-MM-dd"
+                                 placeholder="开业年份"></i-date-picker>
                 </FormItem>
                 <FormItem label="酒店简介" prop="introduce">
-                  <i-input type="text" placeholder="酒店简介" v-model="formData.introduce" />
+                  <i-input type="text" placeholder="酒店简介" v-model.trim="formData.introduce" />
                 </FormItem>
                 <FormItem label="X坐标" prop="baiduX">
-                  <i-input type="number" placeholder="职位" v-model="formData.baiduX" />
+                  <i-input placeholder="X坐标" v-model.trim="formData.baiduX" />
                 </FormItem>
                 <FormItem label="Y坐标" prop="baiduY">
-                  <i-input type="number" placeholder="Y坐标" v-model="formData.baiduY" />
+                  <i-input placeholder="Y坐标" v-model.trim="formData.baiduY" />
                 </FormItem>
               </div>
             </div>
@@ -66,6 +70,23 @@
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   data () {
+    const validateNumber = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isNumber(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入数字'));
+      }
+    };
+
+    const validatePhoneNum = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isMobile(value) || this.$validator.isTelephone(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入正确的联系电话'));
+      }
+    };
     return {
       visible: false,
       isLoading: false,
@@ -90,10 +111,12 @@ export default {
           { required: true, message: '请输入酒店名称', trigger: 'blur' }
         ],
         hotelPhone: [
-          { required: true, message: '请输入酒店电话', trigger: 'blur' }
+          { required: true, message: '请输入酒店电话', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
         ],
         reservePhone: [
-          { required: true, message: '请输入房间预定电话', trigger: 'blur' }
+          { required: true, message: '请输入房间预定电话', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
         ],
         address: [
           { required: true, message: '请输入酒店地址', trigger: 'blur' }
@@ -102,7 +125,11 @@ export default {
           { required: true, message: '请输入联系人名称', trigger: 'blur' }
         ],
         mobilePhone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
+        ],
+        roomCount: [
+          { validator: validateNumber, trigger: 'blur' }
         ],
         baiduX: [
           { required: true, message: '请输入X坐标', trigger: 'blur' }
@@ -117,6 +144,7 @@ export default {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
       this.formData = defaultsDeep({}, item, this.formData);
+      this.$util.valueToStr(this.formData);
 
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -141,12 +169,16 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData
+        ...this.formData,
+        openYear: this.$date(this.formData.openYear).format('YYYY-MM-DD HH:mm:ss')
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'hotelAdd' : 'hotelUpdate',
         params: formData,
-        loading: false
+        loading: false,
+        config: {
+          headers: { 'Content-Type': 'application/json;charset-UTF-8' }
+        }
       }).then(() => {
         this.$message.success(this.type === 'add' ? '添加成功' : '编辑成功');
         this.confirmFn && this.confirmFn();

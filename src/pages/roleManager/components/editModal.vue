@@ -14,10 +14,10 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <FormItem label="角色名称" prop="roleName">
-                <i-input type="text" placeholder="角色名称" v-model="formData.roleName" />
+                <i-input type="text" placeholder="角色名称" v-model.trim="formData.roleName" />
               </FormItem>
               <FormItem label="描述" prop="remark">
-                <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
               </FormItem>
             </div>
           </i-form>

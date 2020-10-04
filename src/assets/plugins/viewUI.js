@@ -19,7 +19,8 @@ import {
   Switch,
   Upload,
   Icon,
-  Transfer
+  Transfer,
+  DatePicker
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';
@@ -50,6 +51,7 @@ export default {
     Vue.component('iUpload', Upload);
     Vue.component('iIcon', Icon);
     Vue.component('iTransfer', Transfer);
+    Vue.component('iDatePicker', DatePicker);
     Vue.prototype.$message = Message;
 
     Message.config({

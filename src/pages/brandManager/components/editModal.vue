@@ -14,10 +14,10 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <FormItem label="品牌名称" prop="name">
-                <i-input type="text" placeholder="品牌名称" v-model="formData.name" />
+                <i-input type="text" placeholder="品牌名称" v-model.trim="formData.name" />
               </FormItem>
               <FormItem label="描述" prop="remark">
-                <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
               </FormItem>
             </div>
           </i-form>

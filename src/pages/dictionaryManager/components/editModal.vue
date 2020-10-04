@@ -15,10 +15,10 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem label="字典名称" prop="dictName">
-                  <i-input type="text" placeholder="字典名称" v-model="formData.dictName" />
+                  <i-input type="text" placeholder="字典名称" v-model.trim="formData.dictName" />
                 </FormItem>
                 <FormItem label="描述" prop="remark">
-                  <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                  <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
             </div>

@@ -9,6 +9,7 @@ import ImgUploader from '../../components/ImgUploader';
 import validator from '../share/validator';
 import globalUtil from '../share/globalUtil';
 import ajax from '../../assets/api';
+import moment from 'moment';
 
 export default {
   install: (Vue) => {
@@ -22,5 +23,6 @@ export default {
     Vue.prototype.$ajax = ajax;
     Vue.prototype.$validator = validator;
     Vue.prototype.$util = globalUtil;
+    Vue.prototype.$date = moment;
   }
 };

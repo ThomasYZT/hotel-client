@@ -14,10 +14,10 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <FormItem label="房间类型名称" prop="typeName">
-                <i-input type="text" placeholder="房间类型名称" v-model="formData.typeName" />
+                <i-input type="text" placeholder="房间类型名称" v-model.trim="formData.typeName" />
               </FormItem>
               <FormItem label="价格" prop="price">
-                <i-input type="text" placeholder="描述" v-model="formData.price" />
+                <i-input type="text" placeholder="价格" v-model.trim="formData.price" />
               </FormItem>
             </div>
           </i-form>
@@ -35,6 +35,14 @@
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   data () {
+    const validateMoney = (rule, value, callback) => {
+      if (!value) callback();
+      this.$validator.validateMoney(value).then(() => {
+        callback();
+      }).catch(err => {
+        callback(err);
+      });
+    };
     return {
       visible: false,
       isLoading: false,
@@ -50,7 +58,8 @@ export default {
           { required: true, message: '请输入房间类型名称', trigger: 'blur' }
         ],
         price: [
-          { required: true, message: '请输入价格', trigger: 'blur' }
+          { required: true, message: '请输入价格', trigger: 'blur' },
+          { validator: validateMoney, trigger: 'blur' }
         ]
       }
     };

@@ -20,16 +20,16 @@
                 </i-select>
               </FormItem>
               <FormItem label="数量" prop="storageCount">
-                <i-input type="text" placeholder="数量" v-model="formData.storageCount" />
+                <i-input type="text" placeholder="数量" v-model.trim="formData.storageCount" />
               </FormItem>
               <FormItem label="单价" prop="unitPrice">
-                <i-input type="text" placeholder="单价" v-model="formData.unitPrice" />
+                <i-input type="text" placeholder="单价" v-model.trim="formData.unitPrice" />
               </FormItem>
               <FormItem label="总价" prop="totalPrice">
-                <i-input type="text" placeholder="总价" v-model="formData.totalPrice" />
+                <i-input type="text" placeholder="总价" v-model.trim="formData.totalPrice" />
               </FormItem>
               <FormItem label="描述" prop="remark">
-                <i-input type="text" placeholder="描述" v-model="formData.remark" />
+                <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
               </FormItem>
             </div>
           </i-form>
@@ -53,6 +53,23 @@ export default {
     ])
   },
   data () {
+    const validateNumber = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isNumber(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入数字'));
+      }
+    };
+
+    const validateMoney = (rule, value, callback) => {
+      if (!value) callback();
+      this.$validator.validateMoney(value).then(() => {
+        callback();
+      }).catch(err => {
+        callback(err);
+      });
+    };
     return {
       visible: false,
       isLoading: false,
@@ -72,13 +89,16 @@ export default {
           { required: true, message: '请选择商品', trigger: 'blur' }
         ],
         storageCount: [
-          { required: true, message: '请输入数量', trigger: 'blur' }
+          { required: true, message: '请输入数量', trigger: 'blur' },
+          { validator: validateNumber, trigger: 'blur' }
         ],
         unitPrice: [
-          { required: true, message: '请输入单价', trigger: 'blur' }
+          { required: true, message: '请输入单价', trigger: 'blur' },
+          { validator: validateMoney, trigger: 'blur' }
         ],
         totalPrice: [
-          { required: true, message: '请输入总价', trigger: 'blur' }
+          { required: true, message: '请输入总价', trigger: 'blur' },
+          { validator: validateMoney, trigger: 'blur' }
         ]
       }
     };

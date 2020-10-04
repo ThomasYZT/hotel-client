@@ -43,7 +43,7 @@ export const tableConfig = [
   {
     prop: 'createTime',
     label: '创建时间',
-    minWidth: '150px'
+    minWidth: '180px'
   },
   {
     prop: 'operate',

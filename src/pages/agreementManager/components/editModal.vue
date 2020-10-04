@@ -15,19 +15,25 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem label="公司名称" prop="companyName">
-                  <i-input type="text" placeholder="公司名称" v-model="formData.companyName" />
+                  <i-input type="text" placeholder="公司名称" v-model.trim="formData.companyName" />
                 </FormItem>
                 <FormItem label="联系人" prop="name">
-                  <i-input type="text" placeholder="联系人" v-model="formData.name" />
+                  <i-input type="text" placeholder="联系人" v-model.trim="formData.name" />
                 </FormItem>
                 <FormItem label="联系电话" prop="phone">
-                  <i-input type="text" placeholder="联系电话" v-model="formData.phone" />
+                  <i-input type="text" placeholder="联系电话" v-model.trim="formData.phone" />
                 </FormItem>
                 <FormItem label="签订时间" prop="signedTime">
-                  <i-input type="text" placeholder="签订时间" v-model="formData.signedTime" />
+                  <i-date-picker v-model="formData.signedTime"
+                                 :editable="false"
+                                 transfer
+                                 type="datetime"
+                                 format="yyyy-MM-dd HH:mm"
+                                 placeholder="签订时间"></i-date-picker>
+
                 </FormItem>
                 <FormItem label="备注" prop="remark">
-                  <i-input type="text" placeholder="地址" v-model="formData.remark" />
+                  <i-input type="text" placeholder="地址" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
               <div class="form-item-block">
@@ -39,8 +45,8 @@
                   <div>原始价格：{{item.originalPrice}}</div>
                   <FormItem label="折扣价格"
                             :prop="'priceList.' + index + '.discountPrice'"
-                            :rules="{required: true, message: `请输入${item.typeName}的折扣价格`, trigger: 'blur'}">
-                    <i-input type="text" placeholder="折扣价格" v-model="item.discountPrice" />
+                            :rules="discountPriceRule">
+                    <i-input type="text" placeholder="折扣价格" v-model.trim="item.discountPrice" />
                   </FormItem>
                 </div>
               </div>
@@ -60,6 +66,22 @@
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   data () {
+    const validatePhoneNum = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isMobile(value) || this.$validator.isTelephone(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入正确的联系电话'));
+      }
+    };
+    const validateMoney = (rule, value, callback) => {
+      if (!value) callback();
+      this.$validator.validateMoney(value).then(() => {
+        callback();
+      }).catch(err => {
+        callback(err);
+      });
+    };
     return {
       visible: false,
       isLoading: false,
@@ -82,12 +104,17 @@ export default {
           { required: true, message: '请输入联系人', trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: '请输入联系电话', trigger: 'blur' }
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
         ],
         signedTime: [
-          { required: true, message: '请选择签订协议时间', trigger: 'blur' }
+          { required: true, type: 'date', message: '请选择签订协议时间', trigger: 'blur' }
         ]
-      }
+      },
+      discountPriceRule: [
+        { required: true, message: `请输入折扣价格`, trigger: 'blur' },
+        { validator: validateMoney, trigger: 'blur' }
+      ]
     };
   },
   methods: {
@@ -171,7 +198,8 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData
+        ...this.formData,
+        signedTime: this.$date(this.formData.signedTime).format('YYYY-MM-DD')
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'agreementAdd' : 'agreementUpdate',

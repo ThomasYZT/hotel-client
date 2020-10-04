@@ -16,17 +16,17 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem label="手机号" prop="phone">
-                  <i-input type="text" placeholder="手机号" v-model="formData.phone" @on-blur="getByPhone" />
+                  <i-input type="text" placeholder="手机号" v-model.trim="formData.phone" @on-blur="getByPhone" />
                 </FormItem>
                 <template v-if="Object.keys(customerInfo).length > 0 || type !== 'add'">
                   <FormItem label="姓名" prop="name">
-                    <i-input :disabled="type === 'add'" type="text" placeholder="姓名" v-model="formData.name" />
+                    <i-input :disabled="type === 'add'" type="text" placeholder="姓名" v-model.trim="formData.name" />
                   </FormItem>
                   <FormItem label="性别" prop="sex">
-                    <i-input :disabled="type === 'add'" type="text" placeholder="性别" v-model="formData.sex" />
+                    <i-input :disabled="type === 'add'" type="text" placeholder="性别" v-model.trim="formData.sex" />
                   </FormItem>
                   <FormItem label="身份证号" prop="idCard">
-                    <i-input :disabled="type === 'add'" type="text" placeholder="身份证号" v-model="formData.idCard" />
+                    <i-input :disabled="type === 'add'" type="text" placeholder="身份证号" v-model.trim="formData.idCard" />
                   </FormItem>
                   <FormItem label="描述" prop="remark">
                     <i-input type="text" placeholder="描述" v-model="formData.remark" />
@@ -49,6 +49,14 @@
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   data () {
+    const validatePhoneNum = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isMobile(value) || this.$validator.isTelephone(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入正确的联系电话'));
+      }
+    };
     return {
       visible: false,
       isLoading: false,
@@ -62,7 +70,8 @@ export default {
       cancelFn: null,
       formRule: {
         phone: [
-          { required: true, message: '请输入电话号码', trigger: 'blur' }
+          { required: true, message: '请输入电话号码', trigger: 'blur' },
+          { validator: validatePhoneNum, trigger: 'blur' }
         ]
       }
     };
