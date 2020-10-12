@@ -1,7 +1,7 @@
 <template>
   <div class="frame-aside">
     <div class="menu-list">
-      <menuTree></menuTree>
+      <menuTree :expand="expand"></menuTree>
     </div>
   </div>
 </template>
@@ -9,9 +9,15 @@
 <script>
 import menuTree from '../MenuTree';
 export default {
+  props: {
+    expand: {
+      type: Boolean,
+      default: true
+    }
+  },
   components: {
     menuTree
-  }
+  },
 };
 </script>
 

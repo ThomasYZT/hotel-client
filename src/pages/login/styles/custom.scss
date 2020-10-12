@@ -16,8 +16,9 @@
       .ivu-tabs-tab {
         flex: 1 0;
         text-align: center;
-        color: #333333;
-        font-weight: bold;
+        font-size: 16px;
+        color: $color_000;
+        font-weight: normal;
 
         &:last-child {
           margin: 0;
@@ -36,6 +37,10 @@
 }
 
 /deep/ .ivu-form-item {
+  .ivu-form-item-label {
+    font-size: 16px;
+    color: $color_000;
+  }
   &:last-child {
     margin-bottom: 17px;
   }

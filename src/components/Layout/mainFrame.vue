@@ -1,13 +1,16 @@
 <template>
   <div class="main-frame">
     <!-- header -->
-    <frameHeader v-if="header"></frameHeader>
+    <frameHeader v-if="header" :tool="showTool"></frameHeader>
 
-    <div class="frame-content">
+    <div class="frame-content" :class="{ 'no-header' : !header }">
       <!-- aside -->
-      <frameAside v-if="aside"></frameAside>
+      <frameAside v-if="aside" :class="{ 'is-rollup': !isMenuExpend }" :expand="isMenuExpend"></frameAside>
 
       <div class="router-com" v-if="routerCom">
+        <div class="bread-wrapper">
+          <breadcrumb></breadcrumb>
+        </div>
         <!-- main -->
         <frameMain>
           <slot name="router"></slot>
@@ -40,6 +43,10 @@ export default {
     routerCom: {
       type: Boolean,
       default: true
+    },
+    showTool: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
@@ -50,7 +57,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'loading'
+      'loading',
+      'isMenuExpend'
     ])
   }
 };
@@ -65,12 +73,22 @@ export default {
   .frame-content {
     @include flex_layout(row, center, flex-start);
     position: relative;
-    height: calc(100% - 38px);
+    height: calc(100% - 30px);
     width: 100%;
+
+    &.no-header {
+      height: 100%;
+    }
 
     .frame-aside {
       @include flex_set(0, 1, 196px);
       height: 100%;
+      transition: all 0.3s;
+
+      &.is-rollup {
+        flex-basis: 50px !important;
+        padding: 0;
+      }
     }
 
     .router-com {
@@ -78,6 +96,17 @@ export default {
       flex: 1 0 calc(100% - 196px);
       height: 100%;
       overflow-y: auto;
+
+      .bread-wrapper {
+        @include flex_layout(row, flex-start, center);
+        padding: 0 10px;
+        height: 40px;
+        width: 100%;
+      }
+
+      /deep/ .frame-main {
+        height: calc(100% - 40px);
+      }
     }
   }
 

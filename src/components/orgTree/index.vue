@@ -1,30 +1,35 @@
 <template>
   <div class="org-tree">
     <div class="tree-wrapper">
-      <div class="title">{{title}}</div>
-      <el-tree  ref="Tree"
-                :data="treeData"
-                :props="treeProps"
-                node-key="id"
-                :highlight-current="false"
-                :expand-on-click-node="false"
-                default-expand-all
-                @node-click="onNodeClick">
-        <div class="custom-tree-node" slot-scope="{ node }">
-          <span>{{ node.label }}</span>
-        </div>
-      </el-tree>
+      <div class="title">{{title || treeTitle}}</div>
+      <div class="content">
+        <el-tree  ref="Tree"
+                  :data="treeData"
+                  :props="treeProps"
+                  node-key="id"
+                  :highlight-current="false"
+                  :expand-on-click-node="false"
+                  :indent="8"
+                  default-expand-all
+                  @node-click="onNodeClick">
+          <div class="custom-tree-node" slot-scope="{ node }">
+            <span>{{ node.label }}</span>
+          </div>
+        </el-tree>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { userType } from '../../assets/enums';
 export default {
   name: 'OrgTree',
   props: {
     title: {
       type: String,
-      default: '组织架构'
+      default: ''
     },
     treeApi: {
       type: String,
@@ -47,6 +52,23 @@ export default {
           label: 'name',
           children: 'list'
         };
+      }
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'userInfo'
+    ]),
+    treeTitle () {
+      switch (this.userInfo.type) {
+        case userType.brand:
+          return '酒店列表';
+        case userType.agent:
+          return '品牌列表';
+        case userType.admin:
+          return '代理商列表';
+        default:
+          return '酒店列表';
       }
     }
   },
@@ -127,17 +149,30 @@ export default {
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
 .org-tree {
+  padding: 15px 15px;
   margin-right: 10px;
   height: 100%;
-  min-width: 300px;
-  overflow-y: auto;
+  min-width: 200px;
   border-right: 1px solid $lightGray;
+  background-color: #FFFFFF;
+  border-radius: 5px;
 
   .tree-wrapper {
-    margin-right: 10px;
+    @include flex_layout(column, flex-start, center);
+    height: 100%;
     .title {
-      @include flex_layout(row, center, center);
+      @include flex_layout(row, flex-start, center);
+      margin-top: -10px;
+      width: 100%;
       height: 45px;
+      font-weight: bold;
+      border-bottom: 2px solid #bfbfbf;
+    }
+    .content {
+      margin: 20px 0;
+      width: 100%;
+      height: calc(100% - 45px);
+      overflow-y: auto;
     }
 
     /deep/ .click-active {

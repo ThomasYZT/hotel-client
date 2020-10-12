@@ -2,14 +2,11 @@
   <div class="modal-wrapper">
     <el-dialog :title="title"
                :visible.sync="visible"
-               width="20%"
-               center>
-      <div class="dialog-wrapper">
-        <span>{{content}}</span>
-      </div>
+               width="30%">
+      <span>{{content}}</span>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>
@@ -55,10 +52,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/styles/scss/base";
-  .dialog-wrapper {
-    @include flex_layout(row, center, center);
-    min-height: 70px;
+@import "~@/assets/styles/scss/base";
+/deep/ .el-dialog {
+  padding: 0 10px;
+  border-radius: 5px;
+  .el-dialog__header {
+    padding: 15px 10px 10px;
+    border-bottom: 1px solid #bfbfbf;
   }
-
+  .el-dialog__body {
+    padding: 15px 10px 10px;
+  }
+}
 </style>

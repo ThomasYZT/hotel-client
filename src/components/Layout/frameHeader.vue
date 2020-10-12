@@ -1,11 +1,43 @@
 <template>
   <div class="frame-header">
-    <div class="title-bar">
+    <!--<div class="title-bar">
       <img class="logo" src="../../assets/img/logo.png" alt="">
       <span class="title">uu智慧酒店管理系统（××酒店）</span>
     </div>
     <div class="tool-bar">
       <win-bar></win-bar>
+    </div>-->
+    <div v-if="tool" class="operation-column flex-box">
+      <div class="left-box">
+        <div class="system-item">关于软件</div>
+        <div class="global-info">
+          <div class="info-item">
+            今日营业额：<span class="red-text">8888</span>元
+          </div>
+          <div class="info-item">
+            昨日营业额：<span class="red-text">8888</span>元
+          </div>
+        </div>
+        <div class="tool-box">
+          <i-input class="search-tool" size="small" placeholder="搜索会员、商品、功能">
+            <i slot="prefix" class="iconfont icon-search"></i>
+          </i-input>
+        </div>
+      </div>
+      <div class="right-box">
+        <div class="system-item">
+          消息
+          <i class="iconfont icon-xiaoxi"></i>
+        </div>
+        <div class="system-item">
+          帮助
+          <i class="iconfont icon-bangzhu"></i>
+        </div>
+        <div class="system-item">
+          账户
+          <i class="iconfont icon-zhanghu"></i>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -16,6 +48,12 @@ import { mapGetters } from 'vuex';
 export default {
   components: {
     WinBar
+  },
+  props: {
+    tool: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     ...mapGetters([
@@ -32,13 +70,15 @@ export default {
 @import "~@/assets/styles/scss/base";
 .frame-header {
   @include flex_layout(row, space-between, center);
-  padding: 0 10px 0 20px;
-  height: 38px;
+  /*padding: 0 10px 0 20px;*/
+  /*height: 38px;*/
+  height: 30px;
   background-color: $lightGreen;
   -webkit-app-region: drag;
 
   .title-bar {
     @include flex_layout(row, flex-start, center);
+    margin-left: 20px;
     height: 100%;
     .logo {
       width: 23px;
@@ -46,6 +86,7 @@ export default {
     }
 
     .title {
+      margin-right: 10px;
       margin-left: 5px;
       color: $color_000;
       font-size: $font-size-mormal;
@@ -54,6 +95,76 @@ export default {
   }
   .tool-bar {
     height: 100%;
+  }
+
+  .operation-column {
+    height: 30px;
+    width: 100%;
+    line-height: 30px;
+
+    &.flex-box {
+      .left-box {
+        @include flex_set(1, 0, auto);
+        .system-item {
+          margin-left: 20px;
+          margin-right: 20px;
+          display: inline-block;
+          vertical-align: top;
+          cursor: pointer;
+        }
+
+        .global-info {
+          @include flex_layout(row, flex-start, center);
+          display: inline-block;
+          vertical-align: top;
+
+          .info-item {
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: top;
+
+            .red-text {
+              color: red;
+            }
+          }
+        }
+
+        .tool-box {
+          height: 30px;
+          display: inline-block;
+          vertical-align: top;
+
+          .search-tool {
+            margin-left: 50px;
+            vertical-align: top;
+            height: 100%;
+            /deep/ .ivu-input {
+              padding-top: 0;
+              padding-bottom: 0;
+              height: 30px;
+              border: none;
+              border-radius: unset;
+              background-color: $lightGray;
+            }
+
+            .icon-search {
+              line-height: 30px;
+            }
+          }
+        }
+      }
+
+      .right-box {
+        @include flex_layout(row, flex-end, center);
+        @include flex_set(0, 1, auto);
+
+        .system-item {
+          display: inline-block;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+      }
+    }
   }
 }
 </style>

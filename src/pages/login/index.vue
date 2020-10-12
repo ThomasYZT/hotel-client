@@ -1,5 +1,7 @@
 <template>
   <mainFrame :aside="false"
+             :header="false"
+             :showTool="false"
              :routerCom="false">
     <template slot="content">
       <div class="page-content">
@@ -19,16 +21,16 @@
                           label-position="left">
                     <div class="form-item-wrapper">
                       <FormItem label="账号" prop="userName">
-                        <i-input size="small" type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.userName" />
+                        <i-input type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.userName" />
                       </FormItem>
                       <FormItem label="密码" prop="password">
-                        <i-input size="small" type="password" :password="true" placeholder="密码" v-model="loginFormData.password" />
+                        <i-input type="password" :password="true" placeholder="密码" v-model="loginFormData.password" />
                       </FormItem>
                     </div>
-                    <div class="login-tool">
+                    <!--<div class="login-tool">
                       <el-checkbox :disabled="isLoading">记住密码</el-checkbox>
                       <span class="forgot">忘记密码?</span>
-                    </div>
+                    </div>-->
                   </i-form>
                   <i-button :loading="isLoading" type="primary" class="submit-btn"
                             @click="handleSubmit('loginForm')">登 陆</i-button>
@@ -217,16 +219,18 @@ export default {
     box-sizing: border-box;
     padding: 19px;
     margin-top: 30px;
-    height: 279px;
-    width: 229px;
+    height: 350px;
+    width: 287px;
     background-color: $color_fff;
     border-radius: 14px;
     box-shadow: 0 4px 24px 0 rgba(0,0,0,.1);
 
     .tab-wrapper {
-      width: 100%;
+      margin: 0 auto;
+      width: 80%;
       height: 100%;
       .login-box {
+        padding-top: 30px;
         position: relative;
         height: 100%;
         width: 100%;
@@ -250,8 +254,10 @@ export default {
 
       .submit-btn {
         position: absolute;
-        bottom: 20px;
+        bottom: 40px;
         width: 100%;
+        height: 40px;
+        font-size: 16px;
         border-radius: unset;
       }
     }

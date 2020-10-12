@@ -1,27 +1,29 @@
 @import '~@/assets/styles/scss/base';
+@import "//at.alicdn.com/t/font_2047418_blaehf6jypt.css";
 
 html,body{
   -webkit-overflow-scrolling: touch;
-  font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Hiragino Sans GB,Microsoft Yahei,Microsoft Jhenghei,sans-serif !important;
+  font-family: -apple-system,Helvetica,Roboto,Arial,PingFang SC,Hiragino Sans GB,Microsoft Yahei,Microsoft Jhenghei,sans-serif !important;
 }
 
 ::-webkit-scrollbar {
   z-index: 11;
-  width: 2px;
-  height: 2px;
+  width: 5px;
+  height: 7px;
   &-thumb {
     width: 2px;
-    background: rgba(0,0,0, .3);
+    background: rgba(0,0,0, .1);
+    border-radius: 50px;
   }
 }
 
 //page
 .page-container {
-  padding: 10px 20px 0;
+  padding: 10px 10px;
   width: 100%;
   height: 100%;
   border-radius: 5px;
-  background-color: #FFFFFF;
+  background-color: #eff4f8;
   overflow-x: auto;
 
   .page-header {
@@ -30,11 +32,39 @@ html,body{
     width: 100%;
   }
   .page-content {
-    height: calc(100% - 50px);
+    height: 100%;
     width: 100%;
-    .tool-wrapper {
-      padding-bottom: 10px;
-      width: 100%;
+
+    .data-box {
+      padding: 15px 15px;
+      background-color: #FFFFFF;
+      border-radius: 5px;
+
+      .operation-wrapper {
+        height: 40px;
+        .left-box {
+          @include flex_layout(row, null, flex-start);
+        }
+        .right-box {
+          @include flex_layout(row, flex-end, flex-start);
+        }
+
+        .tool-wrapper {
+          width: 100%;
+        }
+        .filter-block {
+          .filter-item {
+            @include flex_layout(row, flex-start, center);
+            margin-right: 10px;
+            width: 300px;
+            .filter-label {
+              margin-right: 10px;
+              font-size: 14px;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -63,20 +93,6 @@ html,body{
 .table-btn {
   margin-right: 10px;
 }
-.filter-block {
-  @include flex_layout(row, flex-start, center);
-  margin-bottom: 10px;
-  .filter-item {
-    @include flex_layout(row, flex-start, center);
-    margin-right: 10px;
-    width: 200px;
-    .filter-label {
-      margin-right: 10px;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-  }
-}
 
 //btn
 .normal-width-btn {
@@ -104,8 +120,6 @@ html,body{
 
 //dialog
 .dialog-footer {
-  @include flex_layout(row, space-around, center);
-
   .dialog-cancel-btn {
     width: 40%;
   }

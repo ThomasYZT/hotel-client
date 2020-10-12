@@ -1,6 +1,8 @@
 <template>
   <div class="table-wrapper">
     <el-table ref="Table"
+              border
+              stripe
               v-if="!reset"
               size="medium"
               :data="data"
@@ -160,8 +162,15 @@ export default {
     height: 100%;
   }
   .pagination-wrapper {
-    @include flex_layout(row, flex-start, center);
+    @include flex_layout(row, flex-start, flex-end);
     height: 50px;
   }
+
+  /deep/ .custom-header-row {
+    background-color: #eff4f8;
+  }
+}
+/deep/ .custom-header-cell {
+  background-color: #eff4f8;
 }
 </style>

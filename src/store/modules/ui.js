@@ -3,7 +3,8 @@ import debounce from 'lodash/debounce';
 
 const state = {
   loading: false,
-  windowState: 'normal'
+  windowState: 'normal',
+  isMenuExpend: true
 };
 
 const getters = {
@@ -12,6 +13,9 @@ const getters = {
   },
   windowState: state => {
     return state.windowState;
+  },
+  isMenuExpend: state => {
+    return state.isMenuExpend;
   }
 };
 
@@ -21,6 +25,9 @@ const mutations = {
   },
   UPDATE_WINDOW_STATE (state, val) {
     state.windowState = val;
+  },
+  UPDATE_MENU_STATUS (state, status) {
+    state.isMenuExpend = status;
   }
 };
 
@@ -36,6 +43,9 @@ const actions = {
   },
   setWindowState ({ commit }, val) {
     commit('UPDATE_WINDOW_STATE', val);
+  },
+  setMenuExpandStatus ({ commit }, status) {
+    commit('UPDATE_MENU_STATUS', status);
   },
   showMessage: debounce((store, { type, msg }) => {
     Vue.prototype.$Message[type](msg);

@@ -1,6 +1,6 @@
 <template>
   <div class="frame-main">
-    <slot>1231212312</slot>
+    <slot></slot>
   </div>
 </template>
 
@@ -12,9 +12,9 @@ export default {
 
 <style scoped lang="scss">
 .frame-main {
-  padding: 10px 10px 0;
+  padding: 10px 10px;
   width: 100%;
   height: 100%;
-  background-color: #F8F8F9;
+  background-color: #eff4f8;
 }
 </style>

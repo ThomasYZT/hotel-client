@@ -2,7 +2,17 @@
 
   <iMenuItem v-if="!menuData.children || menuData.children.length === 0"
              :to="menuData.path"
-             :name="menuData.activePath">{{menuData.menuName}}</iMenuItem>
+             :name="menuData.activePath">
+    <span class="item-label" v-if="expand">
+      <i class="iconfont icon-xiaoxi"></i>
+      {{menuData.menuName}}
+    </span>
+    <i-tooltip v-else
+               transfer
+               :content="menuData.menuName" placement="left">
+      <i  class="iconfont icon-xiaoxi"></i>
+    </i-tooltip>
+  </iMenuItem>
   <Submenu v-else
            :name="menuData.activePath">
     <menu-com :menu-data="menuData.children"></menu-com>
@@ -18,6 +28,10 @@ export default {
       default () {
         return {};
       }
+    },
+    expand: {
+      type: Boolean,
+      default: true
     }
   },
   mounted () {
@@ -26,6 +40,8 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.item-label {
+  white-space: nowrap;
+}
 </style>
