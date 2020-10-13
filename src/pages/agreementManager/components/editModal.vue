@@ -3,27 +3,29 @@
     <el-dialog :title="type === 'add' ? '添加协议客户' : '编辑协议客户'"
                :visible.sync="visible"
                width="50%"
+               custom-class="form-dialog"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"
+                  inline
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
                   :label-width="120"
-                  label-position="left">
+                  label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="公司名称" prop="companyName">
+                <FormItem class="block-form-item" label="公司名称" prop="companyName">
                   <i-input type="text" placeholder="公司名称" v-model.trim="formData.companyName" />
                 </FormItem>
-                <FormItem label="联系人" prop="name">
+                <FormItem class="inline-form-item" label="联系人" prop="name">
                   <i-input type="text" placeholder="联系人" v-model.trim="formData.name" />
                 </FormItem>
-                <FormItem label="联系电话" prop="phone">
+                <FormItem class="inline-form-item" label="联系电话" prop="phone">
                   <i-input type="text" placeholder="联系电话" v-model.trim="formData.phone" />
                 </FormItem>
-                <FormItem label="签订时间" prop="signedTime">
+                <!--<FormItem label="签订时间" prop="signedTime">
                   <i-date-picker v-model="formData.signedTime"
                                  :editable="false"
                                  transfer
@@ -31,32 +33,39 @@
                                  format="yyyy-MM-dd HH:mm"
                                  placeholder="签订时间"></i-date-picker>
 
-                </FormItem>
-                <FormItem label="备注" prop="remark">
-                  <i-input type="text" placeholder="地址" v-model.trim="formData.remark" />
+                </FormItem>-->
+                <FormItem class="block-form-item" label="备注" prop="remark">
+                  <i-input type="textarea" placeholder="地址" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
               <div class="form-item-block">
-                <div class="form-item-block-title">价格设置</div>
-                <div v-for="(item, index) in formData.priceList"
-                     class="dynamic-form-item"
-                     :key="item.id">
-                  <div >房间类型名称：{{item.typeName}}</div>
-                  <div>原始价格：{{item.originalPrice}}</div>
-                  <FormItem label="折扣价格"
-                            :prop="'priceList.' + index + '.discountPrice'"
-                            :rules="discountPriceRule">
-                    <i-input type="text" placeholder="折扣价格" v-model.trim="item.discountPrice" />
-                  </FormItem>
-                </div>
+                <table-com :data="formData.priceList"
+                           :has-page="false"
+                           :config="tableConfig">
+                  <template slot="col2"
+                            slot-scope="{ item }">
+                    <el-table-column :prop="item.prop"
+                                     :label="item.label"
+                                     :fixed="item.fixed"
+                                     :min-width="item.minWidth">
+                      <template slot-scope="{ row, $index }">
+                        <FormItem :label-width="0"
+                                  :prop="'priceList.' + $index + '.discountPrice'"
+                                  :rules="discountPriceRule">
+                          <i-input type="text" placeholder="折扣价格" v-model="row.discountPrice"></i-input>
+                        </FormItem>
+                      </template>
+                    </el-table-column>
+                  </template>
+                </table-com>
               </div>
             </div>
           </i-form>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>
@@ -90,7 +99,6 @@ export default {
         companyName: '',
         name: '',
         phone: '',
-        signedTime: '',
         remark: '',
         priceList: ''
       },
@@ -106,14 +114,25 @@ export default {
         phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' },
           { validator: validatePhoneNum, trigger: 'blur' }
-        ],
-        signedTime: [
-          { required: true, type: 'date', message: '请选择签订协议时间', trigger: 'blur' }
         ]
       },
       discountPriceRule: [
         { required: true, message: `请输入折扣价格`, trigger: 'blur' },
         { validator: validateMoney, trigger: 'blur' }
+      ],
+      tableConfig: [
+        {
+          prop: 'typeName',
+          label: '房间类型名称'
+        },
+        {
+          prop: 'originalPrice',
+          label: '原始价格'
+        },
+        {
+          prop: 'discountPrice',
+          label: '折扣价格'
+        }
       ]
     };
   },
@@ -198,8 +217,7 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData,
-        signedTime: this.$date(this.formData.signedTime).format('YYYY-MM-DD')
+        ...this.formData
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'agreementAdd' : 'agreementUpdate',
@@ -253,11 +271,8 @@ export default {
     width: 100%;
 
     .form-item-wrapper {
-      @include flex_layout(row, space-between, flex-start);
 
       .form-item-block {
-        @include flex_set(1, 0);
-        padding-right: 25px;
         margin-right: 20px;
         max-height: 350px;
         overflow-y: auto;
