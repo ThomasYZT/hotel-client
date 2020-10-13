@@ -98,8 +98,7 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-        companyName: '',
-        // name: ''
+        companyName: ''
       },
       nodeData: {}
     };

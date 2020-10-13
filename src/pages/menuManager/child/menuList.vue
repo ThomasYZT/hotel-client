@@ -1,14 +1,10 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
-    <div class="page-content">
+        <div class="page-content">
       <div class="tree-wrapper">
         <el-tree :data="tableData"
                  node-key="id"
                  :highlight-current="false"
-                 default-expand-all
                  :expand-on-click-node="false"
                  :check-on-click-node="false">
           <div class="tree-node" slot-scope="{ node, data }">
@@ -111,6 +107,7 @@ export default {
     .tree-wrapper {
       margin-top: 10px;
       height: 100%;
+      width: 100%;
       /deep/ .el-tree-node__content {
         cursor: unset;
         &:hover {
@@ -131,7 +128,7 @@ export default {
 
         .add-node {
           @include flex_layout(row, center, center);
-          width: 100%;
+          width: 35%;
           height: 70%;
           text-align: center;
           border-radius: 4px;
@@ -147,5 +144,10 @@ export default {
     }
   }
 }
-
+.flex-box {
+  height: 100%;
+  /deep/ .table-wrapper{
+    height: calc(100% - 40px);
+  }
+}
 </style>

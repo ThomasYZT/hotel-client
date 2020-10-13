@@ -1,28 +1,22 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
-
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" all-selectable :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="filter-block">
-            <div class="filter-item">
-              <div class="filter-label">身份证</div>
-              <i-input size="small" v-model="filterParams.cardNo"></i-input>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
             </div>
-            <div class="filter-item">
-              <div class="filter-label">手机号</div>
-              <i-input size="small" v-model="filterParams.mobile"></i-input>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">姓名或登录名：</div>
+                <i-input v-model="filterParams.name" placeholder="姓名或登录名模糊查询"></i-input>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
-            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
-          </div>
-          <div class="tool-wrapper">
-            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加用户</i-button>
           </div>
           <table-com v-if="showTable"
                      :data="tableData"
@@ -31,7 +25,7 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
-            <template slot="col9"
+            <template slot="col7"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -39,7 +33,7 @@
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
                   <div class="operate-block">
-                    <i-button type="primary" class="table-btn" size="small" @click="editRole(row)">编辑角色</i-button>
+                    <i-button type="primary" class="table-btn" size="small" @click="editRole(row)">选择角色</i-button>
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
                   </div>
@@ -187,7 +181,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 76px);
+    height: calc(100% - 40px);
   }
 }
 </style>

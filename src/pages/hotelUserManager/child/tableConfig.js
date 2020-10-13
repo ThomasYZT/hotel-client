@@ -3,7 +3,12 @@ export const tableConfig = [
     prop: 'name',
     label: '姓名',
     fixed: 'left',
-    minWidth: '100px'
+    minWidth: '130px'
+  },
+  {
+    prop: 'userName',
+    label: '登录名',
+    minWidth: '130px'
   },
   {
     prop: 'gender',
@@ -13,42 +18,27 @@ export const tableConfig = [
   {
     prop: 'mobile',
     label: '手机号',
-    minWidth: '100px'
+    minWidth: '130px'
   },
   {
     prop: 'cardNo',
     label: '身份证',
-    minWidth: '100px'
+    minWidth: '170px'
   },
   {
     prop: 'birthday',
     label: '生日',
-    minWidth: '100px'
-  },
-  {
-    prop: 'password',
-    label: '密码',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'position',
     label: '职位',
-    minWidth: '100px'
-  },
-  {
-    prop: 'userName',
-    label: '登录名',
-    minWidth: '100px'
-  },
-  {
-    prop: 'createTime',
-    label: '创建时间',
-    minWidth: '180px'
+    minWidth: '130px'
   },
   {
     prop: 'operate',
     label: '操作',
     fixed: 'right',
-    minWidth: '200px'
+    minWidth: '210px'
   }
 ];
