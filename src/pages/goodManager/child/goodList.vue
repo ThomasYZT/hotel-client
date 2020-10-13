@@ -1,29 +1,29 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
-
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="filter-block">
-            <div class="filter-item">
-              <div class="filter-label">商品代码</div>
-              <i-input size="small" v-model="filterParams.code"></i-input>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
             </div>
-            <div class="filter-item">
-              <div class="filter-label">商品名称</div>
-              <i-input size="small" v-model="filterParams.name"></i-input>
+            <div class="tool-wrapper left-box" style="margin-left: 10px;">
+              <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="warnPerson">预警接收人</i-button>
             </div>
-            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
-          </div>
-          <div class="tool-wrapper">
-            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加商品</i-button>
-            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="warnPerson">预警接收人</i-button>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">商品代码：</div>
+                <i-input v-model="filterParams.code" placeholder="商品代码模糊查询"></i-input>
+              </div>
+              <div class="filter-item">
+                <div class="filter-label">商品名称：</div>
+                <i-input v-model="filterParams.name" placeholder="商品名称模糊查询"></i-input>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
+            </div>
           </div>
           <table-com v-if="showTable"
                      :data="tableData"
@@ -32,7 +32,7 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
-            <template slot="col5"
+            <template slot="col7"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -44,7 +44,7 @@
                 </template>
               </el-table-column>
             </template>
-            <template slot="col7"
+            <template slot="col8"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -199,13 +199,17 @@ export default {
       this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
     },
     delClick (item) {
-      this.$refs.confirmModal.show({
-        title: '警告',
-        content: `是否删除 ${item.name}`,
-        confirm: () => {
-          this.delItem(item);
-        }
-      });
+      if(item.status === 1) {
+         this.$message.warning('必须先下架该商品，才能删除');
+      }else {
+        this.$refs.confirmModal.show({
+          title: '警告',
+          content: `是否删除 ${item.name}`,
+          confirm: () => {
+            this.delItem(item);
+          }
+        });
+      }
     },
     delItem (item) {
       this.$ajax.get({
@@ -232,7 +236,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 76px);
+    height: calc(100% - 40px);
   }
 }
 </style>

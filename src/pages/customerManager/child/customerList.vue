@@ -1,30 +1,28 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
-
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="filter-block">
-            <div class="filter-item">
-              <div class="filter-label">姓名</div>
-              <i-input size="small" v-model="filterParams.name"></i-input>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+
             </div>
-            <!--<div class="filter-item">
-              <div class="filter-label">联系人</div>
-              <i-input size="small" v-model="filterParams.name"></i-input>
-            </div>-->
-            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">姓名：</div>
+                <i-input v-model="filterParams.name" placeholder="姓名模糊查询"></i-input>
+              </div>
+              <div class="filter-item">
+                <div class="filter-label">手机号码：</div>
+                <i-input v-model="filterParams.phone" placeholder="手机号码模糊查询"></i-input>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
+            </div>
           </div>
-          <div class="tool-wrapper">
-            <!--<i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加客户</i-button>-->
-          </div>
-          <table-com v-if="showTable"
+                    <table-com v-if="showTable"
                      :data="tableData"
                      :page-num.sync="pageNum"
                      :page-size.sync="pageSize"
@@ -104,7 +102,8 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-        name: ''
+        name: '',
+        phone: ''
       },
       nodeData: {}
     };
@@ -174,11 +173,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/styles/scss/base";
-  .flex-box {
-    height: 100%;
-    /deep/ .table-wrapper{
-      height: calc(100% - 34px);
-    }
+@import "~@/assets/styles/scss/base";
+.flex-box {
+  height: 100%;
+  /deep/ .table-wrapper{
+    height: calc(100% - 40px);
   }
+}
 </style>

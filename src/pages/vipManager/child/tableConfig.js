@@ -3,7 +3,7 @@ export const tableConfig = [
     prop: 'name',
     label: '姓名',
     fixed: 'left',
-    minWidth: '100px'
+    minWidth: '130px'
   },
   {
     prop: 'sex',
@@ -11,34 +11,24 @@ export const tableConfig = [
     minWidth: '100px'
   },
   {
-    prop: 'level',
-    label: '会员等级',
-    minWidth: '100px'
-  },
-  {
-    prop: 'openId',
-    label: '小程序身份号',
-    minWidth: '150px'
-  },
-  {
-    prop: 'unionId',
-    label: '微信身份号',
-    minWidth: '150px'
-  },
-  {
     prop: 'phone',
     label: '手机号',
-    minWidth: '150px'
+    minWidth: '130px'
+  },
+  {
+    prop: 'level',
+    label: '会员等级',
+    minWidth: '130px'
   },
   {
     prop: 'province',
-    label: '省',
-    minWidth: '100px'
+    label: '省份',
+    minWidth: '150px'
   },
   {
     prop: 'city',
     label: '城市',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'birthday',

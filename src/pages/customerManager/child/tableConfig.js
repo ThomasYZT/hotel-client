@@ -2,12 +2,12 @@ export const tableConfig = [
   {
     prop: 'name',
     label: '姓名',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'sex',
     label: '性别',
-    minWidth: '100px'
+    minWidth: '130px'
   },
   {
     prop: 'idCard',
@@ -17,6 +17,6 @@ export const tableConfig = [
   {
     prop: 'phone',
     label: '手机号',
-    minWidth: '100px'
+    minWidth: '150px'
   }
 ];

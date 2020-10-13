@@ -12,7 +12,7 @@
             </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-                <div class="filter-label">公司名称</div>
+                <div class="filter-label">公司名称：</div>
                 <i-input v-model="filterParams.companyName" placeholder="公司名称模糊查询"></i-input>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>

@@ -1,38 +1,36 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
-
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="filter-block">
-            <div class="filter-item">
-              <div class="filter-label">房号</div>
-              <i-input size="small" v-model="filterParams.roomNumber"></i-input>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
             </div>
-            <div class="filter-item">
-              <div class="filter-label">楼层</div>
-              <i-input size="small" v-model="filterParams.floorId"></i-input>
-            </div>
-            <div class="filter-item">
-              <div class="filter-label">房间类型</div>
-              <i-select size="small" v-model="filterParams.roomTypeId" style="width: 100%;">
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">房号：</div>
+                <i-input v-model="filterParams.roomNumber" placeholder="房号查询"></i-input>
+              </div>
+              <div class="filter-item">
+                <div class="filter-label">楼层：</div>
+                <i-input v-model="filterParams.floorId"></i-input>
+              </div>
+              <div class="filter-item">
+               <div class="filter-label">房间类型：</div>
+               <i-select size="small" v-model="filterParams.roomTypeId" style="width: 100%;">
                 <i-option v-for="item in roomTypeList"
                           :value="item.id"
                           :key="item.id">
                   {{ item.typeName }}
                 </i-option>
               </i-select>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
-            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
-          </div>
-          <div class="tool-wrapper">
-            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加房间</i-button>
           </div>
           <table-com v-if="showTable"
                      :data="tableData"
@@ -217,7 +215,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 78px);
+    height: calc(100% - 40px);
   }
 }
 </style>

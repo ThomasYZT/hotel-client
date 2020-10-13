@@ -1,17 +1,26 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
-
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="tool-wrapper">
-            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">新增入库</i-button>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
+            </div>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">入库开始时间：</div>
+                <i-input v-model="filterParams.storageStartTime"></i-input>
+              </div>
+              <div class="filter-item">
+                <div class="filter-label">入库结束时间：</div>
+                <i-input v-model="filterParams.storageEndTime"></i-input>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
+            </div>
           </div>
           <table-com v-if="showTable"
                      :data="tableData"
@@ -21,6 +30,18 @@
                      :config="tableConfig"
                      :getList="getList">
             <template slot="col5"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span v-if="row.status === 1">入库</span>
+                  <span v-else-if="row.status === 2">出库</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col6"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -94,7 +115,8 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-
+        // storageStartTime: '',
+        // storageEndTime: ''
       },
       nodeData: {}
     };
@@ -158,13 +180,18 @@ export default {
       });
     },
     delClick (item) {
-      this.$refs.confirmModal.show({
-        title: '警告',
-        content: `是否删除 ${item.storageNumber}`,
-        confirm: () => {
-          this.delItem(item);
-        }
-      });
+      if(item.status === 1) {
+        this.$message.warning('必须先出库，才能删除');
+      }else {
+        this.$refs.confirmModal.show({
+          title: '警告',
+          content: `是否删除 ${item.storageNumber}`,
+          confirm: () => {
+            this.delItem(item);
+          }
+        });
+      }
+
     },
     delItem (item) {
       this.$ajax.get({
@@ -191,7 +218,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 42px);
+    height: calc(100% - 40px);
   }
 }
 </style>

@@ -1,32 +1,26 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
-
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="filter-block">
-            <div class="filter-item">
-              <div class="filter-label">身份证</div>
-              <i-input size="small" v-model="filterParams.idCard"></i-input>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
             </div>
-            <div class="filter-item">
-              <div class="filter-label">姓名</div>
-              <i-input size="small" v-model="filterParams.name"></i-input>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">姓名：</div>
+                <i-input v-model="filterParams.name" placeholder="姓名模糊查询"></i-input>
+              </div>
+              <div class="filter-item">
+                <div class="filter-label">手机号码：</div>
+                <i-input v-model="filterParams.phone" placeholder="手机号码模糊查询"></i-input>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
-            <div class="filter-item">
-              <div class="filter-label">手机号</div>
-              <i-input size="small" v-model="filterParams.phone"></i-input>
-            </div>
-            <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
-          </div>
-          <div class="tool-wrapper">
-            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加黑名单</i-button>
           </div>
           <table-com v-if="showTable"
                      :data="tableData"
@@ -113,7 +107,6 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-        idCard: '',
         name: '',
         phone: ''
       },
@@ -181,13 +174,17 @@ export default {
       this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
     },
     delClick (item) {
-      this.$refs.confirmModal.show({
-        title: '警告',
-        content: `是否删除 ${item.name}`,
-        confirm: () => {
-          this.delItem(item);
-        }
-      });
+      if(item.status === 1) {
+        this.$message.warning('必须先停用该记录，才能删除');
+      }else {
+        this.$refs.confirmModal.show({
+          title: '警告',
+          content: `是否删除 ${item.name}`,
+          confirm: () => {
+            this.delItem(item);
+          }
+        });
+      }
     },
     delItem (item) {
       this.$ajax.get({
@@ -210,11 +207,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/styles/scss/base";
-  .flex-box {
-    height: 100%;
-    /deep/ .table-wrapper{
-      height: calc(100% - 76px);
-    }
+@import "~@/assets/styles/scss/base";
+.flex-box {
+  height: 100%;
+  /deep/ .table-wrapper{
+    height: calc(100% - 40px);
   }
+}
 </style>

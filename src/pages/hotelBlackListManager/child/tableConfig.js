@@ -3,7 +3,7 @@ export const tableConfig = [
     prop: 'name',
     label: '姓名',
     fixed: 'left',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'sex',
@@ -13,16 +13,16 @@ export const tableConfig = [
   {
     prop: 'idCard',
     label: '身份证号码',
-    minWidth: '100px'
+    minWidth: '150px'
   },
   {
     prop: 'phone',
     label: '手机号',
-    minWidth: '100px'
+    minWidth: '130px'
   },
   {
-    prop: 'remark',
-    label: '描述',
+    prop: 'status',
+    label: '状态',
     minWidth: '100px'
   },
   {

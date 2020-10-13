@@ -1,27 +1,31 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="flex-box">
-            <div class="left-box">
-              <org-tree title="数据类型"
+        <div class="left-box">
+          <org-tree title="数据类型"
                         tree-api="dicTypeGetAllList"
                         :params="typeOrgTreeParams"
                         :treeProps="{ label: 'name', children: 'list' }"
                         @nodeClick="onTypeNodeClick"></org-tree>
+        </div>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button type="primary" @click="addItem">添加</i-button>
             </div>
-            <div class="right-box">
-              <div class="tool-wrapper">
-                <i-button class="normal-width-btn" type="primary" @click="addItem">添加字典</i-button>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">名称：</div>
+                <i-input v-model="filterPrams.dictName" placeholder="名称模糊查询"></i-input>
               </div>
-              <table-com v-if="showTable"
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
+            </div>
+          </div>
+<table-com v-if="showTable"
                          :data="tableData"
                          :page-num.sync="pageNum"
                          :page-size.sync="pageSize"
@@ -43,13 +47,11 @@
                   </el-table-column>
                 </template>
               </table-com>
-            </div>
-          </div>
         </div>
       </div>
     </div>
-
     <editModal ref="editModal"></editModal>
+    <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
@@ -101,7 +103,7 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterPrams: {
-        name: ''
+        dictName: ''
       },
       typeOrgTreeParams: { level: 1 },
       nodeData: {},
@@ -128,7 +130,8 @@ export default {
           typeCode: this.typeNodeData.code,
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
           pageNum: this.pageNum,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          ...this.filterPrams
         }
       }).then(data => {
         this.tableData = data.data || [];
@@ -184,7 +187,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 42px);
+    height: calc(100% - 40px);
   }
 }
 </style>

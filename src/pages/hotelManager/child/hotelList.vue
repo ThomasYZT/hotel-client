@@ -1,23 +1,22 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
       <div class="flex-box">
         <div class="left-box">
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
-        <div class="right-box">
-          <div class="tool-wrapper">
-            <div class="filter-block">
-              <div class="filter-item">
-                <div class="filter-label">酒店名称</div>
-                <i-input size="small" v-model="filterPrams.name"></i-input>
-              </div>
-              <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
             </div>
-            <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="addItem">添加酒店</i-button>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">酒店名称：</div>
+                <i-input v-model="filterPrams.name" placeholder="酒店名称模糊查询"></i-input>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
+            </div>
           </div>
           <table-com v-if="showTable"
                      :data="tableData"
@@ -26,7 +25,7 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
-            <template slot="col11"
+            <template slot="col8"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -113,7 +112,7 @@ export default {
       this.$ajax.post({
         apiKey: 'hotelPageList',
         params: {
-          id: this.userInfo.type === userType.hotel ? this.userInfo.id : brandId,
+          // id: this.userInfo.type === userType.hotel ? this.userInfo.id : brandId,
           brandId,
           ...this.filterPrams,
           pageNum: this.pageNum,
@@ -141,7 +140,7 @@ export default {
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.agentName}`,
+        content: `是否删除 ${item.name}`,
         confirm: () => {
           this.delItem(item);
         }
@@ -172,7 +171,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 76px);
+    height: calc(100% - 40px);
   }
 }
 </style>

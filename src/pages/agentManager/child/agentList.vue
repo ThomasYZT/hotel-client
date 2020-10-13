@@ -1,45 +1,43 @@
 <template>
   <div class="page-container">
-    <div class="page-header">
-      <breadcrumb></breadcrumb>
-    </div>
     <div class="page-content">
-      <div class="tool-wrapper">
-        <div class="filter-block">
-          <!--<div class="filter-item">
-            <div class="filter-label">区域</div>
-            <areaSelector v-model="filterPrams.area"></areaSelector>
-          </div>-->
-          <div class="filter-item">
-            <div class="filter-label">代理商名称</div>
-            <i-input size="small" v-model="filterPrams.name"></i-input>
+      <div class="flex-box">
+        <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button type="primary" @click="addItem">添加</i-button>
+            </div>
+            <div class="filter-block right-box">
+              <div class="filter-item">
+                <div class="filter-label">代理商名称：</div>
+                <i-input v-model="filterPrams.name" placeholder="代理商名称模糊查询"></i-input>
+              </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
+            </div>
           </div>
-          <i-button size="small" class="short-width-btn" type="primary" @click="getList">查询</i-button>
-        </div>
-        <i-button class="normal-width-btn" type="primary" @click="addItem">添加代理商</i-button>
-      </div>
-      <table-com :data="tableData"
+          <table-com :data="tableData"
                  :page-num.sync="pageNum"
                  :page-size.sync="pageSize"
                  :total-size="totalSize"
                  :config="tableConfig"
                  :getList="getList">
-        <template slot="col13"
-                  slot-scope="{ item }">
-          <el-table-column :prop="item.prop"
+            <template slot="col8"
+                      slot-scope="{ item }">
+             <el-table-column :prop="item.prop"
                            :label="item.label"
                            :fixed="item.fixed"
                            :min-width="item.minWidth">
-            <template slot-scope="{ row }">
-              <div class="operate-block">
-                <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
-              </div>
+                <template slot-scope="{ row }">
+                  <div class="operate-block">
+                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                  </div>
+                </template>
+              </el-table-column>
             </template>
-          </el-table-column>
-        </template>
-
-      </table-com>
+          </table-com>
+        </div>
+      </div>
     </div>
     <editModal ref="editModal"></editModal>
     <confirmModal ref="confirmModal"></confirmModal>
@@ -93,7 +91,7 @@ export default {
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.agentName}`,
+        content: `是否删除 ${item.name}`,
         confirm: () => {
           this.delItem(item);
         }
@@ -121,8 +119,10 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
-/deep/ .table-wrapper {
-  height: calc(100% - 80px);
+.flex-box {
+  height: 100%;
+  /deep/ .table-wrapper{
+    height: calc(100% - 40px);
+  }
 }
-
 </style>
