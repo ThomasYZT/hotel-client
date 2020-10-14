@@ -112,8 +112,8 @@ export default {
   },
   data () {
     return {
-      curPage: 1,
-      curSize: 10,
+      curPage: this.pageNum,
+      curSize: this.pageSize,
       reset: false
     };
   },
@@ -137,12 +137,12 @@ export default {
   watch: {
     curSize: {
       handler (val) {
-        this.$emit('pageSize:update', val);
+        this.$emit('update:pageSize', val);
       }
     },
     curPage: {
       handler (val) {
-        this.$emit('pageNum:update', val);
+        this.$emit('update:pageNum', val);
       }
     }
   }
