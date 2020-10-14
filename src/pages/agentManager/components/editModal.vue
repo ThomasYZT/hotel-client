@@ -1,53 +1,53 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加代理商' : '编辑代理商'"
+    <el-dialog :title="type === 'add' ? '添加代理商信息' : '编辑代理商信息'"
                :visible.sync="visible"
                width="50%"
+               custom-class="form-dialog"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"
+                  inline
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
                   :label-width="120"
-                  label-position="left">
+                  label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="代理商名称" prop="name">
+                <FormItem class="inline-form-item" label="代理商名称" prop="name">
                   <i-input type="text" placeholder="代理商名称" v-model.trim="formData.name" />
                 </FormItem>
-                <FormItem label="联系人名称" prop="contactName">
+                <FormItem class="inline-form-item" label="联系人名称" prop="contactName">
                   <i-input type="text" placeholder="联系人名称" v-model.trim="formData.contactName" />
                 </FormItem>
-                <FormItem label="联系电话" prop="phone">
+                <FormItem class="inline-form-item" label="联系电话" prop="phone">
                   <i-input type="text" placeholder="联系电话" v-model.trim="formData.phone" />
                 </FormItem>
-                <FormItem label="地区" prop="area">
-                  <areaSelector ref="areaSelector" v-model="formData.area"></areaSelector>
-                </FormItem>
-                <FormItem label="地址" prop="address">
-                  <i-input type="text" placeholder="地址" v-model.trim="formData.address" />
-                </FormItem>
-              </div>
-              <div class="form-item-block">
-                <FormItem label="邮箱" prop="email">
+                <FormItem class="inline-form-item" label="邮箱" prop="email">
                   <i-input type="text" placeholder="邮箱" v-model.trim="formData.email" />
                 </FormItem>
-                <FormItem label="小程序ID" prop="appId">
+                <FormItem class="block-form-item" label="地区" prop="area">
+                  <areaSelector ref="areaSelector" v-model="formData.area" style="width:100%;"></areaSelector>
+                </FormItem>
+                <FormItem class="block-form-item" label="地址" prop="address">
+                  <i-input type="text" placeholder="地址" v-model.trim="formData.address" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="小程序ID" prop="appId">
                   <i-input type="text" placeholder="小程序ID" v-model.trim="formData.appId" />
                 </FormItem>
-                <FormItem label="小程序密钥" prop="secret">
+                <FormItem class="inline-form-item" label="小程序密钥" prop="secret">
                   <i-input type="text" placeholder="secret" v-model.trim="formData.secret" />
                 </FormItem>
-                <FormItem label="微信支付商户号" prop="mchId">
-                  <i-input type="text" placeholder="微信支付商户号" v-model.trim="formData.mchId" />
+                <FormItem class="inline-form-item" label="支付商户号" prop="mchId">
+                  <i-input type="text" placeholder="支付商户号" v-model.trim="formData.mchId" />
                 </FormItem>
-                <FormItem label="商户平台支付密钥" prop="roleName">
-                  <i-input type="text" placeholder="商户平台支付密钥" v-model.trim="formData.companyKey" />
+                <FormItem class="inline-form-item" label="支付密钥" prop="roleName">
+                  <i-input type="text" placeholder="支付密钥" v-model.trim="formData.companyKey" />
                 </FormItem>
-                <FormItem label="描述" prop="remark">
-                  <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
+                <FormItem class="block-form-item" label="描述" prop="remark">
+                  <i-input type="textarea" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
             </div>
@@ -55,8 +55,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>
@@ -202,18 +202,28 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
+/deep/ .el-dialog__body {
+  padding: 25px 0 30px;
+}
 .dialog-wrapper {
   @include flex_layout(row, center, flex-start);
-  max-height: 350px;
-  overflow-y: auto;
+  padding: 0 25px 0;
   .form-wrapper {
-    width: 90%;
+    width: 100%;
 
     .form-item-wrapper {
-      @include flex_layout(row, space-between, flex-start);
 
       .form-item-block {
         margin-right: 20px;
+        max-height: 420px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #333333;
+
+        .form-item-block-title {
+          font-size: 16px;
+          margin-bottom: 10px;
+        }
 
         &:last-child {
           margin: 0;

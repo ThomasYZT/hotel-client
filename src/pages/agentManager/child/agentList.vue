@@ -10,7 +10,7 @@
             <div class="filter-block right-box">
               <div class="filter-item">
                 <div class="filter-label">代理商名称：</div>
-                <i-input v-model="filterPrams.name" placeholder="代理商名称模糊查询"></i-input>
+                <i-input v-model="filterPrams.name" placeholder="代理商名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>

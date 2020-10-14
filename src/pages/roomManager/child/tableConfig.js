@@ -26,14 +26,9 @@ export const tableConfig = [
     width: '150px'
   },
   {
-    prop: 'remark',
-    label: '描述',
-    minWidth: '180px'
-  },
-  {
     prop: 'operate',
     label: '操作',
     fixed: 'right',
-    minWidth: '150px'
+    width: '150px'
   }
 ];

@@ -35,7 +35,7 @@
 
                 </FormItem>-->
                 <FormItem class="block-form-item" label="备注" prop="remark">
-                  <i-input type="textarea" placeholder="地址" v-model.trim="formData.remark" />
+                  <i-input type="textarea" placeholder="备注" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
               <div class="form-item-block">

@@ -1,57 +1,47 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加酒店' : '编辑酒店'"
+    <el-dialog :title="type === 'add' ? '添加酒店信息' : '编辑酒店信息'"
                :visible.sync="visible"
                width="50%"
+               custom-class="form-dialog"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"
+                  inline
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
                   :label-width="120"
-                  label-position="left">
+                  label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="酒店名称" prop="name">
-                  <i-input type="text" placeholder="品牌" v-model.trim="formData.name" />
+                <FormItem class="block-form-item" label="酒店名称" prop="name">
+                  <i-input type="text" placeholder="酒店名称" v-model.trim="formData.name" />
                 </FormItem>
-                <FormItem label="酒店地址" prop="address">
-                  <i-input type="text" placeholder="酒店地址" v-model.trim="formData.address" />
-                </FormItem>
-                <FormItem label="房间数量" prop="roomCount">
-                  <i-input type="text" placeholder="房间数量" v-model.trim="formData.roomCount" />
-                </FormItem>
-                <FormItem label="预定房间电话" prop="reservePhone">
+                <FormItem class="inline-form-item" label="预定房间电话" prop="reservePhone">
                   <i-input type="text" placeholder="预定房间电话" v-model.trim="formData.reservePhone" />
                 </FormItem>
-                <FormItem label="酒店电话" prop="hotelPhone">
+                <FormItem class="inline-form-item" label="酒店电话" prop="hotelPhone">
                   <i-input type="text" placeholder="酒店电话" v-model.trim="formData.hotelPhone" />
                 </FormItem>
-              </div>
-              <div class="form-item-block">
-                <FormItem label="联系人名称" prop="contactName">
+                <FormItem class="inline-form-item" label="联系人名称" prop="contactName">
                   <i-input type="text" placeholder="联系人名称" v-model.trim="formData.contactName" />
                 </FormItem>
-                <FormItem label="联系电话" prop="mobilePhone">
+                <FormItem class="inline-form-item" label="联系电话" prop="mobilePhone">
                   <i-input type="text" placeholder="联系电话" v-model.trim="formData.mobilePhone" />
                 </FormItem>
-                <FormItem label="开业年份" prop="openYear">
-                  <i-date-picker v-model="formData.openYear"
-                                 :editable="false"
-                                 transfer
-                                 format="yyyy-MM-dd"
-                                 placeholder="开业年份"></i-date-picker>
+                <FormItem class="inline-form-item" label="房间数量" prop="roomCount">
+                  <i-input type="text" placeholder="房间数量" v-model.trim="formData.roomCount" />
                 </FormItem>
-                <FormItem label="酒店简介" prop="introduce">
-                  <i-input type="text" placeholder="酒店简介" v-model.trim="formData.introduce" />
+                <FormItem class="inline-form-item" label="开业年份" prop="openYear">
+                  <i-input type="text" placeholder="开业年份" v-model.trim="formData.openYear" />
                 </FormItem>
-                <FormItem label="X坐标" prop="baiduX">
-                  <i-input placeholder="X坐标" v-model.trim="formData.baiduX" />
+                <FormItem class="block-form-item" label="酒店地址" prop="address">
+                  <i-input type="text" placeholder="酒店地址" v-model.trim="formData.address" />
                 </FormItem>
-                <FormItem label="Y坐标" prop="baiduY">
-                  <i-input placeholder="Y坐标" v-model.trim="formData.baiduY" />
+                <FormItem class="block-form-item" label="酒店简介" prop="introduce">
+                  <i-input type="textarea" placeholder="酒店简介" v-model.trim="formData.introduce" />
                 </FormItem>
               </div>
             </div>
@@ -59,8 +49,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>
@@ -131,12 +121,15 @@ export default {
         roomCount: [
           { validator: validateNumber, trigger: 'blur' }
         ],
-        baiduX: [
-          { required: true, message: '请输入X坐标', trigger: 'blur' }
-        ],
-        baiduY: [
-          { required: true, message: '请输入Y坐标', trigger: 'blur' }
+        openYear: [
+          { validator: validateNumber, trigger: 'blur' }
         ]
+        // baiduX: [
+        //   { required: true, message: '请输入X坐标', trigger: 'blur' }
+        // ],
+        // baiduY: [
+        //   { required: true, message: '请输入Y坐标', trigger: 'blur' }
+        // ]
       }
     };
   },
@@ -214,18 +207,28 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
+/deep/ .el-dialog__body {
+  padding: 25px 0 30px;
+}
 .dialog-wrapper {
   @include flex_layout(row, center, flex-start);
-  max-height: 350px;
-  overflow-y: auto;
+  padding: 0 25px 0;
   .form-wrapper {
-    width: 90%;
+    width: 100%;
 
     .form-item-wrapper {
-      @include flex_layout(row, space-between, flex-start);
 
       .form-item-block {
         margin-right: 20px;
+        max-height: 430px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #333333;
+
+        .form-item-block-title {
+          font-size: 16px;
+          margin-bottom: 10px;
+        }
 
         &:last-child {
           margin: 0;

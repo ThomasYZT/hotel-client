@@ -11,17 +11,17 @@
               <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
             </div>
             <div class="filter-block right-box">
-              <div class="filter-item">
+              <div class="filter-item" style="width: 230px;">
                 <div class="filter-label">房号：</div>
-                <i-input v-model="filterParams.roomNumber" placeholder="房号查询"></i-input>
+                <i-input v-model="filterParams.roomNumber" placeholder="房号查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
-              <div class="filter-item">
+              <div class="filter-item" style="width: 230px;">
                 <div class="filter-label">楼层：</div>
                 <i-input v-model="filterParams.floorId"></i-input>
               </div>
-              <div class="filter-item">
+              <div class="filter-item" style="width: 230px;height: 32px;">
                <div class="filter-label">房间类型：</div>
-               <i-select size="small" v-model="filterParams.roomTypeId" style="width: 100%;">
+               <i-select size="small" v-model="filterParams.roomTypeId" style="width: 100%;" clearable @on-clear="getList">
                 <i-option v-for="item in roomTypeList"
                           :value="item.id"
                           :key="item.id">

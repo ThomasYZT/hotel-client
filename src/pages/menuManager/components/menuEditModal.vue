@@ -1,34 +1,38 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加菜单' : '编辑菜单'"
+    <el-dialog :title="type === 'add' ? '添加菜单信息' : '编辑菜单信息'"
                :visible.sync="visible"
-               width="40%"
+               width="50%"
+               custom-class="form-dialog"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"
+                  inline
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
-                  :label-width="80"
-                  label-position="left">
+                  :label-width="120"
+                  label-position="right">
             <div class="form-item-wrapper">
-              <FormItem label="菜单名称" prop="menuName">
-                <i-input type="text" placeholder="菜单名称" v-model="formData.menuName" />
-              </FormItem>
-              <FormItem label="菜单链接" prop="url">
-                <i-input type="text" placeholder="菜单链接" v-model="formData.url" />
-              </FormItem>
-              <FormItem label="描述" prop="remark">
-                <i-input type="text" placeholder="描述" v-model="formData.remark" />
-              </FormItem>
+              <div class="form-item-block">
+                <FormItem class="block-form-item" label="菜单名称" prop="menuName">
+                 <i-input type="text" placeholder="菜单名称" v-model="formData.menuName" />
+                </FormItem>
+                <FormItem class="block-form-item" label="菜单链接" prop="url">
+                  <i-input class="block-form-item" type="text" placeholder="菜单链接" v-model="formData.url" />
+                </FormItem>
+                <FormItem class="block-form-item" label="描述" prop="remark">
+                  <i-input type="textarea" placeholder="描述" v-model="formData.remark" />
+                </FormItem>
+              </div>
             </div>
           </i-form>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>
@@ -65,7 +69,7 @@ export default {
           { required: true, message: '请输入菜单名称', trigger: 'blur' }
         ],
         url: [
-          { required: true, message: '请输入url', trigger: 'blur' }
+          { required: true, message: '请输入菜单链接', trigger: 'blur' }
         ]
       }
     };
@@ -128,10 +132,34 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
+/deep/ .el-dialog__body {
+  padding: 25px 0 30px;
+}
 .dialog-wrapper {
-  @include flex_layout(row, center, center);
+  @include flex_layout(row, center, flex-start);
+  padding: 0 25px 0;
   .form-wrapper {
-    width: 70%;
+    width: 100%;
+
+    .form-item-wrapper {
+
+      .form-item-block {
+        margin-right: 20px;
+        max-height: 350px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #333333;
+
+        .form-item-block-title {
+          font-size: 16px;
+          margin-bottom: 10px;
+        }
+
+        &:last-child {
+          margin: 0;
+        }
+      }
+    }
   }
 }
 

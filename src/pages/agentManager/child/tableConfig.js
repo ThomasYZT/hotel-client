@@ -13,12 +13,12 @@ export const tableConfig = [
   {
     prop: 'phone',
     label: '手机号',
-    width: '100px'
+    width: '120px'
   },
   {
     prop: 'email',
     label: '邮箱',
-    width: '130px'
+    width: '120px'
   },
   {
     prop: 'provincesName',

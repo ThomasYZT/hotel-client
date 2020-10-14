@@ -1,24 +1,26 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加字典' : '编辑字典'"
+    <el-dialog :title="type === 'add' ? '添加数据字典信息' : '编辑数据字典信息'"
                :visible.sync="visible"
-               width="25%"
+               width="50%"
+               custom-class="form-dialog"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"
+                  inline
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
-                  :label-width="100"
-                  label-position="left">
+                  :label-width="120"
+                  label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem label="字典名称" prop="dictName">
+                <FormItem class="block-form-item" label="字典名称" prop="dictName">
                   <i-input type="text" placeholder="字典名称" v-model.trim="formData.dictName" />
                 </FormItem>
-                <FormItem label="描述" prop="remark">
-                  <i-input type="text" placeholder="描述" v-model.trim="formData.remark" />
+                <FormItem class="block-form-item" label="描述" prop="remark">
+                  <i-input type="textarea" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
               </div>
             </div>
@@ -26,8 +28,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>
@@ -114,18 +116,28 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
+/deep/ .el-dialog__body {
+  padding: 25px 0 30px;
+}
 .dialog-wrapper {
   @include flex_layout(row, center, flex-start);
-  max-height: 350px;
-  overflow-y: auto;
+  padding: 0 25px 0;
   .form-wrapper {
-    width: 90%;
+    width: 100%;
 
     .form-item-wrapper {
-      @include flex_layout(row, space-between, flex-start);
 
       .form-item-block {
         margin-right: 20px;
+        max-height: 350px;
+        overflow-y: auto;
+        font-size: 13px;
+        color: #333333;
+
+        .form-item-block-title {
+          font-size: 16px;
+          margin-bottom: 10px;
+        }
 
         &:last-child {
           margin: 0;
