@@ -1,8 +1,10 @@
 <template>
   <div class="menu-tree" :class="{ 'is-rollup': !expand }">
-    <Menu  width="100%"
+    <Menu  ref="menu"
+           width="100%"
+           :open-names="openNames"
            :active-name="activePath"
-           :accordion="false">
+           :accordion="true">
       <div class="trigger-tool"
            :class="{ 'is-rollup': !expand }"
            @click="menuTrigger">
@@ -37,15 +39,11 @@ export default {
     activePath () {
       return this.$route.meta ? this.$route.meta.activePath : '';
     },
+    openNames () {
+      return Array.from(new Set(this.$route.matched.map(item => item.meta.activePath)));
+    },
     treeData () {
-      return this.routeInfo
-        ? this.routeInfo.map(menu => {
-          return {
-            path: menu.path,
-            ...menu.meta
-          };
-        })
-        : [];
+      return this.routeInfo || [];
     }
   },
   data () {
@@ -59,6 +57,15 @@ export default {
     ]),
     menuTrigger () {
       this.setMenuExpandStatus(!this.expand);
+    }
+  },
+  watch: {
+    openNames: {
+      handler () {
+        this.$nextTick(() => {
+          this.$refs.menu.updateOpened();
+        });
+      }
     }
   }
 };

@@ -1,22 +1,31 @@
 <template>
 
-  <iMenuItem v-if="!menuData.children || menuData.children.length === 0"
+  <iMenuItem v-if="!menuData.children ||
+               menuData.children.length === 0 ||
+               (menuData.children.length > 0 && menuData.children.filter(item => item.meta.isMenu).length === 0)"
              :to="menuData.path"
-             :name="menuData.activePath">
+             :name="menuData.meta.activePath">
     <span class="item-label" v-if="expand">
       <i class="iconfont icon-xiaoxi"></i>
-      {{menuData.menuName}}
+      {{menuData.meta.menuName}}
     </span>
     <i-tooltip v-else
                transfer
-               :content="menuData.menuName" placement="left">
+               :content="menuData.meta.menuName" placement="left">
       <i  class="iconfont icon-xiaoxi"></i>
     </i-tooltip>
   </iMenuItem>
-  <Submenu v-else
-           :name="menuData.activePath">
-    <menu-com :menu-data="menuData.children"></menu-com>
-  </Submenu>
+  <div v-else>
+    <Submenu v-if="expand" :name="menuData.meta.activePath">
+      <template slot="title">
+        <i  class="iconfont icon-xiaoxi"></i>
+        {{menuData.meta.menuName}}
+      </template>
+      <menu-com v-for="item in menuData.children"
+                :key="item.name"
+                :menu-data="item"></menu-com>
+    </Submenu>
+  </div>
 </template>
 
 <script>
