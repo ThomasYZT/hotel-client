@@ -21,7 +21,10 @@ import {
   Icon,
   Transfer,
   DatePicker,
-  Tooltip
+  Tooltip,
+  InputNumber,
+  RadioGroup,
+  Radio
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';
@@ -54,6 +57,9 @@ export default {
     Vue.component('iTransfer', Transfer);
     Vue.component('iDatePicker', DatePicker);
     Vue.component('iTooltip', Tooltip);
+    Vue.component('iInputNumber', InputNumber);
+    Vue.component('iRadioGroup', RadioGroup);
+    Vue.component('iRadio', Radio);
     Vue.prototype.$message = Message;
 
     Message.config({

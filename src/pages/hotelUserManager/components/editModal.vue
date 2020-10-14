@@ -19,7 +19,7 @@
                 <FormItem class="inline-form-item" label="登录名" prop="userName">
                   <i-input type="text" placeholder="登录名" v-model.trim="formData.userName" />
                 </FormItem>
-                 <FormItem class="inline-form-item" label="密码" prop="password">
+                <FormItem class="inline-form-item" label="密码" prop="password">
                   <i-input type="password" placeholder="密码" v-model.trim="formData.password" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="姓名" prop="name">
@@ -29,10 +29,10 @@
                   <i-input type="text" placeholder="身份证" v-model.trim="formData.cardNo" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="性别" prop="gender">
-                  <RadioGroup v-model="formData.gender">
-                      <Radio label="男"></Radio>
-                      <Radio label="女"></Radio>
-                  </RadioGroup>
+                  <i-radio-group v-model="formData.gender">
+                    <i-radio label="男"></i-radio>
+                    <i-radio label="女"></i-radio>
+                  </i-radio-group>
                 </FormItem>
                 <FormItem class="inline-form-item" label="手机号" prop="mobile">
                   <i-input type="text" placeholder="手机号" v-model.trim="formData.mobile" />
