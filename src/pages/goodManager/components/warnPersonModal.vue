@@ -2,6 +2,7 @@
   <div class="modal-wrapper">
     <el-dialog title="预警接收人管理"
                :visible.sync="visible"
+               custom-class="form-dialog"
                width="40%"
                center
                @close="reset">
@@ -13,8 +14,8 @@
                     @on-change="transferChange"></i-transfer>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>

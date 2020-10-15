@@ -21,10 +21,10 @@
                           label-position="left">
                     <div class="form-item-wrapper">
                       <FormItem label="账号" prop="userName">
-                        <i-input type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.userName" />
+                        <i-input size="large" type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.userName" />
                       </FormItem>
                       <FormItem label="密码" prop="password">
-                        <i-input type="password" :password="true" placeholder="密码" v-model="loginFormData.password" />
+                        <i-input size="large" type="password" :password="true" placeholder="密码" v-model="loginFormData.password" />
                       </FormItem>
                     </div>
                     <!--<div class="login-tool">
@@ -32,7 +32,10 @@
                       <span class="forgot">忘记密码?</span>
                     </div>-->
                   </i-form>
-                  <i-button :loading="isLoading" type="primary" class="submit-btn"
+                  <i-button :loading="isLoading"
+                            type="primary"
+                            class="submit-btn"
+                            @on-enter="handleSubmit('loginForm')"
                             @click="handleSubmit('loginForm')">登 陆</i-button>
                 </div>
               </TabPane>
@@ -206,7 +209,7 @@ export default {
     height: 62px;
     position: relative;
     .title {
-      font-size: 33px;
+      font-size: 50px;
       font-weight: normal;
       color: #FFFFFF;
       text-shadow: 1px 3px 0px #012813;
@@ -218,17 +221,18 @@ export default {
   .auth-box {
     box-sizing: border-box;
     padding: 19px;
-    margin-top: 30px;
-    height: 350px;
-    width: 287px;
+    margin-top: 60px;
+    height: 380px;
+    width: 500px;
     background-color: $color_fff;
-    border-radius: 14px;
+    border-radius: 10px;
     box-shadow: 0 4px 24px 0 rgba(0,0,0,.1);
 
     .tab-wrapper {
       margin: 0 auto;
       width: 80%;
       height: 100%;
+
       .login-box {
         padding-top: 30px;
         position: relative;
@@ -238,7 +242,7 @@ export default {
         .login-tool {
           @include flex_layout(row, space-between, center);
           margin-bottom: 15px;
-          font-size: $font-size-small;
+          font-size: 18px;
 
           .forgot {
             cursor: pointer;
@@ -257,7 +261,7 @@ export default {
         bottom: 40px;
         width: 100%;
         height: 40px;
-        font-size: 16px;
+        font-size: 18px;
         border-radius: unset;
       }
     }
