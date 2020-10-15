@@ -215,7 +215,7 @@ export default {
 
       .form-item-block {
         margin-right: 20px;
-        max-height: 420px;
+        max-height: 450px;
         overflow-y: auto;
         font-size: 13px;
         color: #333333;

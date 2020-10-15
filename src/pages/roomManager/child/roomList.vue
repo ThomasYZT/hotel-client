@@ -39,6 +39,18 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col4"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span v-if="row.isAttribute === 0">显示</span>
+                  <span v-else>不显示</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col5"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"

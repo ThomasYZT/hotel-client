@@ -33,7 +33,7 @@
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
                   <div class="operate-block">
-                    <i-button type="primary" class="table-btn" size="small" @click="editMenu(row)">编辑权限</i-button>
+                    <i-button type="info" class="table-btn" size="small" @click="editMenu(row)">编辑权限</i-button>
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
                   </div>

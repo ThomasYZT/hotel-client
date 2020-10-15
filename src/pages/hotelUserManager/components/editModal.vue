@@ -30,8 +30,8 @@
                 </FormItem>
                 <FormItem class="inline-form-item" label="性别" prop="gender">
                   <i-radio-group v-model="formData.gender">
-                    <i-radio label="男"></i-radio>
-                    <i-radio label="女"></i-radio>
+                    <i-radio label="男" value="1"></i-radio>
+                    <i-radio label="女" value="2"></i-radio>
                   </i-radio-group>
                 </FormItem>
                 <FormItem class="inline-form-item" label="手机号" prop="mobile">
@@ -113,7 +113,7 @@ export default {
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
         password: [
-          { required: false, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: '请输入密码', trigger: 'blur' }
         ],
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' }

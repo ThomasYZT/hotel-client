@@ -1,9 +1,9 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog title="编辑角色"
+    <el-dialog title="选择角色"
                :visible.sync="visible"
                custom-class="form-dialog"
-               width="30%"
+               width="300px"
                center>
       <div class="dialog-wrapper">
         <el-tree v-if="visible"
@@ -120,7 +120,7 @@ export default {
 <style scoped lang="scss">
   @import "~@/assets/styles/scss/base";
   .dialog-wrapper {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
   }
 

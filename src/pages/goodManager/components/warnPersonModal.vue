@@ -1,9 +1,9 @@
 <template>
   <div class="modal-wrapper">
-    <el-dialog title="预警接收人管理"
+    <el-dialog title="预警接收人设置"
                :visible.sync="visible"
                custom-class="form-dialog"
-               width="40%"
+               width="500px"
                center
                @close="reset">
       <div class="dialog-wrapper">
@@ -138,7 +138,7 @@ export default {
   @import "~@/assets/styles/scss/base";
   .dialog-wrapper {
     @include flex_layout(row, center, flex-start);
-    max-height: 300px;
+    max-height: 450px;
     overflow-y: auto;
     .form-wrapper {
       width: 70%;

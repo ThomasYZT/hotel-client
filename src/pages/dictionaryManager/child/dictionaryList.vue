@@ -156,7 +156,7 @@ export default {
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.name}`,
+        content: `是否删除 ${item.dictName}`,
         confirm: () => {
           this.delItem(item);
         }

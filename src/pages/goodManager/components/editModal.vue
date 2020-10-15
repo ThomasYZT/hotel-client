@@ -23,7 +23,7 @@
                   <i-input type="text" placeholder="商品代码" v-model.trim="formData.code" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="商品数量" prop="number">
-                  <i-inputNumber style="width: 100%;" type="text" placeholder="商品数量" v-model="formData.number" />
+                  <i-input-number style="width: 100%;" type="text" placeholder="商品数量" v-model="formData.number" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="单价" prop="unitPrice">
                   <i-input type="text" placeholder="单价" v-model.trim="formData.unitPrice" />
@@ -105,8 +105,7 @@ export default {
           { required: true, message: '请输入商品代码', trigger: 'blur' }
         ],
         number: [
-          { required: true, type: 'number', message: '请输入数量', trigger: 'blur' },
-          { validator: validateNumber, trigger: 'blur' }
+          { required: true, type: 'number', message: '请输入数量', trigger: 'blur' }
         ],
         unitPrice: [
           { required: true, message: '请选择楼层', trigger: 'blur' },
@@ -116,8 +115,7 @@ export default {
           { required: true, message: '请输入单位', trigger: 'blur' }
         ],
         warnCount: [
-          { required: true, type: 'number', message: '请输入库存预警数量', trigger: 'blur' },
-          { validator: validateNumber, trigger: 'blur' }
+          { required: true, type: 'number', message: '请输入库存预警数量', trigger: 'blur' }
         ],
         status: [
           { required: true, message: '请选择商品状态', trigger: 'blur' }
