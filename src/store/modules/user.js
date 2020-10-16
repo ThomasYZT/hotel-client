@@ -6,7 +6,8 @@ import ajax from '../../assets/api';
 
 const state = {
   userInfo: JSON.parse(sessionStorage.getItem(storageKey.userInfo)) || null,
-  routeInfo: null
+  routeInfo: null,
+  dictionary: {}
 };
 
 const getters = {
@@ -15,6 +16,9 @@ const getters = {
   },
   routeInfo: state => {
     return state.routeInfo;
+  },
+  dictionary: state => {
+    return state.dictionary;
   }
 };
 
@@ -25,6 +29,9 @@ const mutations = {
   },
   UPDATE_ROUTEINFO (state, data) {
     state.routeInfo = data;
+  },
+  UPDATE_DICTIONARY (state, data) {
+    state.dictionary = data;
   }
 };
 
@@ -35,24 +42,24 @@ const actions = {
   validUserInfo ({ commit }, data) {
     // ajax.get()
   },
-  generateRouteInfo ({ commit }, menuInfo) {
+  generateRouteInfo ({ commit, dispatch }, menuInfo) {
     return new Promise((resolve, reject) => {
       try {
         const _routes = generateRoutes(menuInfo);
         resetRouter(_routes);
         commit('UPDATE_ROUTEINFO', _routes);
-        resolve(_routes[0]);
+        resolve(dispatch('getDictionary', _routes[0]));
       } catch (err) {
         reject(err);
       }
     });
   },
-  getDictionary ({ commit }, params) {
+  getDictionary ({ commit }, route) {
     return new Promise((resolve, reject) => {
       ajax.get({
-        apiKey: 'dictionaryGetAllList',
-        params
+        apiKey: 'dicGetAllList'
       }).then(data => {
+        commit('UPDATE_DICTIONARY', data);
         resolve(data);
       }).catch(err => {
         reject(err);

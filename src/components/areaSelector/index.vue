@@ -1,6 +1,12 @@
 <template>
   <div class="area-selector">
-    <el-cascader v-if="!reset" ref="ElCascader" clearable :options="options" size="mini" v-model="area" :props="propsConfig"></el-cascader>
+    <el-cascader v-if="!reset"
+                 style="width: 100%;"
+                 ref="ElCascader"
+                 clearable
+                 :options="options"
+                 v-model="area"
+                 :props="propsConfig"></el-cascader>
   </div>
 </template>
 
@@ -135,5 +141,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+/deep/ .el-input__inner {
+  height: 32px;
+}
 </style>

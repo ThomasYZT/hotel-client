@@ -16,17 +16,17 @@
             </div>
           </div>
           <table-com :data="tableData"
-                 :page-num.sync="pageNum"
-                 :page-size.sync="pageSize"
-                 :total-size="totalSize"
-                 :config="tableConfig"
-                 :getList="getList">
+                     :page-num.sync="pageNum"
+                     :page-size.sync="pageSize"
+                     :total-size="totalSize"
+                     :config="tableConfig"
+                     :getList="getList">
             <template slot="col8"
                       slot-scope="{ item }">
-             <el-table-column :prop="item.prop"
-                           :label="item.label"
-                           :fixed="item.fixed"
-                           :min-width="item.minWidth">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
                 <template slot-scope="{ row }">
                   <div class="operate-block">
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>

@@ -157,7 +157,7 @@ export default {
       this.$refs.roleEditModal.show({ item });
     },
     delItem (item) {
-      this.$ajax.get({
+      this.$ajax.post({
         apiKey: 'userDelete',
         params: {
           id: item.id

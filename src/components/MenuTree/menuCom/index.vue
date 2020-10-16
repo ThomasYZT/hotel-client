@@ -25,6 +25,22 @@
                 :key="item.name"
                 :menu-data="item"></menu-com>
     </Submenu>
+    <i-poptip v-else
+              transfer
+              padding="0"
+              trigger="hover"
+              placement="right">
+      <iMenuItem :name="menuData.meta.activePath">
+        <span class="item-label">
+          <i class="iconfont icon-xiaoxi"></i>
+        </span>
+      </iMenuItem>
+      <template slot="content">
+        <menu-com v-for="item in menuData.children"
+                  :key="item.name"
+                  :menu-data="item"></menu-com>
+      </template>
+    </i-poptip>
   </div>
 </template>
 
@@ -50,7 +66,45 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "~@/assets/styles/scss/base";
 .item-label {
   white-space: nowrap;
+}
+.menu-btn {
+  width: 100%;
+  height: 100%;
+}
+
+/deep/ .ivu-poptip {
+  width: 100%;
+
+  .ivu-poptip-rel {
+    width: 100%;
+  }
+
+}
+
+/deep/ .ivu-poptip-body {
+  padding: 0 0 !important;
+}
+
+.ivu-poptip-body-content {
+  .ivu-menu-item {
+    padding: 14px 0 14px 10px;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+    transition: all 0.2s ease-in-out;
+    display: block;
+    outline: none;
+    list-style: none;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+
+    &:hover {
+      background-color: $lightGreen;
+    }
+  }
 }
 </style>

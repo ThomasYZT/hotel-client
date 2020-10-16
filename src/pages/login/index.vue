@@ -21,10 +21,20 @@
                           label-position="left">
                     <div class="form-item-wrapper">
                       <FormItem label="账号" prop="userName">
-                        <i-input size="large" type="text" placeholder="用户名" maxlength="20" v-model="loginFormData.userName" />
+                        <i-input size="large"
+                                 type="text"
+                                 placeholder="用户名"
+                                 maxlength="20"
+                                 v-model="loginFormData.userName"
+                                 @on-enter="handleSubmit('loginForm')"/>
                       </FormItem>
                       <FormItem label="密码" prop="password">
-                        <i-input size="large" type="password" :password="true" placeholder="密码" v-model="loginFormData.password" />
+                        <i-input size="large"
+                                 type="password"
+                                 :password="true"
+                                 placeholder="密码"
+                                 v-model="loginFormData.password"
+                                 @on-enter="handleSubmit('loginForm')"/>
                       </FormItem>
                     </div>
                     <!--<div class="login-tool">
@@ -35,7 +45,6 @@
                   <i-button :loading="isLoading"
                             type="primary"
                             class="submit-btn"
-                            @on-enter="handleSubmit('loginForm')"
                             @click="handleSubmit('loginForm')">登 陆</i-button>
                 </div>
               </TabPane>

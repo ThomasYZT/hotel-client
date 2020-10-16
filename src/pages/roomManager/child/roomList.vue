@@ -17,17 +17,23 @@
               </div>
               <div class="filter-item" style="width: 230px;">
                 <div class="filter-label">楼层：</div>
-                <i-input v-model="filterParams.floorId"></i-input>
+                <i-select v-model="filterParams.floorId" style="width: 100%;" @on-clear="getList">
+                  <i-option v-for="item in floorList"
+                            :value="item.id"
+                            :key="item.id">
+                    {{ item.dictName }}
+                  </i-option>
+                </i-select>
               </div>
               <div class="filter-item" style="width: 230px;height: 32px;">
-               <div class="filter-label">房间类型：</div>
-               <i-select size="small" v-model="filterParams.roomTypeId" style="width: 100%;" clearable @on-clear="getList">
-                <i-option v-for="item in roomTypeList"
-                          :value="item.id"
-                          :key="item.id">
-                  {{ item.typeName }}
-                </i-option>
-              </i-select>
+                <div class="filter-label">房间类型：</div>
+                <i-select v-model="filterParams.roomTypeId" style="width: 100%;" @on-clear="getList">
+                  <i-option v-for="item in roomTypeList"
+                            :value="item.id"
+                            :key="item.id">
+                    {{ item.typeName }}
+                  </i-option>
+                </i-select>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
@@ -77,7 +83,7 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType } from '../../../assets/enums';
+import { userType, dictionaryCodeType } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
   components: {
@@ -85,7 +91,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userInfo'
+      'userInfo',
+      'dictionary'
     ]),
     orgParams () {
       let level;
@@ -114,6 +121,11 @@ export default {
     },
     showAddBtn () {
       return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
+    },
+    floorList () {
+      return this.dictionary[this.userInfo.id]
+        ? [{ id: 0, dictName: '全部' }].concat(this.dictionary[this.userInfo.id][dictionaryCodeType.floor])
+        : [];
     }
   },
   data () {

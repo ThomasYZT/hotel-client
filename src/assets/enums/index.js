@@ -23,3 +23,20 @@ export const storageStatusList = [
     name: '遗失'
   }
 ];
+
+export const genderList = [
+  {
+    label: '女',
+    value: '0'
+  },
+  {
+    label: '男',
+    value: '1'
+  }
+];
+
+export const dictionaryCodeType = {
+  window: 'FJSX',
+  floor: 'FLOOR',
+  vipLevel: 'VIPLEVEL'
+};

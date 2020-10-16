@@ -19,9 +19,6 @@
                 <FormItem class="inline-form-item" label="登录名" prop="userName">
                   <i-input type="text" placeholder="登录名" v-model.trim="formData.userName" />
                 </FormItem>
-                <FormItem class="inline-form-item" label="密码" prop="password">
-                  <i-input type="password" placeholder="密码" v-model.trim="formData.password" />
-                </FormItem>
                 <FormItem class="inline-form-item" label="姓名" prop="name">
                   <i-input type="text" placeholder="姓名" v-model.trim="formData.name" />
                 </FormItem>
@@ -30,8 +27,10 @@
                 </FormItem>
                 <FormItem class="inline-form-item" label="性别" prop="gender">
                   <i-radio-group v-model="formData.gender">
-                    <i-radio label="男" value="1"></i-radio>
-                    <i-radio label="女" value="2"></i-radio>
+                    <i-radio v-for="item in genderList"
+                             :key="item.value"
+                             :label="item.label"
+                             :value="item.value"></i-radio>
                   </i-radio-group>
                 </FormItem>
                 <FormItem class="inline-form-item" label="手机号" prop="mobile">
@@ -61,6 +60,7 @@
 </template>
 
 <script>
+import { genderList } from '../../../assets/enums';
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   data () {
@@ -82,16 +82,16 @@ export default {
     };
 
     return {
+      genderList,
       visible: false,
       isLoading: false,
       type: '',
       formData: {
         birthday: '',
         cardNo: '',
-        gender: '',
+        gender: '0',
         mobile: '',
         name: '',
-        password: '',
         position: '',
         userName: ''
       },
@@ -112,9 +112,6 @@ export default {
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
-        ],
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ]
@@ -129,7 +126,6 @@ export default {
         delete this.formData.updateTime;
         delete this.formData.createTime;
         this.$util.valueToStr(this.formData);
-        this.formRule.password.required = true;
       }
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -177,7 +173,6 @@ export default {
         gender: '',
         mobile: '',
         name: '',
-        password: '',
         position: '',
         userName: ''
       };
