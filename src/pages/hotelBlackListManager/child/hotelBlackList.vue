@@ -29,6 +29,31 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span v-if="row.sex === 1">男</span>
+                  <span v-else-if="row.sex === 2">女</span>
+                  <span v-else>未知</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col4"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span v-if="row.status === 0">停用</span>
+                  <span v-else>启用</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col5"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"

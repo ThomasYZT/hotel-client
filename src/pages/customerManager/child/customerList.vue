@@ -22,13 +22,26 @@
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
           </div>
-                    <table-com v-if="showTable"
-                     :data="tableData"
-                     :page-num.sync="pageNum"
-                     :page-size.sync="pageSize"
-                     :total-size="totalSize"
-                     :config="tableConfig"
-                     :getList="getList">
+          <table-com v-if="showTable"
+            :data="tableData"
+            :page-num.sync="pageNum"
+            :page-size.sync="pageSize"
+            :total-size="totalSize"
+            :config="tableConfig"
+            :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span v-if="row.sex === 1">男</span>
+                  <span v-else-if="row.sex === 2">女</span>
+                  <span v-else>未知</span>
+                </template>
+              </el-table-column>
+            </template>
             <!--<template slot="col4"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"

@@ -12,12 +12,8 @@
             </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-                <div class="filter-label">入库开始时间：</div>
-                <i-input v-model="filterParams.storageStartTime"></i-input>
-              </div>
-              <div class="filter-item">
-                <div class="filter-label">入库结束时间：</div>
-                <i-input v-model="filterParams.storageEndTime"></i-input>
+                <div class="filter-label">入库时间：</div>
+                <DatePicker type="daterange" split-panels placeholder="入库时间"></DatePicker>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>

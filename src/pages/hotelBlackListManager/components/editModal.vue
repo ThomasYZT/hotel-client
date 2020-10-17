@@ -20,13 +20,13 @@
                   <i-input type="text" placeholder="手机号" clearable @on-clear="clear" search @on-search="getByPhone" v-model.trim="formData.phone" @on-blur="getByPhone" />
                 </FormItem>
                 <FormItem class="form-item-block" label="姓名" prop="name">
-                  <i-input :disabled="type === 'add'" type="text" placeholder="姓名" v-model.trim="formData.name" />
+                  <i-input readonly type="text" placeholder="姓名" v-model.trim="formData.name" />
                 </FormItem>
                 <FormItem class="form-item-block" label="性别" prop="sex">
-                  <i-input :disabled="type === 'add'" type="text" placeholder="性别" v-model.trim="formData.sex" />
+                  <i-input readonly type="text" placeholder="性别" v-model.trim="formData.sex" />
                 </FormItem>
                 <FormItem class="block-form-item" label="身份证号" prop="idCard">
-                  <i-input :disabled="type === 'add'" type="text" placeholder="身份证号" v-model.trim="formData.idCard" />
+                  <i-input readonly type="text" placeholder="身份证号" v-model.trim="formData.idCard" />
                 </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
                   <i-input type="textarea" placeholder="描述" v-model="formData.remark" />
@@ -78,6 +78,15 @@ export default {
   methods: {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
+      if(type === 'edit'){
+        if (item.sex === 1) {
+            item.sex  = '男'
+        } else if (item.sex === 2) {
+            item.sex  = '女'
+        } else {
+            item.sex  = '未知'
+        }
+      }
       this.formData = defaultsDeep({}, item, this.formData);
 
       if (confirmFn) {
@@ -91,7 +100,6 @@ export default {
       this.visible = true;
     },
     getByPhone () {
-      if (this.formData.phone && this.type === 'add') {
         this.isLoading = true;
         this.$ajax.get({
           apiKey: 'customerGetByPhone',
@@ -101,6 +109,14 @@ export default {
           loading: false
         }).then(data => {
           if (data && Object.keys(data).length > 0) {
+            console.log(data.sex)
+            if (data.sex === 1) {
+                data.sex  = '男'
+            } else if (data.sex === 2) {
+                data.sex  = '女'
+            } else {
+                data.sex  = '未知'
+            }
             this.formData = defaultsDeep({}, this.formData, data);
             this.formData.customerId = this.formData.id;
             delete this.formData.id;
@@ -114,7 +130,6 @@ export default {
         }).finally(() => {
           this.isLoading = false;
         });
-      }
     },
     clear () {
       this.formData = {
@@ -155,6 +170,9 @@ export default {
       this.$refs.Form.resetFields();
       this.formData = {
         phone: '',
+        name: '',
+        sex: '',
+        idCard: '',
         remark: ''
       };
       this.customerInfo = {};

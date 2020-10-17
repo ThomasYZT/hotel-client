@@ -29,6 +29,32 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span v-if="row.sex === 1">男</span>
+                  <span v-else-if="row.sex === 2">女</span>
+                  <span v-else>未知</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col7"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span v-if="row.sex === 1">取出</span>
+                  <span v-else-if="row.sex === 2">遗失</span>
+                  <span v-else>寄存</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col8"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
@@ -38,7 +64,7 @@
                 <template slot-scope="{ row }">
                   <div class="operate-block">
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                    <i-button type="primary" class="table-btn" size="small" @click="retrieveClick(row)">取 出</i-button>
+                    <i-button type="info" class="table-btn" size="small" @click="retrieveClick(row)">取 出</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="lostClick(row)">遗 失</i-button>
                   </div>
                 </template>
