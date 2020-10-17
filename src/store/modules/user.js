@@ -60,7 +60,7 @@ const actions = {
         apiKey: 'dicGetAllList'
       }).then(data => {
         commit('UPDATE_DICTIONARY', data);
-        resolve(data);
+        resolve(route);
       }).catch(err => {
         reject(err);
       });
