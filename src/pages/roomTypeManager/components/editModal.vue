@@ -2,8 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '添加房间类型' : '编辑房间类型'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="50%"
                custom-class="form-dialog"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
@@ -17,11 +19,11 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem class="block-form-item" label="房间类型名称" prop="typeName">
-                <i-input type="text" placeholder="房间类型名称" v-model.trim="formData.typeName" />
-              </FormItem>
-              <FormItem class="block-form-item" label="价格" prop="price">
-                <i-input type="text" placeholder="价格" v-model.trim="formData.price" />
-              </FormItem>
+                  <i-input type="text" placeholder="房间类型名称" v-model.trim="formData.typeName" />
+                </FormItem>
+                <FormItem class="block-form-item" label="价格" prop="price">
+                  <i-input type="text" placeholder="价格" v-model.trim="formData.price" />
+                </FormItem>
               </div>
             </div>
           </i-form>
@@ -34,7 +36,6 @@
     </el-dialog>
   </div>
 </template>
-
 
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
@@ -99,7 +100,10 @@ export default {
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'roomTypeAdd' : 'roomTypeUpdate',
         params: this.formData,
-        loading: false
+        loading: false,
+        config: {
+          headers: { 'Content-Type': 'application/json;charset-UTF-8' }
+        }
       }).then(() => {
         this.$message.success(this.type === 'add' ? '添加成功' : '编辑成功');
         this.confirmFn && this.confirmFn();

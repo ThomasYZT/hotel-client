@@ -2,7 +2,9 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '添加酒店' : '编辑酒店'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="50%"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">

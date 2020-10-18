@@ -2,9 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '新增入库' : '编辑入口信息'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="40%"
                center
-               @close="reset">
+               @close="cancel">
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"

@@ -2,8 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '添加酒店信息' : '编辑酒店信息'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="50%"
                custom-class="form-dialog"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
@@ -37,6 +39,15 @@
                 <FormItem class="inline-form-item" label="开业年份" prop="openYear">
                   <i-input type="text" placeholder="开业年份" v-model.trim="formData.openYear" />
                 </FormItem>
+                <FormItem class="inline-form-item" label="X坐标" prop="baiduX">
+                  <i-input type="text" placeholder="X坐标" v-model.trim="formData.baiduX" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="Y坐标" prop="baiduY">
+                  <i-input type="text" placeholder="Y坐标" v-model.trim="formData.baiduY" />
+                </FormItem>
+                <FormItem class="block-form-item">
+                  <i-button @click="showMapModal">获取坐标</i-button>
+                </FormItem>
                 <FormItem class="block-form-item" label="酒店地址" prop="address">
                   <i-input type="text" placeholder="酒店地址" v-model.trim="formData.address" />
                 </FormItem>
@@ -53,12 +64,17 @@
         <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
+    <MapModal ref="mapModal"></MapModal>
   </div>
 </template>
 
 <script>
+import MapModal from '../../../components/MapModal';
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
+  components: {
+    MapModal
+  },
   data () {
     const validateNumber = (rule, value, callback) => {
       if (!value) callback();
@@ -123,13 +139,13 @@ export default {
         ],
         openYear: [
           { validator: validateNumber, trigger: 'blur' }
+        ],
+        baiduX: [
+          { required: true, message: '请输入X坐标', trigger: 'blur' }
+        ],
+        baiduY: [
+          { required: true, message: '请输入Y坐标', trigger: 'blur' }
         ]
-        // baiduX: [
-        //   { required: true, message: '请输入X坐标', trigger: 'blur' }
-        // ],
-        // baiduY: [
-        //   { required: true, message: '请输入Y坐标', trigger: 'blur' }
-        // ]
       }
     };
   },
@@ -179,6 +195,9 @@ export default {
       }).catch(err => {
         this.$message.error(`${this.type === 'add' ? '添加' : '编辑'}失败${err.msg ? ': ' + err.msg : ''}`);
       });
+    },
+    showMapModal () {
+      this.$refs.mapModal.show();
     },
     reset () {
       this.$refs.Form.resetFields();

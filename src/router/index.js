@@ -46,7 +46,7 @@ const createRouter = () => new Router({
 
 const router = createRouter();
 
-export const resetRouter = (routes) => {
+export const resetRouter = (routes = []) => {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher;
   router.addRoutes(routes);

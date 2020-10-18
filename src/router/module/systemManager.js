@@ -6,7 +6,7 @@ export default {
     component: () => import('../../pages/routerView/index.vue'),
     meta: {
       menuName: '系统设置',
-      iconClass: '',
+      iconClass: 'icon-iconset0177',
       activePath: `${topName}`,
       isMenu: true
     },
@@ -17,7 +17,7 @@ export default {
         redirect: () => { return { name: 'dictionaryList' }; },
         meta: {
           menuName: '数据字典管理',
-          iconClass: '',
+          iconClass: 'icon-zidianguanli5',
           activePath: `${topName}.dictionary`,
           isMenu: true
         },
@@ -41,7 +41,7 @@ export default {
         redirect: () => { return { name: 'hotelUserList' }; },
         meta: {
           menuName: '用户管理',
-          iconClass: '',
+          iconClass: 'icon-yonghu',
           activePath: `${topName}.hotelUserManager`,
           isMenu: true
         },
@@ -65,7 +65,7 @@ export default {
         redirect: () => { return { name: 'roleList' }; },
         meta: {
           menuName: '角色管理',
-          iconClass: '',
+          iconClass: 'icon-jiaose1',
           activePath: `${topName}.roleManager`,
           isMenu: true
         },
@@ -89,7 +89,7 @@ export default {
         redirect: () => { return { name: 'menuList' }; },
         meta: {
           menuName: '菜单管理',
-          iconClass: '',
+          iconClass: 'icon-caidan',
           activePath: `${topName}`,
           isMenu: true
         },

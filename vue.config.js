@@ -5,6 +5,11 @@ const ProEnv = require('./config/dev.env');
 module.exports = {
   productionSourceMap: false,
   lintOnSave: process.env.NODE_ENV !== 'production',
+  configureWebpack: {
+    externals: {
+      qqMap: 'qq'
+    }
+  },
   pwa: {
     iconPaths: {
       favicon32: 'favicon.ico',

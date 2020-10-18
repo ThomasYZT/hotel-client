@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import debounce from 'lodash/debounce';
+import qqMap from 'qqMap';
 
 const state = {
   loading: false,
@@ -49,7 +50,19 @@ const actions = {
   },
   showMessage: debounce((store, { type, msg }) => {
     Vue.prototype.$Message[type](msg);
-  }, 500)
+  }, 500),
+  getLocation () {
+    return new Promise((resolve, reject) => {
+      const geolocation = new qqMap.maps.Geolocation('OBCBZ-7WNKO-WZLWV-S4X5F-7NDOF-Q3FTX', 'hotel-web');
+      geolocation.getLocation((locationInfo) => {
+        resolve(locationInfo);
+      }, (err) => {
+        reject(err);
+      }, {
+        failTipFlag: true
+      });
+    });
+  }
 };
 
 export default {

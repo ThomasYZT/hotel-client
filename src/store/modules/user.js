@@ -106,6 +106,15 @@ const actions = {
         reject({ type: 'loginError', err });
       });
     });
+  },
+  logout ({ commit }) {
+    return new Promise((resolve, reject) => {
+      commit('UPDATE_USERINFO', null);
+      commit('UPDATE_ROUTEINFO', null);
+      commit('UPDATE_DICTIONARY', {});
+      resetRouter();
+      resolve();
+    });
   }
 };
 

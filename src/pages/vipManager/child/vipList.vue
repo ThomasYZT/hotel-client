@@ -29,6 +29,29 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{genderList.find(item => item.value === row.sex).label}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col3"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{vipLevelList.find(item => item.id === row.level) ?
+                    vipLevelList.find(item => item.id === row.level).dictName : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
             <!--<template slot="col9"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
@@ -55,7 +78,7 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType } from '../../../assets/enums';
+import { userType, genderList, dictionaryCodeType } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
   components: {
@@ -63,7 +86,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userInfo'
+      'userInfo',
+      'dictionary'
     ]),
     orgParams () {
       let level;
@@ -92,10 +116,16 @@ export default {
     },
     showAddBtn () {
       return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
+    },
+    vipLevelList () {
+      return this.dictionary[this.userInfo.id]
+        ? this.dictionary[this.userInfo.id][dictionaryCodeType.vipLevel]
+        : [];
     }
   },
   data () {
     return {
+      genderList,
       tableConfig,
       tableData: [],
       pageNum: 1,

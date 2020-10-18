@@ -9,5 +9,12 @@ export default {
             : String(params[prop])
         : '';
     });
+  },
+  removeProp: (obj, propsList) => {
+    Object.keys(obj).forEach(prop => {
+      if (propsList.includes(prop)) {
+        delete obj[prop];
+      }
+    });
   }
 };

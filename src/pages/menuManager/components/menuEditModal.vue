@@ -2,8 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '添加菜单信息' : '编辑菜单信息'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="50%"
                custom-class="form-dialog"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">

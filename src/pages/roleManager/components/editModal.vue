@@ -21,7 +21,7 @@
                 </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
                   <i-input type="textarea" placeholder="描述" v-model.trim="formData.remark" />
-              </FormItem>
+                </FormItem>
               </div>
             </div>
           </i-form>
@@ -63,6 +63,7 @@ export default {
       if (!item) return;
       this.formData = defaultsDeep({}, item, this.formData);
       this.$util.valueToStr(this.formData);
+      this.$util.removeProp(this.formData, ['createTime', 'updateTime']);
 
       if (confirmFn) {
         this.confirmFn = confirmFn;

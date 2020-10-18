@@ -2,8 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '添加黑名单' : '编辑黑名单'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="50%"
                custom-class="form-dialog"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
@@ -17,7 +19,7 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem class="block-form-item" label="手机号" prop="phone">
-                  <i-input type="text" placeholder="手机号" clearable @on-clear="clear" search @on-search="getByPhone" v-model.trim="formData.phone" @on-blur="getByPhone" />
+                  <i-input type="text" placeholder="手机号" clearable @on-clear="clear" search @on-enter="getByPhone" v-model.trim="formData.phone" />
                 </FormItem>
                 <FormItem class="form-item-block" label="姓名" prop="name">
                   <i-input :disabled="type === 'add'" type="text" placeholder="姓名" v-model.trim="formData.name" />
@@ -60,10 +62,7 @@ export default {
       visible: false,
       isLoading: false,
       type: '',
-      formData: {
-        phone: '',
-        remark: ''
-      },
+      formData: {},
       customerInfo: {},
       confirmFn: null,
       cancelFn: null,
@@ -107,7 +106,7 @@ export default {
             this.customerInfo = data;
           } else {
             this.$message.error(`未查询到该客户信息，请检查手机号码`);
-            this.customerInfo = null;
+            this.customerInfo = {};
           }
         }).catch(err => {
           this.$message.error(`获取客户信息失败${err.msg ? ': ' + err.msg : ''}`);
@@ -117,12 +116,7 @@ export default {
       }
     },
     clear () {
-      this.formData = {
-        name: '',
-        sex: '',
-        idCard: '',
-        remark: ''
-      };
+      this.formData = {};
     },
     cancel () {
       this.cancelFn && this.cancelFn();

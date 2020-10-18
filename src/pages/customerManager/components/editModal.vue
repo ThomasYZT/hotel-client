@@ -3,6 +3,8 @@
     <el-dialog :title="type === 'add' ? '添加客户' : '编辑客户'"
                :visible.sync="visible"
                width="35%"
+               @close="cancel"
+               :close-on-click-modal="false"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">

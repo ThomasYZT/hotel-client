@@ -7,7 +7,7 @@ export default {
     redirect: () => { return { name: 'brandList' }; },
     meta: {
       menuName: '品牌管理',
-      iconClass: '',
+      iconClass: 'icon-pinpaisheji',
       activePath: `${topName}`,
       isMenu: true
     },

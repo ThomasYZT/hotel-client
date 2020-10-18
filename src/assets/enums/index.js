@@ -9,34 +9,62 @@ export const storageKey = {
   userInfo: 'hotel:userinfo'
 };
 
+export const storageStatusMap = {
+  lost: 2,
+  retrieve: 1,
+  consign: 0
+};
+
 export const storageStatusList = [
   {
-    value: '0',
+    value: storageStatusMap.consign,
     name: '寄存'
   },
   {
-    value: '1',
+    value: storageStatusMap.retrieve,
     name: '取出'
   },
   {
-    value: '2',
+    value: storageStatusMap.lost,
     name: '遗失'
   }
 ];
 
+export const genderMap = {
+  unknown: 0,
+  male: 1,
+  female: 2
+};
+
 export const genderList = [
   {
-    label: '女',
-    value: '0'
+    label: '未知',
+    value: genderMap.unknown
   },
   {
     label: '男',
-    value: '1'
+    value: genderMap.male
+  },
+  {
+    label: '女',
+    value: genderMap.female
+  }
+];
+
+export const blacklistStatusList = [
+  {
+    label: '启用',
+    value: 1
+  },
+  {
+    label: '停用',
+    value: 0
   }
 ];
 
 export const dictionaryCodeType = {
   window: 'FJSX',
   floor: 'FLOOR',
-  vipLevel: 'VIPLEVEL'
+  vipLevel: 'VIPLEVEL',
+  consignType: 'CONSIGNTYPE'
 };

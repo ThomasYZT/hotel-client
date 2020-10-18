@@ -33,18 +33,26 @@
           帮助
           <i class="iconfont icon-bangzhu"></i>
         </div>
-        <div class="system-item">
-          账户
-          <i class="iconfont icon-zhanghu"></i>
-        </div>
+        <i-poptip trigger="hover" placement="bottom-end">
+          <div class="system-item">
+            账户
+            <i class="iconfont icon-zhanghu"></i>
+          </div>
+          <template slot="content">
+            <div class="menu-item">个人信息</div>
+            <div class="menu-item">修改密码</div>
+            <div class="menu-item" @click="didLogoutClick">注销</div>
+          </template>
+        </i-poptip>
       </div>
     </div>
+    <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
 <script>
 import WinBar from '../WinBar';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   components: {
     WinBar
@@ -59,6 +67,26 @@ export default {
     ...mapGetters([
       'windowState'
     ])
+  },
+  methods: {
+    ...mapActions([
+      'logout'
+    ]),
+    didLogoutClick () {
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否退出登录`,
+        confirm: () => {
+          this.logout().then(() => {
+            this.$message.success('退出登录成功');
+            this.$router.push({
+              name: 'login',
+              replace: true
+            });
+          });
+        }
+      });
+    }
   },
   mounted () {
 
@@ -163,6 +191,21 @@ export default {
           margin-right: 20px;
           cursor: pointer;
         }
+      }
+    }
+
+    .menu-item {
+      @include flex_layout(row, center, center);
+      height: 40px;
+      cursor: pointer;
+      border-bottom: 1px solid  $lightGray;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        color: $normalGreen;
       }
     }
   }

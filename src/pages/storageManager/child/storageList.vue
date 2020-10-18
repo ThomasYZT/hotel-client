@@ -29,6 +29,41 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{genderList.find(item => item.value === row.sex) ?
+                    genderList.find(item => item.value === row.sex).label : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col5"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{consignTypeList.find(item => item.id === row.consignType)
+                    ? consignTypeList.find(item => item.id === row.consignType).dictName : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col7"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{storageStatusList.find(item => item.value === row.status).name}}</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col8"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
@@ -56,7 +91,7 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType } from '../../../assets/enums';
+import { userType, storageStatusList, genderList, dictionaryCodeType } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
   components: {
@@ -64,7 +99,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userInfo'
+      'userInfo',
+      'dictionary'
     ]),
     orgParams () {
       let level;
@@ -93,10 +129,17 @@ export default {
     },
     showAddBtn () {
       return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
+    },
+    consignTypeList () {
+      return this.dictionary[this.userInfo.id]
+        ? this.dictionary[this.userInfo.id][dictionaryCodeType.consignType]
+        : [];
     }
   },
   data () {
     return {
+      genderList,
+      storageStatusList,
       tableConfig,
       tableData: [],
       pageNum: 1,
@@ -138,22 +181,39 @@ export default {
         item: {
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
         },
+        consignTypeList: this.consignTypeList,
         confirmFn: this.getList
       });
     },
     editItem (item) {
-      this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
+      this.$refs.editModal.show({
+        type: 'edit',
+        item,
+        consignTypeList: this.consignTypeList,
+        confirmFn: this.getList });
     },
-    retrieveClick(item) {
-
+    retrieveClick (item) {
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否取出`,
+        confirm: () => {
+          this.retrieveItem(item);
+        }
+      });
     },
-    lostClick(item) {
-
+    lostClick (item) {
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否遗失`,
+        confirm: () => {
+          this.lostItem(item);
+        }
+      });
     },
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.roomNumber}`,
+        content: `是否删除`,
         confirm: () => {
           this.delItem(item);
         }
@@ -170,6 +230,32 @@ export default {
         this.$message.success('删除成功');
       }).catch(err => {
         this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
+      });
+    },
+    retrieveItem (item) {
+      this.$ajax.get({
+        apiKey: 'storageRetrieveConsign',
+        params: {
+          id: item.id
+        }
+      }).then(() => {
+        this.getList();
+        this.$message.success('操作成功');
+      }).catch(err => {
+        this.$message.error(`操作失败${err.msg ? ': ' + err.msg : ''}`);
+      });
+    },
+    lostItem (item) {
+      this.$ajax.get({
+        apiKey: 'storageLostConsign',
+        params: {
+          id: item.id
+        }
+      }).then(() => {
+        this.getList();
+        this.$message.success('操作成功');
+      }).catch(err => {
+        this.$message.error(`操作失败${err.msg ? ': ' + err.msg : ''}`);
       });
     }
   },

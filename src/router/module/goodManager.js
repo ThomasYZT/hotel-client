@@ -6,7 +6,7 @@ export default {
     component: () => import('../../pages/routerView/index.vue'),
     meta: {
       menuName: '商品管理',
-      iconClass: '',
+      iconClass: 'icon-shangpin',
       activePath: `${topName}`,
       isMenu: true
     },
@@ -17,7 +17,7 @@ export default {
         redirect: () => { return { name: 'stockList' }; },
         meta: {
           menuName: '入库管理',
-          iconClass: '',
+          iconClass: 'icon-ruku',
           activePath: `${topName}.stockManager`,
           isMenu: true
         },
@@ -41,7 +41,7 @@ export default {
         redirect: () => { return { name: 'goodList' }; },
         meta: {
           menuName: '商品管理',
-          iconClass: '',
+          iconClass: 'icon-shangpin',
           activePath: `${topName}.goodManager`,
           isMenu: true
         },

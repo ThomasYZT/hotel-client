@@ -6,19 +6,19 @@
              :to="menuData.path"
              :name="menuData.meta.activePath">
     <span class="item-label" v-if="expand">
-      <i class="iconfont icon-xiaoxi"></i>
+      <i class="menu-icon iconfont" :class="menuData.meta.iconClass"></i>
       {{menuData.meta.menuName}}
     </span>
     <i-tooltip v-else
                transfer
                :content="menuData.meta.menuName" placement="left">
-      <i  class="iconfont icon-xiaoxi"></i>
+      <i class="menu-icon iconfont" :class="menuData.meta.iconClass"></i>
     </i-tooltip>
   </iMenuItem>
   <div v-else>
     <Submenu v-if="expand" :name="menuData.meta.activePath">
       <template slot="title">
-        <i  class="iconfont icon-xiaoxi"></i>
+        <i class="menu-icon iconfont" :class="menuData.meta.iconClass"></i>
         {{menuData.meta.menuName}}
       </template>
       <menu-com v-for="item in menuData.children"
@@ -32,7 +32,7 @@
               placement="right">
       <iMenuItem :name="menuData.meta.activePath">
         <span class="item-label">
-          <i class="iconfont icon-xiaoxi"></i>
+          <i class="menu-icon iconfont" :class="menuData.meta.iconClass"></i>
         </span>
       </iMenuItem>
       <template slot="content">
@@ -106,5 +106,8 @@ export default {
       background-color: $lightGreen;
     }
   }
+}
+i.menu-icon {
+  font-weight: bold;
 }
 </style>

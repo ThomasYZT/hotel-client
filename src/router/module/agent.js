@@ -7,7 +7,7 @@ export default {
     redirect: () => { return { name: 'agentList' }; },
     meta: {
       menuName: '代理商管理',
-      iconClass: '',
+      iconClass: 'icon-dailishang',
       activePath: `${topName}`,
       isMenu: true
     },

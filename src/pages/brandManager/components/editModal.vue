@@ -4,6 +4,8 @@
                :visible.sync="visible"
                width="50%"
                custom-class="form-dialog"
+               @close="cancel"
+               :close-on-click-modal="false"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">

@@ -2,8 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '添加房间信息' : '编辑房间信息'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="50%"
                custom-class="form-dialog"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
@@ -12,20 +14,34 @@
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
-                  :label-width="120"
+                  :label-width="90"
                   label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <FormItem class="form-item-block" label="房间号" prop="roomNumber">
+                <FormItem class="inline-form-item" label="房间号" prop="roomNumber">
                   <i-input type="text" placeholder="房间号" v-model.trim="formData.roomNumber" />
                 </FormItem>
-                <FormItem class="form-item-block" label="房间类型" prop="roomTypeId">
-                  <i-input type="text" placeholder="房间类型" v-model.trim="formData.roomTypeId" />
+                <FormItem class="inline-form-item" label="房间类型" prop="roomTypeId">
+                  <i-select v-model="formData.roomTypeId"
+                            placeholder="请选择">
+                    <i-option v-for="item in roomTypeList"
+                              :value="item.id"
+                              :key="item.id">
+                      {{ item.typeName }}
+                    </i-option>
+                  </i-select>
                 </FormItem>
-                <FormItem class="form-item-block" label="楼层" prop="floorId">
-                  <i-input type="text" placeholder="楼层" v-model.trim="formData.floorId" />
+                <FormItem class="inline-form-item" label="楼层" prop="floorId" >
+                  <i-select v-model="formData.floorId"
+                            placeholder="请选择">
+                    <i-option v-for="item in floorList"
+                              :value="item.id"
+                              :key="item.id">
+                      {{ item.dictName }}
+                    </i-option>
+                  </i-select>
                 </FormItem>
-                <FormItem class="form-item-block" label="分机号" prop="phoneExt">
+                <FormItem class="inline-form-item" label="分机号" prop="phoneExt">
                   <i-input type="text" placeholder="分机号" v-model.trim="formData.phoneExt" />
                 </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
@@ -69,22 +85,26 @@ export default {
           { required: true, message: '请输入房间号', trigger: 'blur' }
         ],
         roomTypeId: [
-          { required: true, message: '请选择房间类型', trigger: 'blur' }
+          { required: true, type: 'number', message: '请选择房间类型', trigger: 'blur' }
         ],
         floorId: [
-          { required: true, message: '请选择楼层', trigger: 'blur' }
+          { required: true, type: 'number', message: '请选择楼层', trigger: 'blur' }
         ],
         phoneExt: [
           { required: true, message: '请输入分机号', trigger: 'blur' }
         ]
-      }
+      },
+      roomTypeList: [],
+      floorList: []
     };
   },
   methods: {
-    show ({ type = '', item, confirmFn, cancelFn }) {
+    show ({ type = '', item, roomTypeList, floorList, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
       this.formData = defaultsDeep({}, item, this.formData);
-      this.$util.valueToStr(this.formData);
+      this.$util.valueToStr(this.formData, ['roomTypeId', 'floorId']);
+      this.roomTypeList = roomTypeList.filter(item => item.id !== 0);
+      this.floorList = floorList.filter(item => item.id !== 0);
       this.formData.attributeList.push({
         attributeValue: '12',
         dictionaryId: '12',
@@ -137,6 +157,8 @@ export default {
         isAttribute: 1,
         attributeList: []
       };
+      this.roomTypeList = [];
+      this.floorList = [];
       this.confirmFn = null;
       this.cancelFn = null;
       this.visible = false;

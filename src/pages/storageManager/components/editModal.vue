@@ -2,7 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '新增行李寄存' : '编辑寄存信息'"
                :visible.sync="visible"
+               :close-on-click-modal="false"
+               custom-class="form-dialog"
                width="40%"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <div class="form-wrapper">
@@ -15,7 +18,14 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem label="寄存类型" prop="consignType">
-                  <i-input type="text" placeholder="寄存类型" v-model="formData.consignType" />
+                  <i-select v-model="formData.consignType"
+                            placeholder="请选择">
+                    <i-option v-for="item in consignTypeList"
+                              :value="item.id"
+                              :key="item.id">
+                      {{ item.dictName }}
+                    </i-option>
+                  </i-select>
                 </FormItem>
                 <FormItem label="寄存时间" prop="consignTime">
                   <i-date-picker v-model="formData.consignTime"
@@ -56,8 +66,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>
@@ -85,7 +95,7 @@ export default {
       cancelFn: null,
       formRule: {
         consignType: [
-          { required: true, message: '请选择寄存类型', trigger: 'blur' }
+          { required: true, type: 'number', message: '请选择寄存类型', trigger: 'blur' }
         ],
         consignTime: [
           { required: true, type: 'date', message: '请选择寄存时间', trigger: 'blur' }
@@ -99,14 +109,16 @@ export default {
         vipId: [
           { required: true, message: '请输入会员ID', trigger: 'blur' }
         ]
-      }
+      },
+      consignTypeList: []
     };
   },
   methods: {
-    show ({ type = '', item, confirmFn, cancelFn }) {
+    show ({ type = '', item, consignTypeList, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
       this.formData = defaultsDeep({}, item, this.formData);
-      this.$util.valueToStr(this.formData);
+      this.$util.valueToStr(this.formData, ['consignType']);
+      this.consignTypeList = consignTypeList;
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -156,6 +168,7 @@ export default {
         vipId: '',
         remark: ''
       };
+      this.consignTypeList = [];
       this.confirmFn = null;
       this.cancelFn = null;
       this.visible = false;

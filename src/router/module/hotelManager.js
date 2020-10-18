@@ -6,7 +6,7 @@ export default {
     component: () => import('../../pages/routerView/index.vue'),
     meta: {
       menuName: '酒店管理',
-      iconClass: '',
+      iconClass: 'icon-jiudian',
       activePath: `${topName}`,
       isMenu: true
     },
@@ -17,7 +17,7 @@ export default {
         redirect: () => { return { name: 'agreementList' }; },
         meta: {
           menuName: '协议客户管理',
-          iconClass: '',
+          iconClass: 'icon-xieyixiangqing',
           activePath: `${topName}.agreementManager`,
           isMenu: true
         },
@@ -28,7 +28,7 @@ export default {
             name: 'agreementList',
             component: () => import('../../pages/agreementManager/child/agreementList.vue'),
             meta: {
-              menuName: '协议客户管理',
+              menuName: '协议客户列表',
               activePath: `${topName}.agreementManager`,
               isMenu: false
             }
@@ -41,7 +41,7 @@ export default {
         redirect: () => { return { name: 'customerList' }; },
         meta: {
           menuName: '客户管理',
-          iconClass: '',
+          iconClass: 'icon-kehu',
           activePath: `${topName}.customerManager`,
           isMenu: true
         },
@@ -65,7 +65,7 @@ export default {
         redirect: () => { return { name: 'hotelBlackList' }; },
         meta: {
           menuName: '酒店黑名单管理',
-          iconClass: '',
+          iconClass: 'icon-heimingdan',
           activePath: `${topName}.hotelBlackListManager`,
           isMenu: true
         },
@@ -88,7 +88,7 @@ export default {
         redirect: () => { return { name: 'hotelList' }; },
         meta: {
           menuName: '酒店管理',
-          iconClass: '',
+          iconClass: 'icon-jiudian',
           activePath: `${topName}.hotelManager`,
           isMenu: true
         },
@@ -112,7 +112,7 @@ export default {
         redirect: () => { return { name: 'vipList' }; },
         meta: {
           menuName: '会员管理',
-          iconClass: '',
+          iconClass: 'icon-huiyuan',
           activePath: `${topName}.vipManager`,
           isMenu: true
         },
@@ -135,7 +135,7 @@ export default {
         redirect: () => { return { name: 'storageList' }; },
         meta: {
           menuName: '行李寄存管理',
-          iconClass: '',
+          iconClass: 'icon-hanglixiang',
           activePath: `${topName}.storageManager`,
           isMenu: true
         },

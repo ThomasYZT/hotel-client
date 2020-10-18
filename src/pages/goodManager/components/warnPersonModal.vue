@@ -5,7 +5,8 @@
                custom-class="form-dialog"
                width="500px"
                center
-               @close="reset">
+               :close-on-click-modal="false"
+               @close="cancel">
       <div class="dialog-wrapper">
         <i-transfer :data="warnPeopleList"
                     :titles="titles"

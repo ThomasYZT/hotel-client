@@ -29,6 +29,28 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{genderList.find(item => item.value === row.sex).label}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col4"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{blacklistStatusList.find(item => item.value === row.status).label}}</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col5"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
@@ -60,7 +82,7 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType } from '../../../assets/enums';
+import { userType, genderList, blacklistStatusList } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
   components: {
@@ -101,6 +123,8 @@ export default {
   },
   data () {
     return {
+      blacklistStatusList,
+      genderList,
       tableConfig,
       tableData: [],
       pageNum: 1,

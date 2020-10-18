@@ -6,7 +6,7 @@ export default {
     component: () => import('../../pages/routerView/index.vue'),
     meta: {
       menuName: '酒店房间',
-      iconClass: '',
+      iconClass: 'icon-Door-Hanger',
       activePath: `${topName}`,
       isMenu: true
     },
@@ -17,7 +17,7 @@ export default {
         redirect: () => { return { name: 'roomList' }; },
         meta: {
           menuName: '房间管理',
-          iconClass: '',
+          iconClass: 'icon-fangjianguanli',
           activePath: `${topName}.roomManager`,
           isMenu: true
         },
@@ -41,7 +41,7 @@ export default {
         redirect: () => { return { name: 'roomTypeList' }; },
         meta: {
           menuName: '房间类型管理',
-          iconClass: '',
+          iconClass: 'icon-fangjianweihu',
           activePath: `${topName}.roomTypeManager`,
           isMenu: true
         },

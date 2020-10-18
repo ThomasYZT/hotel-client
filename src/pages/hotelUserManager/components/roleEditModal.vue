@@ -2,8 +2,10 @@
   <div class="modal-wrapper">
     <el-dialog title="选择角色"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                custom-class="form-dialog"
                width="300px"
+               @close="cancel"
                center>
       <div class="dialog-wrapper">
         <el-tree v-if="visible"

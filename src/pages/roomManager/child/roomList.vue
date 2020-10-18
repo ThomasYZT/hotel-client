@@ -45,6 +45,21 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col2"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>
+                    {{floorList.find(item => item.id === row.floorId)
+                      ? floorList.find(item => item.id === row.floorId).dictName
+                      : ''}}
+                  </span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col4"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
@@ -199,11 +214,19 @@ export default {
         item: {
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
         },
+        floorList: this.floorList,
+        roomTypeList: this.roomTypeList,
         confirmFn: this.getList
       });
     },
     editItem (item) {
-      this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
+      this.$refs.editModal.show({
+        type: 'edit',
+        item,
+        floorList: this.floorList,
+        roomTypeList: this.roomTypeList,
+        confirmFn: this.getList
+      });
     },
     delClick (item) {
       this.$refs.confirmModal.show({
