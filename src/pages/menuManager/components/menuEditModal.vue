@@ -19,7 +19,7 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem class="block-form-item" label="菜单名称" prop="menuName">
-                 <i-input type="text" placeholder="菜单名称" v-model="formData.menuName" />
+                  <i-input type="text" placeholder="菜单名称" v-model="formData.menuName" />
                 </FormItem>
                 <FormItem class="block-form-item" label="菜单链接" prop="url">
                   <i-input class="block-form-item" type="text" placeholder="菜单链接" v-model="formData.url" />

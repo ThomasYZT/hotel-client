@@ -199,9 +199,9 @@ export default {
       this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
     },
     delClick (item) {
-      if(item.status === 1) {
-         this.$message.warning('必须先下架该商品，才能删除');
-      }else {
+      if (item.status === 1) {
+        this.$message.warning('必须先下架该商品，才能删除');
+      } else {
         this.$refs.confirmModal.show({
           title: '警告',
           content: `是否删除 ${item.name}`,

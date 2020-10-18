@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-        <div class="page-content">
+    <div class="page-content">
       <div class="tree-wrapper">
         <el-tree :data="tableData"
                  node-key="id"

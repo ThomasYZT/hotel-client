@@ -12,12 +12,8 @@
             </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-                <div class="filter-label">入库开始时间：</div>
-                <i-input v-model="filterParams.storageStartTime"></i-input>
-              </div>
-              <div class="filter-item">
-                <div class="filter-label">入库结束时间：</div>
-                <i-input v-model="filterParams.storageEndTime"></i-input>
+                <div class="filter-label">入库时间：</div>
+                <i-date-picker type="daterange" split-panels placeholder="入库时间" @on-change="timeChange"></i-date-picker>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
@@ -115,8 +111,8 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-        // storageStartTime: '',
-        // storageEndTime: ''
+        storageStartTime: '',
+        storageEndTime: ''
       },
       nodeData: {}
     };
@@ -180,9 +176,9 @@ export default {
       });
     },
     delClick (item) {
-      if(item.status === 1) {
+      if (item.status === 1) {
         this.$message.warning('必须先出库，才能删除');
-      }else {
+      } else {
         this.$refs.confirmModal.show({
           title: '警告',
           content: `是否删除 ${item.storageNumber}`,
@@ -191,7 +187,6 @@ export default {
           }
         });
       }
-
     },
     delItem (item) {
       this.$ajax.get({
@@ -205,6 +200,10 @@ export default {
       }).catch(err => {
         this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
       });
+    },
+    timeChange (val) {
+      this.filterParams.storageStartTime = val[0] || '';
+      this.filterParams.storageEndTime = val[1] || '';
     }
   },
   mounted () {

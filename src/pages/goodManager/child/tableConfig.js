@@ -2,14 +2,13 @@ export const tableConfig = [
   {
     prop: 'goodsNumber',
     label: '商品编号',
-    minWidth: '160px',
+    minWidth: '250px',
     fixed: 'left'
   },
   {
     prop: 'name',
     label: '商品名称',
-    width: '150px',
-    fixed: 'left'
+    width: '150px'
   },
   {
     prop: 'code',

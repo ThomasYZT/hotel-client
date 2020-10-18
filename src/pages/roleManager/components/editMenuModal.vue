@@ -8,17 +8,17 @@
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <el-tree v-if="visible"
-                 ref="Tree"
-                 :data="allMenuList"
-                 :props="treeProps"
-                 :highlight-current="false"
-                 :expand-on-click-node="false"
-                 :check-on-click-node="false"
-                 node-key="id"
-                 style="width: 100%;"
-                 show-checkbox
-                 default-expand-all>
-        </el-tree>
+                   ref="Tree"
+                   :data="allMenuList"
+                   :props="treeProps"
+                   :highlight-current="false"
+                   :expand-on-click-node="false"
+                   :check-on-click-node="false"
+                   node-key="id"
+                   style="width: 100%;"
+                   show-checkbox
+                   default-expand-all>
+          </el-tree>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -152,4 +152,3 @@ export default {
 }
 
 </style>
-

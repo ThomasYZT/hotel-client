@@ -107,8 +107,8 @@ export default {
         roomCount: '',
         openYear: '',
         introduce: '',
-        baiduX: '',
-        baiduY: ''
+        baiduX: '0',
+        baiduY: '0'
       },
       confirmFn: null,
       cancelFn: null,
@@ -178,8 +178,7 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData,
-        openYear: this.$date(this.formData.openYear).format('YYYY-MM-DD HH:mm:ss')
+        ...this.formData
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'hotelAdd' : 'hotelUpdate',
@@ -211,8 +210,8 @@ export default {
         mobilePhone: '',
         openYear: '',
         introduce: '',
-        baiduX: 0,
-        baiduY: 0
+        baiduX: '',
+        baiduY: ''
       };
       this.confirmFn = null;
       this.cancelFn = null;

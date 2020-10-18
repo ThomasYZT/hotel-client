@@ -25,7 +25,7 @@ import {
   InputNumber,
   RadioGroup,
   Radio,
-  Poptip
+  Poptip,
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';

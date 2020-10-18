@@ -7,10 +7,10 @@
         </div>
         <div class="left-box">
           <org-tree title="数据类型"
-                        tree-api="dicTypeGetAllList"
-                        :params="typeOrgTreeParams"
-                        :treeProps="{ label: 'name', children: 'list' }"
-                        @nodeClick="onTypeNodeClick"></org-tree>
+                    tree-api="dicTypeGetAllList"
+                    :params="typeOrgTreeParams"
+                    :treeProps="{ label: 'name', children: 'list' }"
+                    @nodeClick="onTypeNodeClick"></org-tree>
         </div>
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
@@ -25,28 +25,28 @@
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
           </div>
-<table-com v-if="showTable"
-                         :data="tableData"
-                         :page-num.sync="pageNum"
-                         :page-size.sync="pageSize"
-                         :total-size="totalSize"
-                         :config="tableConfig"
-                         :getList="getList">
-                <template slot="col2"
-                          slot-scope="{ item }">
-                  <el-table-column :prop="item.prop"
-                                   :label="item.label"
-                                   :fixed="item.fixed"
-                                   :min-width="item.minWidth">
-                    <template slot-scope="{ row }">
-                      <div class="operate-block">
-                        <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                        <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
-                      </div>
-                    </template>
-                  </el-table-column>
+          <table-com v-if="showTable"
+                     :data="tableData"
+                     :page-num.sync="pageNum"
+                     :page-size.sync="pageSize"
+                     :total-size="totalSize"
+                     :config="tableConfig"
+                     :getList="getList">
+            <template slot="col2"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <div class="operate-block">
+                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                  </div>
                 </template>
-              </table-com>
+              </el-table-column>
+            </template>
+          </table-com>
         </div>
       </div>
     </div>

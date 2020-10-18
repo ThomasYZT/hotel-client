@@ -55,7 +55,8 @@ export default {
       type: '',
       formData: {
         typeName: '',
-        price: ''
+        price: '',
+        attachId: 0
       },
       confirmFn: null,
       cancelFn: null,

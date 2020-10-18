@@ -31,8 +31,7 @@
                   <i-radio-group v-model="formData.gender">
                     <i-radio v-for="item in genderList"
                              :key="item.value"
-                             :label="item.label"
-                             :value="item.value"></i-radio>
+                             :label="item.value">{{item.label}}</i-radio>
                   </i-radio-group>
                 </FormItem>
                 <FormItem class="inline-form-item" label="手机号" prop="mobile">
@@ -91,10 +90,10 @@ export default {
       formData: {
         birthday: '',
         cardNo: '',
-        gender: '0',
+        gender: 0,
         mobile: '',
         name: '',
-        position: '',
+        position: ''
         // userName: ''
       },
       confirmFn: null,
@@ -105,7 +104,7 @@ export default {
           { validator: validateIdCard, trigger: 'blur' }
         ],
         gender: [
-          { required: true, message: '请选择性别', trigger: 'blur' }
+          { required: true, type: 'number', message: '请选择性别', trigger: 'blur' }
         ],
         mobile: [
           { required: true, message: '请输入联系电话', trigger: 'blur' },
@@ -113,7 +112,7 @@ export default {
         ],
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
-        ],
+        ]
         // userName: [
         //   { required: true, message: '请输入用户名', trigger: 'blur' }
         // ]
@@ -125,9 +124,8 @@ export default {
       if (!type || (type === 'edit' && !item)) return;
       this.formData = defaultsDeep({}, item, this.formData);
       if (type === 'edit') {
-        delete this.formData.updateTime;
-        delete this.formData.createTime;
-        this.$util.valueToStr(this.formData);
+        this.$util.valueToStr(this.formData, ['gender']);
+        this.$util.removeProp(this.formData, ['updateTime', 'createTime']);
       }
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -175,7 +173,7 @@ export default {
         gender: '',
         mobile: '',
         name: '',
-        position: '',
+        position: ''
         // userName: ''
       };
       this.confirmFn = null;
