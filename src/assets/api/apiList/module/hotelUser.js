@@ -8,6 +8,7 @@ export default {
 
   get: '/hotelUser/get',
   login: '/hotelUser/login',
+  logout: '/hotelUser/logout',
   modifyPassword: '/hotelUser/modifyPassword',
   setRole: '/hotelUser/setUserRole',
   menuList: '/hotelUser/userMenuList',

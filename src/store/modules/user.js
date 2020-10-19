@@ -5,7 +5,7 @@ import { resetRouter } from '../../router';
 import ajax from '../../assets/api';
 
 const state = {
-  userInfo: JSON.parse(sessionStorage.getItem(storageKey.userInfo)) || null,
+  userInfo: JSON.parse(sessionStorage.getItem(storageKey.userInfo)) || {},
   routeInfo: null,
   dictionary: {}
 };
@@ -109,11 +109,17 @@ const actions = {
   },
   logout ({ commit }) {
     return new Promise((resolve, reject) => {
-      commit('UPDATE_USERINFO', null);
-      commit('UPDATE_ROUTEINFO', null);
-      commit('UPDATE_DICTIONARY', {});
-      resetRouter();
-      resolve();
+      ajax.post({
+        apiKey: 'userLogout'
+      }).then(() => {
+        commit('UPDATE_USERINFO', {});
+        commit('UPDATE_ROUTEINFO', null);
+        commit('UPDATE_DICTIONARY', {});
+        resetRouter();
+        resolve();
+      }).catch(err => {
+        reject(err);
+      });
     });
   }
 };

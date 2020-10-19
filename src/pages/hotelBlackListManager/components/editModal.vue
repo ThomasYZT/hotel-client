@@ -133,7 +133,8 @@ export default {
     },
     submitForm () {
       const formData = {
-        ...this.formData
+        ...this.formData,
+        remark: this.formData.remark
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'blacklistAdd' : 'blacklistUpdate',

@@ -79,10 +79,8 @@ export default {
         confirm: () => {
           this.logout().then(() => {
             this.$message.success('退出登录成功');
-            this.$router.push({
-              name: 'login',
-              replace: true
-            });
+          }).catch(() => {
+            this.$message.success('退出登录失败');
           });
         }
       });

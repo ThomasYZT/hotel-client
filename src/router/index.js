@@ -56,7 +56,7 @@ router.beforeEach((to, from, next) => {
   if (['login', 'noPermission', 'noService'].includes(to.name)) {
     next();
   } else {
-    if (store.getters.userInfo) {
+    if (store.getters.userInfo && Object.keys(store.getters.userInfo).length > 0) {
       if (!store.getters.routeInfo) {
         store.dispatch('getMenuList', {
           tip: false,
