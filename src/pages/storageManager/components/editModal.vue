@@ -19,7 +19,7 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem class="block-form-item" label="手机号" prop="phone">
-                  <i-input type="text" placeholder="手机号" clearable @on-clear="clear" search @on-search="getByPhone" v-model.trim="formData.phone" @on-blur="getByPhone" />
+                  <i-input type="text" placeholder="手机号" clearable @on-clear="clear" search @on-search="getByPhone" v-model.trim="formData.phone" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="寄存类型" prop="consignType">
                   <i-select v-model="formData.consignType"
@@ -32,17 +32,18 @@
                   </i-select>
                 </FormItem>
                 <FormItem class="inline-form-item" label="姓名" prop="name">
-                  <i-input readonly type="text" placeholder="姓名" v-model.trim="formData.name" />
+                  <i-input disabled type="text" placeholder="姓名" v-model.trim="formData.name" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="性别" prop="sex">
                   <i-radio-group v-model="formData.sex">
                     <i-radio v-for="item in genderList"
+                             disabled
                              :key="item.value"
                              :label="item.value">{{item.label}}</i-radio>
                   </i-radio-group>
                 </FormItem>
                 <FormItem class="block-form-item" label="身份证号" prop="idCard">
-                  <i-input readonly type="text" placeholder="身份证号" v-model.trim="formData.idCard" />
+                  <i-input disabled type="text" placeholder="身份证号" v-model.trim="formData.idCard" />
                 </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
                   <i-input type="textarea" placeholder="描述" v-model="formData.remark" />
@@ -71,12 +72,7 @@ export default {
       visible: false,
       isLoading: false,
       type: '',
-      formData: {
-        consignType: '',
-        status: '',
-        vipId: '',
-        remark: ''
-      },
+      formData: {},
       confirmFn: null,
       cancelFn: null,
       formRule: {
@@ -138,15 +134,29 @@ export default {
       });
     },
     getByPhone () {
-
+      this.isLoading = true;
+      this.$ajax.get({
+        apiKey: 'vipGetByPhone',
+        params: {
+          phone: this.formData.phone
+        },
+        loading: false
+      }).then(data => {
+        if (data && Object.keys(data).length > 0) {
+          this.formData = defaultsDeep({}, this.formData, data);
+          this.formData.vipId = this.formData.id;
+          delete this.formData.id;
+        } else {
+          this.$message.error(`未查询到该会员信息，请检查手机号码`);
+        }
+      }).catch(err => {
+        this.$message.error(`获取会员信息失败${err.msg ? ': ' + err.msg : ''}`);
+      }).finally(() => {
+        this.isLoading = false;
+      });
     },
     clear () {
-      this.formData = {
-        consignType: '',
-        status: '',
-        vipId: '',
-        remark: ''
-      };
+      this.formData = {};
     },
     reset () {
       this.$refs.Form.resetFields();

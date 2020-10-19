@@ -27,6 +27,7 @@
                 <FormItem class="inline-form-item" label="性别" prop="sex">
                   <i-radio-group v-model="formData.sex">
                     <i-radio v-for="item in genderList"
+                             disabled
                              :key="item.value"
                              :label="item.value">{{item.label}}</i-radio>
                   </i-radio-group>
@@ -69,7 +70,6 @@ export default {
       isLoading: false,
       type: '',
       formData: {},
-      customerInfo: {},
       confirmFn: null,
       cancelFn: null,
       formRule: {
@@ -108,10 +108,8 @@ export default {
           this.formData = defaultsDeep({}, this.formData, data);
           this.formData.customerId = this.formData.id;
           delete this.formData.id;
-          this.customerInfo = data;
         } else {
           this.$message.error(`未查询到该客户信息，请检查手机号码`);
-          this.customerInfo = {};
         }
       }).catch(err => {
         this.$message.error(`获取客户信息失败${err.msg ? ': ' + err.msg : ''}`);
@@ -151,14 +149,7 @@ export default {
     },
     reset () {
       this.$refs.Form.resetFields();
-      this.formData = {
-        phone: '',
-        name: '',
-        sex: '',
-        idCard: '',
-        remark: ''
-      };
-      this.customerInfo = {};
+      this.formData = {};
       this.confirmFn = null;
       this.cancelFn = null;
       this.visible = false;

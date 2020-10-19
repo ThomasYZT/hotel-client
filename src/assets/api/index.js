@@ -4,7 +4,7 @@ import qs from 'querystring';
 import defautsDeep from 'lodash/defaultsDeep';
 import store from '../../store';
 
-const domain = 'http://139.155.42.50:8080';
+const domain = 'https://uujd.com.cn';
 const isProduct = process.env.NODE_ENV === 'production';
 // 创建自定义axios实例
 const instance = axios.create({

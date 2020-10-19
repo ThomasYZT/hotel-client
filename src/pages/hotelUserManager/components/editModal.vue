@@ -18,9 +18,9 @@
                   label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
-                <!--<FormItem class="inline-form-item" label="登录名" prop="userName">
-                  <i-input type="text" placeholder="登录名" v-model.trim="formData.userName" />
-                </FormItem>-->
+                <FormItem class="inline-form-item" label="登录名" prop="userName">
+                  <i-input :disabled="type === 'edit'" type="text" placeholder="登录名" v-model.trim="formData.userName" />
+                </FormItem>
                 <FormItem class="inline-form-item" label="姓名" prop="name">
                   <i-input type="text" placeholder="姓名" v-model.trim="formData.name" />
                 </FormItem>
@@ -93,8 +93,8 @@ export default {
         gender: 0,
         mobile: '',
         name: '',
-        position: ''
-        // userName: ''
+        position: '',
+        userName: ''
       },
       confirmFn: null,
       cancelFn: null,
@@ -112,10 +112,10 @@ export default {
         ],
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
+        ],
+        userName: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
         ]
-        // userName: [
-        //   { required: true, message: '请输入用户名', trigger: 'blur' }
-        // ]
       }
     };
   },
@@ -173,8 +173,8 @@ export default {
         gender: '',
         mobile: '',
         name: '',
-        position: ''
-        // userName: ''
+        position: '',
+        userName: ''
       };
       this.confirmFn = null;
       this.cancelFn = null;
