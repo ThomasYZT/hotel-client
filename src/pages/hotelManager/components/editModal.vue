@@ -39,13 +39,16 @@
                 <FormItem class="inline-form-item" label="开业年份" prop="openYear">
                   <i-input type="text" placeholder="开业年份" v-model.trim="formData.openYear" />
                 </FormItem>
-                <FormItem class="inline-form-item" label="X坐标" prop="baiduX">
+                <!--<FormItem class="inline-form-item" label="X坐标" prop="baiduX">
                   <i-input type="text" placeholder="X坐标" v-model.trim="formData.baiduX" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="Y坐标" prop="baiduY">
                   <i-input type="text" placeholder="Y坐标" v-model.trim="formData.baiduY" />
-                </FormItem>
-                <FormItem class="block-form-item">
+                </FormItem>-->
+                <FormItem class="no-label block-form-item">
+                  <div class="map-wrapper">
+                    <place-search></place-search>
+                  </div>
                   <i-button @click="showMapModal">获取坐标</i-button>
                 </FormItem>
                 <FormItem class="block-form-item" label="酒店地址" prop="address">
@@ -64,16 +67,15 @@
         <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
-    <MapModal ref="mapModal"></MapModal>
   </div>
 </template>
 
 <script>
-import MapModal from '../../../components/MapModal';
+import PlaceSearch from '../../../components/PlaceSearch';
 import defaultsDeep from 'lodash/defaultsDeep';
 export default {
   components: {
-    MapModal
+    PlaceSearch
   },
   data () {
     const validateNumber = (rule, value, callback) => {
@@ -196,7 +198,7 @@ export default {
       });
     },
     showMapModal () {
-      this.$refs.mapModal.show();
+
     },
     reset () {
       this.$refs.Form.resetFields();
@@ -253,6 +255,16 @@ export default {
         }
       }
     }
+  }
+
+  .map-wrapper {
+    height: 300px;
+    width: 80%;
+  }
+}
+.no-label {
+  /deep/.ivu-form-item-content {
+    margin-left: 0 !important;
   }
 }
 

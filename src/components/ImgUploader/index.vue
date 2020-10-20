@@ -1,17 +1,16 @@
 <template>
   <div>
     <div class="demo-upload-list" v-for="(item, index) in uploadList" :key="index">
-      <template v-if="item.status === 'finished'">
+      <template>
         <img :src="item.url" alt="">
         <div class="demo-upload-list-cover">
-          <i-icon type="ios-eye-outline" @click.native="handleView(item.name)"></i-icon>
-          <i-icon type="ios-trash-outline" @click.native="handleRemove(item)"></i-icon>
+          <!--<i-icon type="ios-eye-outline" @click.native="handleView(item.name)"></i-icon>-->
+          <i-icon type="ios-trash-outline" @click.native="handleRemove(index)"></i-icon>
         </div>
       </template>
     </div>
     <i-upload ref="upload"
               :show-upload-list="false"
-              :default-file-list="defaultList"
               :format="fileType"
               :max-size="maxFileSize"
               :before-upload="handleBeforeUpload"
@@ -21,6 +20,9 @@
               multiple
               type="drag"
               action="http://139.155.42.50:8080/common/upload"
+              :data="{
+                attchType: attachType.img
+              }"
               :headers="{
                 methods: 'POST'
               }"
@@ -35,6 +37,7 @@
   </div>
 </template>
 <script>
+import { attachType } from '../../assets/enums';
 export default {
   name: 'ImgUploader',
   props: {
@@ -50,12 +53,12 @@ export default {
     },
     maxFileNum: {
       type: Number,
-      default: 10
+      default: 5
     }
   },
   data () {
     return {
-      defaultList: [],
+      attachType,
       imgName: '',
       visible: false,
       uploadList: []
@@ -66,9 +69,8 @@ export default {
       this.imgName = name;
       this.visible = true;
     },
-    handleRemove (file) {
-      const fileList = this.$refs.upload.fileList;
-      this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+    handleRemove (index) {
+      this.uploadList.splice(index, 1);
     },
     handleBeforeUpload () {
       const check = this.uploadList.length < this.maxFileNum;
@@ -79,6 +81,16 @@ export default {
     },
     handleSuccess (res, file) {
       this.$message.success('上传成功');
+      this.getAttachInfo(res.data).then(attachList => {
+        this.uploadList.push({
+          name: file.name,
+          attachId: res.data,
+          ...attachList[0]
+        });
+        this.$emit('change', this.uploadList);
+      }).catch(err => {
+        this.$message.error('获取附件信息失败');
+      });
     },
     handleFormatError (file) {
       this.$message.warning(`请选择${this.fileType.join(',')} 类型的图片`);
@@ -86,13 +98,36 @@ export default {
     handleMaxSize (file) {
       this.$message.warning(`文件大小不能超过2M`);
     },
+    getAttachInfo (params) {
+      return new Promise((resolve, reject) => {
+        let ids;
+        if (Object.prototype.toString.apply(params) === '[object Array]') {
+          ids = params.join(',');
+        } else {
+          ids = params;
+        }
+        if (ids) {
+          this.$ajax.get({
+            apiKey: 'attachGetByIds',
+            params: {
+              ids
+            }
+          }).then(res => {
+            resolve(res);
+          }).catch(err => {
+            reject(err);
+          });
+        } else {
+          reject({ msg: '参数错误' });
+        }
+      });
+    }
   },
-  mounted () {
-    this.uploadList = this.$refs.upload.fileList;
-  }
+  mounted () {}
 };
 </script>
 <style scoped lang="scss">
+@import "~@/assets/styles/scss/base";
   .demo-upload-list{
     display: inline-block;
     width: 60px;

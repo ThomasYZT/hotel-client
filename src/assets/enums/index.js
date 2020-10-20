@@ -68,3 +68,10 @@ export const dictionaryCodeType = {
   vipLevel: 'VIPLEVEL',
   consignType: 'CONSIGNTYPE'
 };
+
+export const attachType = {
+  img: 0,
+  voice: 1,
+  video: 2,
+  file: 3
+};

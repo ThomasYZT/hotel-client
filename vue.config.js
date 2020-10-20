@@ -7,7 +7,7 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV !== 'production',
   configureWebpack: {
     externals: {
-      qqMap: 'qq'
+      AMap: 'AMap'
     }
   },
   pwa: {

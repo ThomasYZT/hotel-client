@@ -147,7 +147,7 @@ export default {
         loading: false
       }).then(data => {
         if (data && Object.keys(data).length > 0) {
-          this.formData = defaultsDeep({}, this.formData, data);
+          this.formData = defaultsDeep({}, data);
           this.formData.vipId = this.formData.id;
           delete this.formData.id;
         } else {

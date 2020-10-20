@@ -41,6 +41,7 @@
                 </FormItem>
                 <FormItem class="block-form-item" label="" prop="remark">
                   <file-uploader></file-uploader>
+                  <img-uploader></img-uploader>
                 </FormItem>
               </div>
               <div class="form-item-block">

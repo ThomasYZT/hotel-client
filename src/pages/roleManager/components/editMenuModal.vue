@@ -2,6 +2,7 @@
   <div class="modal-wrapper">
     <el-dialog title="配置菜单"
                :visible.sync="visible"
+               :close-on-click-modal="false"
                width="350px"
                custom-class="form-dialog"
                center>
