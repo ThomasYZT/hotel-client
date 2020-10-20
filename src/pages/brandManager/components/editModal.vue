@@ -21,6 +21,15 @@
                 <FormItem class="block-form-item" label="品牌名称" prop="name">
                   <i-input type="text" placeholder="品牌名称" v-model.trim="formData.name" />
                 </FormItem>
+                <FormItem class="inline-form-item" label="联系人名称" prop="contactName">
+                  <i-input type="text" placeholder="联系人名称" v-model.trim="formData.contactName" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="联系电话" prop="phone">
+                  <i-input type="text" placeholder="联系电话" v-model.trim="formData.phone" />
+                </FormItem>
+                <FormItem class="block-form-item" label="地址" prop="address">
+                  <i-input type="text" placeholder="地址" v-model.trim="formData.address" />
+                </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
                   <i-input type="textarea" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
@@ -48,6 +57,9 @@ export default {
       formData: {
         agentId: '',
         name: '',
+        contactName: '',
+        phone: '',
+        address: '',
         remark: ''
       },
       confirmFn: null,

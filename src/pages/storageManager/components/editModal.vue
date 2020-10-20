@@ -45,6 +45,9 @@
                 <FormItem class="block-form-item" label="身份证号" prop="idCard">
                   <i-input disabled type="text" placeholder="身份证号" v-model.trim="formData.idCard" />
                 </FormItem>
+                <FormItem class="block-form-item" label="房号" prop="roomNumber">
+                  <i-input type="text" placeholder="房号" clearable v-model.trim="formData.roomNumber" />
+                </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
                   <i-input type="textarea" placeholder="描述" v-model="formData.remark" />
                 </FormItem>

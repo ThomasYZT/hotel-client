@@ -21,6 +21,9 @@
                 <FormItem class="inline-form-item" label="登录名" prop="userName">
                   <i-input :disabled="type === 'edit'" type="text" placeholder="登录名" v-model.trim="formData.userName" />
                 </FormItem>
+                <FormItem class="inline-form-item" label="密码" prop="password">
+                  <i-input :hidden="type === 'add'" type="password" placeholder="密码" v-model.trim="formData.password" />
+                </FormItem>
                 <FormItem class="inline-form-item" label="姓名" prop="name">
                   <i-input type="text" placeholder="姓名" v-model.trim="formData.name" />
                 </FormItem>
@@ -94,6 +97,7 @@ export default {
         mobile: '',
         name: '',
         position: '',
+        password: '',
         userName: ''
       },
       confirmFn: null,
@@ -113,6 +117,9 @@ export default {
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur' }
         ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
         ]
@@ -125,7 +132,7 @@ export default {
       this.formData = defaultsDeep({}, item, this.formData);
       if (type === 'edit') {
         this.$util.valueToStr(this.formData, ['gender']);
-        this.$util.removeProp(this.formData, ['updateTime', 'createTime']);
+        this.$util.removeProp(this.formData, ['updateTime', 'createTime','password']);
       }
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -174,6 +181,7 @@ export default {
         mobile: '',
         name: '',
         position: '',
+        password: '',
         userName: ''
       };
       this.confirmFn = null;

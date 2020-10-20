@@ -39,6 +39,6 @@ export const tableConfig = [
     prop: 'operate',
     label: '操作',
     fixed: 'right',
-    minWidth: '210px'
+    minWidth: '260px'
   }
 ];

@@ -48,6 +48,7 @@
                   <div class="operate-block">
                     <i-button type="info" class="table-btn" size="small" @click="editRole(row)">选择角色</i-button>
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="warning" class="table-btn" size="small" @click="resetPwd(row)">重置密码</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
                   </div>
                 </template>
@@ -168,6 +169,26 @@ export default {
     },
     editRole (item) {
       this.$refs.roleEditModal.show({ item });
+    },
+    resetPwd(item){
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否重置密码？`,
+        confirm: () => {
+            this.$ajax.post({
+              apiKey: 'userResetPwd',
+              params: {
+                id: item.id
+              }
+            }).then(() => {
+              this.getList();
+              this.$message.success('重置密码成功，密码为：88888888');
+            }).catch(err => {
+              this.$message.error(`重置密码失败${err.msg ? ': ' + err.msg : ''}`);
+            });
+        }
+      });
+
     },
     delItem (item) {
       this.$ajax.post({

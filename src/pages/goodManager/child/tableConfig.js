@@ -27,7 +27,7 @@ export const tableConfig = [
   },
   {
     prop: 'unitPrice',
-    label: '单价',
+    label: '售价',
     width: '100px'
   },
   {

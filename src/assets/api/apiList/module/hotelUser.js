@@ -3,6 +3,7 @@ export default {
 
   add: '/hotelUser/add',
   delete: '/hotelUser/delete',
+  resetPwd: '/hotelUser/resetPwd',
   update: '/hotelUser/update',
   pageList: '/hotelUser/pageList',
 

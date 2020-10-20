@@ -27,8 +27,8 @@
                 <FormItem class="inline-form-item" label="商品数量" prop="number">
                   <i-input-number style="width: 100%;" type="text" placeholder="商品数量" v-model="formData.number" />
                 </FormItem>
-                <FormItem class="inline-form-item" label="单价" prop="unitPrice">
-                  <i-input type="text" placeholder="单价" v-model.trim="formData.unitPrice" />
+                <FormItem class="inline-form-item" label="售价" prop="unitPrice">
+                  <i-input type="text" placeholder="售价" v-model.trim="formData.unitPrice" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="单位" prop="unit">
                   <i-input type="text" placeholder="单位" v-model.trim="formData.unit" />
@@ -110,7 +110,7 @@ export default {
           { required: true, type: 'number', message: '请输入数量', trigger: 'blur' }
         ],
         unitPrice: [
-          { required: true, message: '请选择楼层', trigger: 'blur' },
+          { required: true, message: '请输入售价', trigger: 'blur' },
           { validator: validateMoney, trigger: 'blur' }
         ],
         unit: [
