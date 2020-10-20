@@ -8,17 +8,17 @@ export const tableConfig = [
   {
     prop: 'sex',
     label: '性别',
-    minWidth: '90px'
+    minWidth: '80px'
   },
   {
     prop: 'idCard',
     label: '身份证号',
-    minWidth: '130px'
+    minWidth: '170px'
   },
   {
     prop: 'phone',
     label: '联系电话',
-    minWidth: '130px'
+    minWidth: '120px'
   },
   {
     prop: 'consignTime',

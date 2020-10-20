@@ -44,7 +44,7 @@
                 <FormItem class="inline-form-item" label="分机号" prop="phoneExt">
                   <i-input type="text" placeholder="分机号" v-model.trim="formData.phoneExt" />
                 </FormItem>
-                <FormItem class="inline-form-item" label="显示房间属性" prop="isAttribute">
+                <FormItem class="block-form-item" label="显示房间属性" prop="isAttribute">
                   <i-switch size="large" :true-value="'0'" :false-value="'1'" v-model="formData.isAttribute">
                     <span slot="open">不显示</span>
                     <span slot="close">显示</span>

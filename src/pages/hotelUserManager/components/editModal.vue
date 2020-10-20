@@ -21,8 +21,8 @@
                 <FormItem class="inline-form-item" label="登录名" prop="userName">
                   <i-input :disabled="type === 'edit'" type="text" placeholder="登录名" v-model.trim="formData.userName" />
                 </FormItem>
-                <FormItem class="inline-form-item" label="密码" prop="password">
-                  <i-input :hidden="type === 'add'" type="password" placeholder="密码" v-model.trim="formData.password" />
+                <FormItem class="inline-form-item" label="密码" v-if="type === 'add'" prop="password">
+                  <i-input type="password" placeholder="密码" v-model.trim="formData.password" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="姓名" prop="name">
                   <i-input type="text" placeholder="姓名" v-model.trim="formData.name" />

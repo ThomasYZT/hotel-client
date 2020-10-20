@@ -25,7 +25,7 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
-            <template slot="col2"
+            <template slot="col5"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
