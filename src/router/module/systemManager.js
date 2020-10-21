@@ -47,13 +47,25 @@ export default {
         },
         children: {
           // 菜单列表
-          menuList: {
+          hotelUserList: {
             path: '/hotelUserManager/list',
             name: 'hotelUserList',
             component: () => import('../../pages/hotelUserManager/child/hotelUserList.vue'),
             meta: {
               menuName: '用户列表',
               activePath: `${topName}.hotelUserManager`,
+              isMenu: false
+            }
+          },
+          // 菜单列表
+          hotelUserInfo: {
+            path: '/hotelUserManager/hotelUserInfo',
+            name: 'hotelUserInfo',
+            component: () => import('../../pages/hotelUserManager/child/hotelUserInfo.vue'),
+            meta: {
+              menuName: '用户信息',
+              activePath: ``,
+              noBread: true,
               isMenu: false
             }
           }

@@ -5,6 +5,11 @@ import { nvllRouterAuth } from './routeUtils';
 import { treeTraverse } from '../assets/share/utils';
 Vue.use(Router);
 
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push (location) {
+  return originalPush.call(this, location).catch(err => err);
+};
+
 const createRouter = () => new Router({
   routes: [
     {
@@ -81,7 +86,6 @@ router.beforeEach((to, from, next) => {
       next({ name: 'login' });
     }
   }
-
 });
 
 export default router;

@@ -40,7 +40,11 @@ export default {
       return this.$route.meta ? this.$route.meta.activePath : '';
     },
     openNames () {
-      return Array.from(new Set(this.$route.matched.map(item => item.meta.activePath)));
+      const _arr = Array.from(
+        new Set(this.$route.matched.map(item => item.meta.activePath))
+      );
+      const isClose = _arr.some(item => !item);
+      return isClose ? [] : _arr;
     },
     treeData () {
       return this.routeInfo || [];
@@ -65,7 +69,8 @@ export default {
         this.$nextTick(() => {
           this.$refs.menu.updateOpened();
         });
-      }
+      },
+      deep: true
     }
   }
 };

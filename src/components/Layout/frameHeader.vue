@@ -39,23 +39,26 @@
             <i class="iconfont icon-zhanghu"></i>
           </div>
           <template slot="content">
-            <div class="menu-item">个人信息</div>
-            <div class="menu-item">修改密码</div>
+            <div class="menu-item" @click="go('hotelUserInfo')">个人信息</div>
+            <div class="menu-item" @click="showPwdModal">修改密码</div>
             <div class="menu-item" @click="didLogoutClick">注销</div>
           </template>
         </i-poptip>
       </div>
     </div>
+    <pwdEditModal ref="pwdEditModal"></pwdEditModal>
     <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
 <script>
 import WinBar from '../WinBar';
+import pwdEditModal from '../../pages/businessComponents/pwdEditModal';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   components: {
-    WinBar
+    WinBar,
+    pwdEditModal
   },
   props: {
     tool: {
@@ -84,6 +87,14 @@ export default {
           });
         }
       });
+    },
+    go (name) {
+      this.$router.push({
+        name
+      });
+    },
+    showPwdModal () {
+      this.$refs.pwdEditModal.show();
     }
   },
   mounted () {

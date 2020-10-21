@@ -3,6 +3,7 @@
     <el-dialog :title="type === 'add' ? '添加客户' : '编辑客户'"
                :visible.sync="visible"
                width="35%"
+               custom-class="form-dialog"
                @close="cancel"
                :close-on-click-modal="false"
                center>
@@ -29,8 +30,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <i-button class="dialog-cancel-btn" @click="cancel">取 消</i-button>
-        <i-button class="dialog-confirm-btn" type="primary" @click="confirm">确 定</i-button>
+        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+        <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
   </div>

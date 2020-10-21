@@ -7,8 +7,10 @@
       <!-- aside -->
       <frameAside v-if="aside" :class="{ 'is-rollup': !isMenuExpend }" :expand="isMenuExpend"></frameAside>
 
-      <div class="router-com" v-if="routerCom">
-        <div class="bread-wrapper">
+      <div class="router-com"
+           :class="{ 'no-bread': $route.meta.noBread === true }"
+           v-if="routerCom">
+        <div v-if="$route.meta.noBread !== true" class="bread-wrapper">
           <breadcrumb></breadcrumb>
         </div>
         <!-- main -->
@@ -102,6 +104,12 @@ export default {
         padding: 0 10px;
         height: 40px;
         width: 100%;
+      }
+
+      &.no-bread {
+        /deep/ .frame-main {
+          height: 100%;
+        }
       }
 
       /deep/ .frame-main {
