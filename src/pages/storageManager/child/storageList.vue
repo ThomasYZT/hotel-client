@@ -72,9 +72,9 @@
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
                   <div class="operate-block">
-                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                    <i-button type="info" class="table-btn" size="small" @click="retrieveClick(row)">取 出</i-button>
-                    <i-button type="error" class="table-btn" size="small" @click="lostClick(row)">遗 失</i-button>
+                    <i-button type="primary"  v-if="row.status===0" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="info" v-if="row.status===0" class="table-btn" size="small" @click="retrieveClick(row)">取 出</i-button>
+                    <i-button type="error" v-if="row.status===0" class="table-btn" size="small" @click="lostClick(row)">遗 失</i-button>
                   </div>
                 </template>
               </el-table-column>

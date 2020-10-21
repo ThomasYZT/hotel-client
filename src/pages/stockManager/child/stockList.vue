@@ -46,7 +46,7 @@
                 <template slot-scope="{ row }">
                   <div class="operate-block">
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                    <i-button v-if="!row.withdrawTime" type="primary" class="table-btn" size="small" @click="withdrawClick(row)">出 库</i-button>
+                    <i-button v-if="row.status!=2" type="warning" class="table-btn" size="small" @click="withdrawClick(row)">出 库</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
                   </div>
                 </template>
