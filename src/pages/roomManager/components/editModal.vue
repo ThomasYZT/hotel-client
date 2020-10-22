@@ -14,7 +14,7 @@
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
-                  :label-width="90"
+                  :label-width="100"
                   label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
@@ -50,6 +50,20 @@
                     <span slot="close">显示</span>
                   </i-switch>
                 </FormItem>
+                <FormItem v-if="roomAttrs && roomAttrs.length > 0"
+                          class="block-form-item"
+                          prop="attributeList"
+                          label="房间属性列表">
+                  <i-checkbox-group v-model="attributeList">
+                    <i-checkbox v-for="item in roomAttrs"
+                                :true-value="1"
+                                :false-value="0"
+                                :key="item.id"
+                                :label="item.id">
+                      <span>{{item.dictName}}</span>
+                    </i-checkbox>
+                  </i-checkbox-group>
+                </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
                   <i-input type="textarea" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
@@ -68,7 +82,20 @@
 
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
+import { dictionaryCodeType } from '../../../assets/enums';
+import { mapGetters } from 'vuex';
 export default {
+  computed: {
+    ...mapGetters([
+      'userInfo',
+      'dictionary'
+    ]),
+    roomAttrs () {
+      return this.dictionary[this.userInfo.id]
+        ? this.dictionary[this.userInfo.id][dictionaryCodeType.roomAttrs]
+        : [];
+    }
+  },
   data () {
     return {
       visible: false,
@@ -84,6 +111,7 @@ export default {
         isAttribute: 1,
         attributeList: []
       },
+      attributeList: [],
       confirmFn: null,
       cancelFn: null,
       formRule: {
@@ -106,17 +134,13 @@ export default {
   },
   methods: {
     show ({ type = '', item, roomTypeList, floorList, confirmFn, cancelFn }) {
-      if (!type || (type === 'edit' && !item)) return;
+      if (!type || !item) return;
       this.formData = defaultsDeep({}, item, this.formData);
       this.$util.valueToStr(this.formData, ['roomTypeId', 'floorId']);
       this.roomTypeList = roomTypeList.filter(item => item.id !== 0);
       this.floorList = floorList.filter(item => item.id !== 0);
-      this.formData.attributeList.push({
-        attributeValue: '12',
-        dictionaryId: '12',
-        roomId: item.id
-      });
 
+      this.type = type;
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -124,8 +148,22 @@ export default {
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
-      this.type = type;
-      this.visible = true;
+
+      if (type === 'add') {
+        this.formData.attributeList = this.roomAttrs.map(item => ({
+          attributeValue: 0,
+          dictionaryId: item.id
+        }));
+        this.visible = true;
+      } else {
+        this.getRoomAttrs(item.id).then(data => {
+          this.formData.attributeList = data;
+          this.attributeList = data.filter(item => item.attributeValue === 1).map(item => item.dictionaryId);
+          this.visible = true;
+        }).catch(() => {
+          this.$message.error('获取房间属性失败');
+        });
+      }
     },
     cancel () {
       this.cancelFn && this.cancelFn();
@@ -139,6 +177,13 @@ export default {
       });
     },
     submitForm () {
+      this.formData.attributeList.forEach(attr => {
+        if (this.attributeList.includes(attr.dictionaryId)) {
+          attr.attributeValue = 1;
+        } else {
+          attr.attributeValue = 0;
+        }
+      });
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'roomAdd' : 'roomUpdate',
         params: this.formData,
@@ -163,13 +208,28 @@ export default {
         isAttribute: '1',
         attributeList: []
       };
+      this.attributeList = [];
       this.roomTypeList = [];
       this.floorList = [];
       this.confirmFn = null;
       this.cancelFn = null;
       this.visible = false;
       this.isLoading = false;
-      this.type = '1';
+      this.type = 'add';
+    },
+    getRoomAttrs (roomId) {
+      return new Promise((resolve, reject) => {
+        this.$ajax.get({
+          apiKey: 'roomAttrsGet',
+          params: {
+            roomId
+          }
+        }).then(data => {
+          resolve(data);
+        }).catch(err => {
+          reject(err);
+        });
+      });
     }
   }
 };

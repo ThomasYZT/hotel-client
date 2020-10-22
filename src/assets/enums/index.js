@@ -63,7 +63,7 @@ export const blacklistStatusList = [
 ];
 
 export const dictionaryCodeType = {
-  window: 'FJSX',
+  roomAttrs: 'FJSX',
   floor: 'FLOOR',
   vipLevel: 'VIPLEVEL',
   consignType: 'CONSIGNTYPE'

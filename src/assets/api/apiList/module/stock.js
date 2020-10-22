@@ -6,5 +6,6 @@ export default {
   pageList: '/goodsStorage/pageList',
   delete: '/goodsStorage/delete',
   update: '/goodsStorage/update',
-  withdraw: '/goodsStorage/withdraw'
+  withdraw: '/goodsStorage/withdraw',
+  getDetail: '/goodsStorageDetail/getByStorageId'
 };

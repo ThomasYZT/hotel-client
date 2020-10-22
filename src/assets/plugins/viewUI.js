@@ -26,6 +26,7 @@ import {
   RadioGroup,
   Radio,
   Poptip,
+  CheckboxGroup
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';
@@ -62,6 +63,7 @@ export default {
     Vue.component('iRadioGroup', RadioGroup);
     Vue.component('iRadio', Radio);
     Vue.component('iPoptip', Poptip);
+    Vue.component('iCheckboxGroup', CheckboxGroup);
     Vue.prototype.$message = Message;
 
     Message.config({
