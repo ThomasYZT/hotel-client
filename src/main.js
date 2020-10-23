@@ -8,6 +8,7 @@ import 'normalize.css/normalize.css'; // 全局默认样式
 import elementUI from './assets/plugins/elementUI';
 import viewUI from './assets/plugins/viewUI';
 import './assets/styles/scss/_common.scss'; // 全局自定义样式
+import 'viewerjs/dist/viewer.css';
 
 Vue.config.productionTip = false;
 

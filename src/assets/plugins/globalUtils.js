@@ -11,6 +11,7 @@ import validator from '../share/validator';
 import globalUtil from '../share/globalUtil';
 import ajax from '../../assets/api';
 import moment from 'moment';
+import Viewer from 'v-viewer';
 
 export default {
   install: (Vue) => {
@@ -21,6 +22,12 @@ export default {
     Vue.component(NoData.name, NoData);
     Vue.component(ImgUploader.name, ImgUploader);
     Vue.component(FileUploader.name, FileUploader);
+    Vue.use(Viewer, {
+      defaultOptions: {
+        zIndex: 9999
+      },
+      name: 'viewer'
+    });
 
     Vue.prototype.$ajax = ajax;
     Vue.prototype.$validator = validator;

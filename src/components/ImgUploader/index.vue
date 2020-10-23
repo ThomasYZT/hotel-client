@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="demo-upload-list" v-for="(item, index) in uploadList" :key="index">
-      <template>
-        <img :src="item.url" alt="">
-        <div class="demo-upload-list-cover">
-          <!--<i-icon type="ios-eye-outline" @click.native="handleView(item.name)"></i-icon>-->
-          <i-icon type="ios-trash-outline" @click.native="handleRemove(index)"></i-icon>
-        </div>
-      </template>
+    <div class="demo-upload-list"
+         v-for="(item, index) in uploadList"
+         :key="index">
+      <img v-viewer ref="viewer" :src="item.attchFilePath" alt="">
+      <div class="demo-upload-list-cover">
+        <i-icon type="ios-eye-outline" @click.native="handleView(index)"></i-icon>
+        <i-icon type="ios-trash-outline" @click.native="handleRemove(index)"></i-icon>
+      </div>
     </div>
     <i-upload ref="upload"
               :show-upload-list="false"
@@ -20,20 +20,13 @@
               multiple
               type="drag"
               action="http://139.155.42.50:8080/common/upload"
-              :data="{
-                attchType: attachType.img
-              }"
-              :headers="{
-                methods: 'POST'
-              }"
+              :data="{ attchType: attachType.img }"
+              :headers="{ methods: 'POST' }"
               style="display: inline-block;width:58px;">
       <div style="width: 58px;height:58px;line-height: 58px;">
         <i-icon type="ios-camera" size="20"></i-icon>
       </div>
     </i-upload>
-    <el-dialog title="View Image" :visible.sync="visible">
-      <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%" alt="">
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -60,14 +53,12 @@ export default {
     return {
       attachType,
       imgName: '',
-      visible: false,
       uploadList: []
     };
   },
   methods: {
-    handleView (name) {
-      this.imgName = name;
-      this.visible = true;
+    handleView (index) {
+      this.$refs.viewer[index].$viewer.show();
     },
     handleRemove (index) {
       this.uploadList.splice(index, 1);
@@ -81,15 +72,11 @@ export default {
     },
     handleSuccess (res, file) {
       this.$message.success('上传成功');
-      this.getAttachInfo(res.data).then(attachList => {
-        this.uploadList.push({
-          name: file.name,
-          attachId: res.data,
-          ...attachList[0]
-        });
-        this.$emit('change', this.uploadList);
-      }).catch(err => {
-        this.$message.error('获取附件信息失败');
+      this.uploadList.push({
+        attchFileName: file.name,
+        attchFilePath: res.data.path,
+        attchType: attachType.file,
+        id: res.attachId
       });
     },
     handleFormatError (file) {
@@ -123,7 +110,14 @@ export default {
       });
     }
   },
-  mounted () {}
+  watch: {
+    value: {
+      handler(newVal) {
+        this.uploadList = newVal;
+      },
+      deep: true
+    }
+  }
 };
 </script>
 <style scoped lang="scss">

@@ -40,8 +40,7 @@
                   <i-input type="textarea" placeholder="备注" v-model.trim="formData.remark" />
                 </FormItem>
                 <FormItem class="block-form-item" label="" prop="remark">
-                  <file-uploader></file-uploader>
-                  <img-uploader></img-uploader>
+                  <file-uploader v-model="formData.attachList"></file-uploader>
                 </FormItem>
               </div>
               <div class="form-item-block">
@@ -79,6 +78,7 @@
 
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
+import { mapActions } from 'vuex';
 export default {
   data () {
     const validatePhoneNum = (rule, value, callback) => {
@@ -106,7 +106,8 @@ export default {
         name: '',
         phone: '',
         remark: '',
-        priceList: ''
+        priceList: [],
+        attachList: []
       },
       confirmFn: null,
       cancelFn: null,
@@ -143,6 +144,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'getAttachInfo'
+    ]),
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || !item) return;
       this.type = type;
@@ -175,7 +179,14 @@ export default {
               discountPrice: String(item.discountPrice)
             };
           });
-          this.visible = true;
+          if (item.attachId) {
+            this.getAttachInfo(item.attachId).then(data => {
+              this.formData.attachList = data;
+              this.visible = true;
+            });
+          } else {
+            this.visible = true;
+          }
         }).catch(() => {
           this.$message.error('获取协议价格失败');
           this.reset();
@@ -222,12 +233,10 @@ export default {
       });
     },
     submitForm () {
-      const formData = {
-        ...this.formData
-      };
+      this.$util.removeProp(this.formData, ['signedTime', 'attachId']);
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'agreementAdd' : 'agreementUpdate',
-        params: formData,
+        params: this.formData,
         loading: false,
         config: {
           headers: { 'Content-Type': 'application/json;charset-UTF-8' }
@@ -243,17 +252,12 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
-        agentName: '',
-        contactName: '',
+        companyName: '',
+        name: '',
         phone: '',
-        area: [],
-        address: '',
-        email: '',
-        appId: '',
-        secret: '',
-        mchId: '',
-        companyKey: '',
-        remark: ''
+        remark: '',
+        priceList: [],
+        attachList: []
       };
       this.confirmFn = null;
       this.cancelFn = null;
@@ -280,7 +284,7 @@ export default {
 
       .form-item-block {
         margin-right: 20px;
-        max-height: 350px;
+        max-height: 400px;
         overflow-y: auto;
         font-size: 13px;
         color: #333333;

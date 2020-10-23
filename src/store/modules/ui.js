@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import debounce from 'lodash/debounce';
+import ajax from '../../assets/api';
 
 const state = {
   loading: false,
@@ -49,7 +50,21 @@ const actions = {
   },
   showMessage: debounce((store, { type, msg }) => {
     Vue.prototype.$Message[type](msg);
-  }, 500)
+  }, 500),
+  getAttachInfo ({ commit }, ids) {
+    return new Promise((resolve, reject) => {
+      ajax.get({
+        apiKey: 'attachGetByIds',
+        params: {
+          ids
+        }
+      }).then(res => {
+        resolve(res);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  }
 };
 
 export default {

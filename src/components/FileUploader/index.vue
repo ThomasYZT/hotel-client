@@ -7,12 +7,8 @@
               :on-success="handleSuccess"
               :on-format-error="handleFormatError"
               :on-exceeded-size="handleMaxSize"
-              :data="{
-                attchType: attachType.file
-              }"
-              :headers="{
-                methods: 'POST'
-              }">
+              :data="{ attchType: attachType.file }"
+              :headers="{ methods: 'POST' }">
       <i-button>上传文件</i-button>
     </i-upload>
     <div class="file-list-wrapper">
@@ -21,8 +17,9 @@
            :key="item.id">
         <div @click="downloadItem(item)">
           <i class="iconfont icon-wenjian"></i>
-          <span>{{item.name}}</span>
+          <span>{{item.attchFileName}}</span>
         </div>
+        <!--<a :href="item.attchFilePath" :download="item.attchFileName">{{item.attchFileName}}</a>-->
         <i class="iconfont icon-close" @click="delItem(index)"></i>
       </div>
     </div>
@@ -69,16 +66,13 @@ export default {
     },
     handleSuccess (res, file) {
       this.$message.success('上传成功');
-      this.getAttachInfo(res.data).then(attachList => {
-        this.uploadList.push({
-          name: file.name,
-          attachId: res.data,
-          ...attachList[0]
-        });
-        this.$emit('change', this.uploadList);
-      }).catch(err => {
-        this.$message.error('获取附件信息失败');
+      this.uploadList.push({
+        attchFileName: file.name,
+        attchFilePath: res.data.path,
+        attchType: attachType.file,
+        id: res.attachId
       });
+      this.$emit('change', this.uploadList);
     },
     handleFormatError () {
       this.$message.success('文件格式错误');
@@ -87,7 +81,13 @@ export default {
       this.$message.warning(`文件大小不能超过5M`);
     },
     downloadItem (item) {
-      console.log(item)
+      const aLink = document.createElement('a');
+      aLink.href = item.attchFilePath;
+      aLink.setAttribute('download', item.attchFileName);
+      const evt = document.createEvent('MouseEvents');
+      // evt.initEvent('click', false, true);
+      // aLink.dispatchEvent(evt);
+      aLink.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
     },
     delItem (index) {
       this.uploadList.splice(index, 1);
@@ -116,13 +116,26 @@ export default {
         }
       });
     }
+  },
+  watch: {
+    value: {
+      handler(newVal) {
+        this.uploadList = newVal;
+      },
+      deep: true
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
+.upload-wrapper {
+  @include flex_layout(row, flex-start, flex-start);
+}
 .file-list-wrapper {
+  margin-left: 10px;
+  margin-top: -5px;
   @include flex_layout(column, center, flex-start);
   .file-item {
     display: flex;
@@ -131,6 +144,7 @@ export default {
     cursor: pointer;
 
     .icon-close {
+      margin: 5px 0 0 10px;
       &:hover {
         font-weight: bold;
       }
