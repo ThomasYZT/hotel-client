@@ -3,9 +3,13 @@ import apiList from './apiList';
 import qs from 'querystring';
 import defautsDeep from 'lodash/defaultsDeep';
 import store from '../../store';
-
-const domain = 'https://uujd.com.cn';
 const isProduct = process.env.NODE_ENV === 'production';
+export let domain;
+if (isProduct) {
+  domain = 'https://uujd.com.cn';
+} else {
+  domain = 'http://139.155.42.50:8080';
+}
 // 创建自定义axios实例
 const instance = axios.create({
   baseURL: '',

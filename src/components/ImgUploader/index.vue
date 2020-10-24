@@ -19,7 +19,7 @@
               :on-exceeded-size="handleMaxSize"
               multiple
               type="drag"
-              action="http://139.155.42.50:8080/common/upload"
+              :action="`${domain}/common/upload`"
               :data="{ attchType: attachType.img }"
               :headers="{ methods: 'POST' }"
               style="display: inline-block;width:58px;">
@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+import { domain } from '../../assets/api';
 import { attachType } from '../../assets/enums';
 export default {
   name: 'ImgUploader',
@@ -51,6 +52,7 @@ export default {
   },
   data () {
     return {
+      domain,
       attachType,
       imgName: '',
       uploadList: []

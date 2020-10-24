@@ -1,7 +1,7 @@
 <template>
   <div class="upload-wrapper">
     <i-upload multiple
-              action="http://139.155.42.50:8080/common/upload"
+              :action="`${domain}/common/upload`"
               :show-upload-list="false"
               :before-upload="handleBeforeUpload"
               :on-success="handleSuccess"
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { domain } from '../../assets/api';
 import { attachType } from '../../assets/enums';
 export default {
   model: {
@@ -52,6 +53,7 @@ export default {
   },
   data () {
     return {
+      domain,
       attachType,
       uploadList: []
     };
