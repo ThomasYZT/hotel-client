@@ -284,7 +284,8 @@ export default {
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'stockAdd' : 'stockUpdate',
         params: {
-          ...this.formData
+          ...this.formData,
+          storageOperator: this.userInfo.id
         },
         loading: false,
         config: {
@@ -349,7 +350,7 @@ export default {
 @import "~@/assets/styles/scss/base";
 .dialog-wrapper {
   @include flex_layout(row, center, flex-start);
-  height: 300px;
+  height: 550px;
   .form-wrapper {
     height: 100%;
     width: 100%;

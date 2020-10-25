@@ -17,10 +17,10 @@
                   label-position="left">
             <div class="form-item-wrapper">
               <FormItem label="旧密码" prop="oldPassword">
-                <i-input type="text" placeholder="旧密码" v-model="formData.oldPassword" />
+                <i-input type="password" placeholder="旧密码" v-model="formData.oldPassword" />
               </FormItem>
               <FormItem label="新密码" prop="password">
-                <i-input type="text" placeholder="新密码" v-model="formData.password" />
+                <i-input type="password" placeholder="新密码" v-model="formData.password" />
               </FormItem>
             </div>
           </i-form>
