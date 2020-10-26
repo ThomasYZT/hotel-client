@@ -2,6 +2,7 @@
   <div class="modal-wrapper">
     <el-dialog :title="type === 'add' ? '添加角色' : '编辑角色'"
                :visible.sync="visible"
+               @close="cancel"
                :close-on-click-modal="false"
                width="50%"
                custom-class="form-dialog"

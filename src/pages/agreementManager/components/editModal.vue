@@ -129,7 +129,7 @@ export default {
       ],
       tableConfig: [
         {
-          prop: 'typeName',
+          prop: 'roomTypeName',
           label: '房间类型名称'
         },
         {
