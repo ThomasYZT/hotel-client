@@ -47,7 +47,7 @@
                               :label-width="0"
                               :prop="'list.' + $index + '.storageCount'"
                               :rules="storageCountRule">
-                      <i-input type="text" placeholder="数量" v-model.trim="row.storageCount" />
+                      <i-input type="text" placeholder="数量" v-model.trim="row.storageCount" @on-change="priceChange(row)" />
                     </FormItem>
                   </template>
                 </el-table-column>
@@ -63,7 +63,7 @@
                               :label-width="0"
                               :prop="'list.' + $index + '.unitPrice'"
                               :rules="unitPriceRule">
-                      <i-input type="text" placeholder="单价" v-model="row.unitPrice"></i-input>
+                      <i-input type="text" placeholder="单价" v-model="row.unitPrice" @on-change="priceChange(row)"></i-input>
                     </FormItem>
                   </template>
                 </el-table-column>
@@ -77,9 +77,8 @@
                   <template slot-scope="{ row, $index }">
                     <FormItem class="table-form-item"
                               :label-width="0"
-                              :prop="'list.' + $index + '.totalPrice'"
-                              :rules="totalPriceRule">
-                      <i-input type="text" placeholder="总价" v-model="row.totalPrice"></i-input>
+                              :prop="'list.' + $index + '.totalPrice'">
+                      <i-input disabled type="text" placeholder="总价" v-model="row.totalPrice"></i-input>
                     </FormItem>
                   </template>
                 </el-table-column>
@@ -119,6 +118,7 @@
         <i-button @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
+    <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
@@ -269,6 +269,9 @@ export default {
         });
       });
     },
+    priceChange (rowData) {
+      rowData.totalPrice = parseFloat((rowData.unitPrice * rowData.storageCount).toFixed(2));
+    },
     cancel () {
       this.cancelFn && this.cancelFn();
       this.reset();
@@ -325,7 +328,13 @@ export default {
       });
     },
     delItem (row, index) {
-      this.formData.list.splice(index, 1);
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否确认删除`,
+        confirm: () => {
+          this.formData.list.splice(index, 1);
+        }
+      });
     },
     getDetail (storageId) {
       return new Promise((resolve, reject) => {

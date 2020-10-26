@@ -42,9 +42,9 @@
                     <span slot="close">上架</span>
                   </i-switch>
                 </FormItem>
-                <!--<FormItem label="图片" prop="attributeList">
-                <img-uploader></img-uploader>
-              </FormItem>-->
+                <FormItem class="block-form-item" label="图片" prop="attachList">
+                  <img-uploader v-model="formData.attachList"></img-uploader>
+                </FormItem>
                 <FormItem class="block-form-item" label="描述" prop="remark">
                   <i-input type="textarea" placeholder="描述" v-model.trim="formData.remark" />
                 </FormItem>
@@ -63,6 +63,7 @@
 
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
+import { mapActions } from 'vuex';
 export default {
   data () {
     const validateNumber = (rule, value, callback) => {
@@ -95,6 +96,7 @@ export default {
         unit: '',
         warnCount: 0,
         status: '1',
+        attachList: [],
         remark: ''
       },
       confirmFn: null,
@@ -126,10 +128,14 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'getAttachInfo'
+    ]),
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
       this.formData = defaultsDeep({}, item, this.formData);
       this.$util.valueToStr(this.formData, ['number', 'warnCount']);
+      this.type = type;
 
       if (confirmFn) {
         this.confirmFn = confirmFn;
@@ -138,8 +144,14 @@ export default {
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
-      this.type = type;
-      this.visible = true;
+      if (type === 'add' || (type === 'edit' && !item.attachId)) {
+        this.visible = true;
+      } else {
+        this.getAttachInfo(item.attachId).then(data => {
+          this.formData.attachList = data;
+          this.visible = true;
+        });
+      }
     },
     cancel () {
       this.cancelFn && this.cancelFn();
@@ -173,11 +185,12 @@ export default {
       this.formData = {
         name: '',
         code: '',
-        number: '',
+        number: 0,
         unitPrice: '',
         unit: '',
-        warnCount: '',
-        status: '0',
+        warnCount: 0,
+        status: '1',
+        attachList: [],
         remark: ''
       };
       this.confirmFn = null;

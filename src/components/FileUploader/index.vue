@@ -72,7 +72,7 @@ export default {
         attchFileName: file.name,
         attchFilePath: res.data.path,
         attchType: attachType.file,
-        id: res.attachId
+        id: res.data.attachId
       });
       this.$emit('change', this.uploadList);
     },
@@ -121,7 +121,7 @@ export default {
   },
   watch: {
     value: {
-      handler(newVal) {
+      handler (newVal) {
         this.uploadList = newVal;
       },
       deep: true

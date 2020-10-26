@@ -24,6 +24,9 @@
                 <FormItem class="block-form-item" label="价格" prop="price">
                   <i-input type="text" placeholder="价格" v-model.trim="formData.price" />
                 </FormItem>
+                <FormItem class="block-form-item" label="图片" prop="attachList">
+                  <img-uploader v-model="formData.attachList"></img-uploader>
+                </FormItem>
               </div>
             </div>
           </i-form>
@@ -39,6 +42,7 @@
 
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
+import { mapActions } from 'vuex';
 export default {
   data () {
     const validateMoney = (rule, value, callback) => {
@@ -56,7 +60,8 @@ export default {
       formData: {
         typeName: '',
         price: '',
-        attachId: 0
+        attachId: 0,
+        attachList: []
       },
       confirmFn: null,
       cancelFn: null,
@@ -72,10 +77,14 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'getAttachInfo'
+    ]),
     show ({ type = '', item, confirmFn, cancelFn }) {
-      if (!type || (type === 'edit' && !item)) return;
+      if (!type || !item) return;
       this.formData = defaultsDeep({}, item, this.formData);
       this.$util.valueToStr(this.formData);
+      this.type = type;
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -83,8 +92,15 @@ export default {
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
-      this.type = type;
-      this.visible = true;
+
+      if (type === 'add' || (type === 'edit' && !item.attachId)) {
+        this.visible = true;
+      } else {
+        this.getAttachInfo(item.attachId).then(data => {
+          this.formData.attachList = data;
+          this.visible = true;
+        });
+      }
     },
     cancel () {
       this.cancelFn && this.cancelFn();
@@ -117,7 +133,8 @@ export default {
       this.$refs.Form.resetFields();
       this.formData = {
         typeName: '',
-        price: ''
+        price: '',
+        attachList: []
       };
       this.confirmFn = null;
       this.cancelFn = null;

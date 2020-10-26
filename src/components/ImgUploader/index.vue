@@ -34,7 +34,17 @@ import { domain } from '../../assets/api';
 import { attachType } from '../../assets/enums';
 export default {
   name: 'ImgUploader',
+  model: {
+    prop: 'value',
+    event: 'change'
+  },
   props: {
+    value: {
+      type: Array,
+      default () {
+        return [];
+      }
+    },
     fileType: {
       type: Array,
       default () {
@@ -54,7 +64,6 @@ export default {
     return {
       domain,
       attachType,
-      imgName: '',
       uploadList: []
     };
   },
@@ -78,8 +87,9 @@ export default {
         attchFileName: file.name,
         attchFilePath: res.data.path,
         attchType: attachType.file,
-        id: res.attachId
+        id: res.data.attachId
       });
+      this.$emit('change', this.uploadList);
     },
     handleFormatError (file) {
       this.$message.warning(`请选择${this.fileType.join(',')} 类型的图片`);
@@ -114,7 +124,7 @@ export default {
   },
   watch: {
     value: {
-      handler(newVal) {
+      handler (newVal) {
         this.uploadList = newVal;
       },
       deep: true

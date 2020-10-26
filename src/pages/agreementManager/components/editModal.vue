@@ -39,7 +39,7 @@
                 <FormItem class="block-form-item" label="备注" prop="remark">
                   <i-input type="textarea" placeholder="备注" v-model.trim="formData.remark" />
                 </FormItem>
-                <FormItem class="block-form-item" label="" prop="remark">
+                <FormItem class="block-form-item" label="" prop="attachList">
                   <file-uploader v-model="formData.attachList"></file-uploader>
                 </FormItem>
               </div>
