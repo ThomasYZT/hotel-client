@@ -15,7 +15,7 @@
                 <img v-if="item.id !== functionType.addTool"
                      class="del-icon"  alt=""
                      src="../../../assets/img/delete.png"
-                     @click="delTool(item)">
+                     @click.stop="delTool(item)">
               </div>
               {{item.name}}
             </div>
