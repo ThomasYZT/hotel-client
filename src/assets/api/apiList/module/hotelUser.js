@@ -14,5 +14,8 @@ export default {
   setRole: '/hotelUser/setUserRole',
   menuList: '/hotelUser/userMenuList',
   roleList: '/hotelUser/userRoleList',
-  getAllRoleList: '/hotelUser/getUserAllRoleList'
+  getAllRoleList: '/hotelUser/getUserAllRoleList',
+  tools: '/hotelUser/userTools',
+  removeTool: '/hotelUser/removeHotelUserTools',
+  addTool: '/hotelUser/addHotelUserTools'
 };

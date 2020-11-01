@@ -128,7 +128,7 @@ export default {
       this.$ajax.post({
         apiKey: 'stockPageList',
         params: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams
@@ -144,7 +144,7 @@ export default {
       this.$refs.editModal.show({
         type: 'add',
         item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
         },
         confirmFn: this.getList
       });

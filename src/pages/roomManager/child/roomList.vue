@@ -171,7 +171,7 @@ export default {
         this.$ajax.post({
           apiKey: 'roomPageList',
           params: {
-            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
+            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
             pageNum: this.pageNum,
             pageSize: this.pageSize,
             ...this.filterParams
@@ -191,7 +191,7 @@ export default {
         this.$ajax.get({
           apiKey: 'roomTypeGetAllList',
           params: {
-            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
           },
           loading: false
         }).then(data => {
@@ -212,7 +212,7 @@ export default {
       this.$refs.editModal.show({
         type: 'add',
         item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
         },
         floorList: this.floorList,
         roomTypeList: this.roomTypeList,

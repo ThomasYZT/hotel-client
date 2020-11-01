@@ -132,7 +132,7 @@ export default {
       this.$ajax.post({
         apiKey: 'customerPageList',
         params: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams

@@ -16,5 +16,6 @@ export default {
         delete obj[prop];
       }
     });
+    return obj;
   }
 };

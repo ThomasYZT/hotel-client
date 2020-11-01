@@ -128,7 +128,7 @@ export default {
         apiKey: 'dicPageList',
         params: {
           typeCode: this.typeNodeData.code,
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterPrams
@@ -145,7 +145,7 @@ export default {
         type: 'add',
         item: {
           typeCode: this.typeNodeData.code,
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
         },
         confirmFn: this.getList
       });

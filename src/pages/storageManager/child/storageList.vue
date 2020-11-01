@@ -163,7 +163,7 @@ export default {
       this.$ajax.post({
         apiKey: 'storagePageList',
         params: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id,
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams
@@ -179,7 +179,7 @@ export default {
       this.$refs.editModal.show({
         type: 'add',
         item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
         },
         consignTypeList: this.consignTypeList,
         confirmFn: this.getList
