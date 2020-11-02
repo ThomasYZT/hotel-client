@@ -285,3 +285,14 @@ export const orderStatus = {
   refunding: 4,
   refunded: 5
 };
+
+export const hourRoomChargeTypeList = [
+  {
+    label: '封顶',
+    value: 0
+  },
+  {
+    label: '按小时计价',
+    value: 1
+  }
+];

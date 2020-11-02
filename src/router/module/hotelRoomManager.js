@@ -58,6 +58,54 @@ export default {
             }
           }
         }
+      },
+      roomRuleManager: {
+        path: '/roomRuleManager',
+        component: () => import('../../pages/roomRuleManager/index.vue'),
+        redirect: () => { return { name: 'roomRuleList' }; },
+        meta: {
+          menuName: '普通房规则管理',
+          iconClass: 'icon-fangjianweihu',
+          activePath: `${topName}.roomRuleManager`,
+          isMenu: true
+        },
+        children: {
+          // 普通房规则列表
+          roomRuleList: {
+            path: '/roomRuleManager/list',
+            name: 'roomRuleList',
+            component: () => import('../../pages/roomRuleManager/child/roomRuleList.vue'),
+            meta: {
+              menuName: '普通房规则列表',
+              activePath: `${topName}.roomRuleManager`,
+              isMenu: false
+            }
+          }
+        }
+      },
+      hourRoomRuleManager: {
+        path: '/hourRoomRuleManager',
+        component: () => import('../../pages/hourRoomRuleManager/index.vue'),
+        redirect: () => { return { name: 'hourRoomRuleList' }; },
+        meta: {
+          menuName: '钟点房规则管理',
+          iconClass: 'icon-fangjianweihu',
+          activePath: `${topName}.hourRoomRuleManager`,
+          isMenu: true
+        },
+        children: {
+          // 普通房规则列表
+          roomRuleList: {
+            path: '/hourRoomRuleManager/list',
+            name: 'hourRoomRuleList',
+            component: () => import('../../pages/hourRoomRuleManager/child/hourRoomRuleList.vue'),
+            meta: {
+              menuName: '钟点房规则列表',
+              activePath: `${topName}.hourRoomRuleManager`,
+              isMenu: false
+            }
+          }
+        }
       }
     }
   }
