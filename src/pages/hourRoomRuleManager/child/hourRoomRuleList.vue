@@ -18,6 +18,30 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col0"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{roomTypeList.find(item => item.id === row.roomTypeId) ?
+                    roomTypeList.find(item => item.id === row.roomTypeId).typeName : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{hourRoomChargeTypeList.find(item => item.value === row.type) ?
+                    hourRoomChargeTypeList.find(item => item.value === row.type).label : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col3"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
@@ -66,8 +90,8 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType } from '../../../assets/enums';
-import { mapGetters } from 'vuex';
+import { userType, hourRoomChargeTypeList } from '../../../assets/enums';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   components: {
     editModal
@@ -107,17 +131,25 @@ export default {
   },
   data () {
     return {
+      hourRoomChargeTypeList,
       tableConfig,
       tableData: [],
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
-      nodeData: {}
+      nodeData: {},
+      roomTypeList: []
     };
   },
   methods: {
+    ...mapActions([
+      'getAllRoomType'
+    ]),
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
+      this.getAllRoomType(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId).then(data => {
+        this.roomTypeList = data || [];
+      });
       if (!isDefault) {
         this.getList();
       }
@@ -175,9 +207,6 @@ export default {
         this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
       });
     }
-  },
-  mounted () {
-
   }
 };
 </script>

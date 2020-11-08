@@ -101,10 +101,16 @@ export const functionType = {
   addTool: -1
 };
 
-export const functionList = [
+export const functionMapList = [
+  {
+    label: '酒店预定',
+    name: functionType.reserve,
+    icon: 'icon-tianjiafangyuanyuding'
+  },
   {
     label: '登记入住',
-    name: functionType.check
+    name: functionType.check,
+    icon: 'icon-dengji'
   },
   {
     label: '增加消费',
@@ -112,31 +118,38 @@ export const functionList = [
   },
   {
     label: '结账离店',
-    name: functionType.settle
+    name: functionType.settle,
+    icon: 'icon-jiezhang'
   },
   {
     label: '营业查询',
-    name: functionType.businessQuery
+    name: functionType.businessQuery,
+    icon: 'icon-shuju'
   },
   {
     label: '交班管理',
-    name: functionType.handover
+    name: functionType.handover,
+    icon: 'icon-jiaoban'
   },
   {
     label: '预定信息',
-    name: functionType.reservationQuiry
+    name: functionType.reservationQuiry,
+    icon: 'icon-dingdan'
   },
   {
     label: '查看房价',
-    name: functionType.roomPrice
+    name: functionType.roomPrice,
+    icon: 'icon-fangjia'
   },
   {
     label: '系统设置',
-    name: functionType.systemSetting
+    name: functionType.systemSetting,
+    icon: 'icon-dengji'
   },
   {
     label: '会员设置',
-    name: functionType.vipSetting
+    name: functionType.vipSetting,
+    icon: 'icon-dengji'
   }
 ];
 
@@ -286,6 +299,33 @@ export const orderStatus = {
   refunded: 5
 };
 
+export const orderStatusList = [
+  {
+    label: '下单未支付',
+    value: 0
+  },
+  {
+    label: '已支付',
+    value: 1
+  },
+  {
+    label: '已入住',
+    value: 2
+  },
+  {
+    label: '已完成',
+    value: 3
+  },
+  {
+    label: '退款中',
+    value: 4
+  },
+  {
+    label: '退款完成',
+    value: 5
+  }
+];
+
 export const hourRoomChargeTypeList = [
   {
     label: '封顶',
@@ -296,3 +336,8 @@ export const hourRoomChargeTypeList = [
     value: 1
   }
 ];
+
+export const workStatusMap = {
+  workOn: '0',
+  workOff: '1'
+};

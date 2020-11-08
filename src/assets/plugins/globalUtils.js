@@ -12,6 +12,11 @@ import globalUtil from '../share/globalUtil';
 import ajax from '../../assets/api';
 import moment from 'moment';
 import Viewer from 'v-viewer';
+import 'echarts/lib/chart/bar';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
+import 'echarts/lib/component/legendScroll';
+import 'echarts/lib/component/dataZoom';
 
 export default {
   install: (Vue) => {

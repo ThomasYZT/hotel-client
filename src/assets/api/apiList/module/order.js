@@ -5,5 +5,10 @@ export default {
   pageList: '/order/pageList',
   submit: '/order/submit',
   checkin: '/order/checkin',
-  getByMobile: '/order/getNotStayByMobile'
+  checkout: '/order/checkoutRoom',
+  refund: '/order/refundOrder',
+  cancel: '/order/cancelOrder',
+  getByMobile: '/order/getNotStayByMobile',
+  stayRoom: '/order/stayRoomOrder',
+  charge: '/order/orderCharge'
 };

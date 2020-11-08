@@ -16,6 +16,7 @@
                      class="del-icon"  alt=""
                      src="../../../assets/img/delete.png"
                      @click.stop="delTool(item)">
+                <i :class="`iconfont ${item.icon}`"></i>
               </div>
               {{item.name}}
             </div>
@@ -84,20 +85,23 @@
     <addToolModal ref="addToolModal"></addToolModal>
     <ordainModal ref="ordainModal"></ordainModal>
     <checkInModal ref="checkInModal"></checkInModal>
+    <checkoutModal ref="checkoutModal"></checkoutModal>
   </div>
 </template>
 
 <script>
-import { userType, dictionaryCodeType, roowStatusList, functionType, roomStatus, orderType } from '../../../assets/enums';
+import { userType, dictionaryCodeType, roowStatusList, functionType, functionMapList, roomStatus, orderType } from '../../../assets/enums';
 import addToolModal from '../components/addToolModal';
 import ordainModal from '../components/ordainModal';
 import checkInModal from '../components/checkInModal';
+import checkoutModal from '../components/checkoutModal';
 import { mapGetters } from 'vuex';
 export default {
   components: {
     addToolModal,
     ordainModal,
-    checkInModal
+    checkInModal,
+    checkoutModal
   },
   computed: {
     ...mapGetters([
@@ -246,6 +250,28 @@ export default {
             name: 'dataStatistic'
           });
           break;
+        case functionType.handover:
+          this.$router.push({
+            name: 'workList'
+          });
+          break;
+        case functionType.settle:
+          if (Object.keys(this.activeRoom).length === 0 ||
+            ![roomStatus.live, roomStatus.hourRoom].includes(this.activeRoom.status)) {
+            this.$message.warning('请选择在住房间或钟点房');
+            return;
+          }
+          this.$refs.checkoutModal.show({
+            item: {
+              hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+              hotelUserId: this.userInfo.id
+            },
+            roomInfo: this.activeRoom,
+            confirmFn: () => {
+              this.getList();
+            }
+          });
+          break;
         case functionType.addTool:
           this.$refs.addToolModal.show({
             funcList: this.functionList,
@@ -255,9 +281,10 @@ export default {
       }
     },
     reservationAndCheckin (type) {
+      // 预定
       if (type === 'reservation') {
         if (Object.keys(this.activeRoom).length === 0 ||
-            this.activeRoom.status !== roomStatus.clean) {
+            ![roomStatus.clean].includes(this.activeRoom.status)) {
           this.$message.warning('请选择一个空净房');
           return;
         }
@@ -273,10 +300,10 @@ export default {
           }
         });
       }
-
+      // 登记入住
       if (type === 'checkin') {
         if (Object.keys(this.activeRoom).length > 0 &&
-            this.activeRoom.status !== roomStatus.clean) {
+          ![roomStatus.clean, roomStatus.reserved].includes(this.activeRoom.status)) {
           this.$message.warning('请选择空净房');
           return;
         }
@@ -315,16 +342,21 @@ export default {
           hotelUserId: this.userInfo.id
         }
       }).then(data => {
-        this.functionList = (data || []).concat({
+        this.functionList = (data.map(item => ({
+          ...item,
+          icon: functionMapList.find(tool => tool.name === item.id).icon
+        })) || []).concat({
           id: functionType.addTool,
           name: '添加工具',
-          ord: 0
+          ord: 0,
+          icon: 'icon-15'
         });
       }).catch(() => {
         this.functionList = [{
           id: functionType.addTool,
           name: '添加工具',
-          ord: 0
+          ord: 0,
+          icon: 'icon-15'
         }];
         this.$message.error('获取工具列表失败');
       });
@@ -374,12 +406,18 @@ export default {
         white-space: nowrap;
         .icon-wrapper {
           @include flex_set(0, 1, auto);
+          @include flex_layout(row, center, center);
           position: relative;
           margin-bottom: 5px;
           width: 50px;
           height: 50px;
           border-radius: 50%;
           background-color: $normalGreen;
+          color: #FFFFFF;
+          i {
+            margin-top: -2px;
+            font-size: 25px;
+          }
           &:hover {
             .del-icon {
               display: block;

@@ -1,13 +1,14 @@
 // import { userInfo } from '../persistence';
 import { generateRoutes } from '../../router/routeUtils';
-import { userType, storageKey } from '../../assets/enums';
+import { userType, storageKey, workStatusMap } from '../../assets/enums';
 import { resetRouter } from '../../router';
 import ajax from '../../assets/api';
 
 const state = {
   userInfo: JSON.parse(sessionStorage.getItem(storageKey.userInfo)) || {},
   routeInfo: null,
-  dictionary: {}
+  dictionary: {},
+  workStatus: workStatusMap.workOff
 };
 
 const getters = {
@@ -19,6 +20,9 @@ const getters = {
   },
   dictionary: state => {
     return state.dictionary;
+  },
+  workStatus: state => {
+    return state.workStatus;
   }
 };
 
@@ -32,6 +36,9 @@ const mutations = {
   },
   UPDATE_DICTIONARY (state, data) {
     state.dictionary = data;
+  },
+  UPDATE_WORK_STATUS (state, data) {
+    state.workStatus = data
   }
 };
 
@@ -67,6 +74,7 @@ const actions = {
     });
   },
   getMenuList ({ commit, dispatch }, { tip, userInfo }) {
+    dispatch('getUserWorkStatus', userInfo.id);
     return new Promise((resolve, reject) => {
       if (userInfo.type === userType.admin) {
         // 超级管理员
@@ -121,6 +129,21 @@ const actions = {
         reject(err);
       });
     });
+  },
+  getUserWorkStatus ({ commit, dispatch }, id) {
+    ajax.post({
+      apiKey: 'workStatus',
+      params: {
+        hotelUserId: id
+      }
+    }).then(data => {
+      dispatch('updateWorkStatus', String(data.status));
+    }).catch(() => {
+      dispatch('showMessage', { type: 'error', msg: '获取上班状态失败' });
+    });
+  },
+  updateWorkStatus ({ commit }, status) {
+    commit('UPDATE_WORK_STATUS', status);
   }
 };
 

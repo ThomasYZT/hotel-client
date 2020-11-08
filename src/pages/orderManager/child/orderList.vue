@@ -7,13 +7,14 @@
         </div>
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
-            <div class="tool-wrapper left-box">
-              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
-            </div>
             <div class="filter-block right-box">
               <div class="filter-item" style="width: 230px;">
-                <div class="filter-label">房号：</div>
-                <i-input v-model="filterParams.roomNumber" placeholder="房号查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
+                <div class="filter-label">手机号：</div>
+                <i-input v-model="filterParams.mobile" placeholder="手机号查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
+              </div>
+              <div class="filter-item" style="width: 230px;">
+                <div class="filter-label">订单号：</div>
+                <i-input v-model="filterParams.code" placeholder="订单号查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
@@ -25,6 +26,18 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col2"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{roomTypeList.find(item => item.id === row.roomTypeId) ?
+                    roomTypeList.find(item => item.id === row.roomTypeId).typeName : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col4"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
@@ -32,8 +45,8 @@
                                :fixed="item.fixed"
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
-                  <span v-if="row.isAttribute === 0">显示</span>
-                  <span v-else>不显示</span>
+                  <span>{{orderTypeList.find(item => item.value === row.orderType) ?
+                    orderTypeList.find(item => item.value === row.orderType).label : ''}}</span>
                 </template>
               </el-table-column>
             </template>
@@ -44,9 +57,33 @@
                                :fixed="item.fixed"
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
+                  <span>{{orderStatusList.find(item => item.value === row.status) ?
+                    orderStatusList.find(item => item.value === row.status).label : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col6"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{ordainRoomTypeList.find(item => item.value === row.type) ?
+                    ordainRoomTypeList.find(item => item.value === row.type).label : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col9"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
                   <div class="operate-block">
-                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                    <i-button :disabled="row.status !== orderStatus.unPay" type="primary" class="table-btn" size="small" @click="cancelOrder(row)">取消订单</i-button>
+                    <i-button :disabled="![orderStatus.payed, orderStatus.living].includes(row.status)" type="error" class="table-btn" size="small" @click="refundOrder(row)">退款</i-button>
                   </div>
                 </template>
               </el-table-column>
@@ -63,8 +100,8 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType, dictionaryCodeType } from '../../../assets/enums';
-import { mapGetters } from 'vuex';
+import { userType, dictionaryCodeType, orderStatus, orderStatusList, orderTypeList, ordainRoomTypeList } from '../../../assets/enums';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   components: {
     editModal
@@ -110,20 +147,32 @@ export default {
   },
   data () {
     return {
+      orderStatus,
+      orderStatusList,
+      ordainRoomTypeList,
+      orderTypeList,
       tableConfig,
       tableData: [],
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-        roomNumber: 0
+        mobile: '',
+        code: ''
       },
-      nodeData: {}
+      nodeData: {},
+      roomTypeList: []
     };
   },
   methods: {
+    ...mapActions([
+      'getAllRoomType'
+    ]),
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
+      this.getAllRoomType(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId).then(data => {
+        this.roomTypeList = data || [];
+      });
       if (!isDefault) {
         this.getList();
       }
@@ -144,49 +193,42 @@ export default {
         this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
-    addItem () {
-      this.$refs.editModal.show({
-        type: 'add',
-        item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
-        },
-        floorList: this.floorList,
-        confirmFn: this.getList
-      });
-    },
-    editItem (item) {
-      this.$refs.editModal.show({
-        type: 'edit',
-        item,
-        floorList: this.floorList,
-        confirmFn: this.getList
-      });
-    },
-    delClick (item) {
+    cancelOrder (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.roomNumber}`,
+        content: `是否取消订单 ${item.code}`,
         confirm: () => {
-          this.delItem(item);
+          this.$ajax.post({
+            apiKey: 'orderCancel',
+            params: {
+              code: item.code
+            }
+          }).then(() => {
+            this.$message.success('取消成功');
+          }).catch(err => {
+            this.$message.error(`取消失败${err.msg ? ': ' + err.msg : ''}`);
+          });
         }
       });
     },
-    delItem (item) {
-      this.$ajax.get({
-        apiKey: 'roomDelete',
-        params: {
-          id: item.id
+    refundOrder (item) {
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否退款订单 ${item.code}`,
+        confirm: () => {
+          this.$ajax.post({
+            apiKey: 'orderRefund',
+            params: {
+              code: item.code
+            }
+          }).then(() => {
+            this.$message.success('退款成功');
+          }).catch(err => {
+            this.$message.error(`退款失败${err.msg ? ': ' + err.msg : ''}`);
+          });
         }
-      }).then(() => {
-        this.getList();
-        this.$message.success('删除成功');
-      }).catch(err => {
-        this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
       });
     }
-  },
-  mounted () {
-
   }
 };
 </script>

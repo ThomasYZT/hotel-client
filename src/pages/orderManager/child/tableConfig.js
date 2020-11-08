@@ -1,34 +1,54 @@
 export const tableConfig = [
   {
+    prop: 'code',
+    label: '订单编号',
+    fixed: 'left',
+    minWidth: '250px'
+  },
+  {
     prop: 'roomNumber',
     label: '房号',
-    fixed: 'left',
-    width: '130px'
+    minWidth: '150px'
   },
   {
-    prop: 'roomTypeName',
+    prop: 'roomTypeId',
     label: '房间类型',
-    width: '150px'
+    minWidth: '150px'
   },
   {
-    prop: 'floorId',
-    label: '楼层',
-    width: '130px'
+    prop: 'mobile',
+    label: '联系电话',
+    minWidth: '130px'
   },
   {
-    prop: 'phoneExt',
-    label: '分机号',
-    width: '130px'
+    prop: 'orderType',
+    label: '预定方式',
+    minWidth: '130px'
   },
   {
-    prop: 'isAttribute',
-    label: '是否显示房间属性',
-    width: '150px'
+    prop: 'status',
+    label: '订单状态',
+    minWidth: '150px'
+  },
+  {
+    prop: 'type',
+    label: '订单类型',
+    minWidth: '150px'
+  },
+  {
+    prop: 'orderBeginDate',
+    label: '下单开始时间',
+    minWidth: '150px'
+  },
+  {
+    prop: 'orderEndDate',
+    label: '下单结束时间',
+    minWidth: '130px'
   },
   {
     prop: 'operate',
     label: '操作',
     fixed: 'right',
-    width: '150px'
-  }
+    minWidth: '150px'
+  },
 ];

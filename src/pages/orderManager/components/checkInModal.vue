@@ -324,7 +324,7 @@ export default {
     checkin () {
       this.$ajax.post({
         apiKey: 'orderCheckin',
-        params: this.checkinFormData,
+        params: this.checkinFormData
       }).then(() => {
         this.$message.success('登记入住成功');
         this.confirmFn && this.confirmFn();

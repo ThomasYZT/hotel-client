@@ -1,34 +1,33 @@
 export const tableConfig = [
   {
-    prop: 'roomNumber',
-    label: '房号',
-    fixed: 'left',
-    width: '130px'
+    prop: 'bufferTime',
+    label: '缓冲时长(分钟)',
+    minWidth: '150px'
   },
   {
-    prop: 'roomTypeName',
-    label: '房间类型',
-    width: '150px'
+    prop: 'chargePrice',
+    label: '加收费用',
+    minWidth: '130px'
   },
   {
-    prop: 'floorId',
-    label: '楼层',
-    width: '130px'
+    prop: 'latestTfTime',
+    label: '最晚退房时间',
+    minWidth: '130px'
   },
   {
-    prop: 'phoneExt',
-    label: '分机号',
-    width: '130px'
+    prop: 'maxDuration',
+    label: '加收费最大时长(分钟)',
+    minWidth: '160px'
   },
   {
-    prop: 'isAttribute',
-    label: '是否显示房间属性',
-    width: '150px'
+    prop: 'perDuration',
+    label: '加收费时长(分钟)',
+    minWidth: '150px'
   },
   {
     prop: 'operate',
     label: '操作',
     fixed: 'right',
-    width: '150px'
+    minWidth: '150px'
   }
 ];

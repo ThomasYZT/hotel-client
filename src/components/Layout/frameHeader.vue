@@ -42,23 +42,28 @@
             <div class="menu-item" @click="go('hotelUserInfo')">个人信息</div>
             <div class="menu-item" @click="showPwdModal">修改密码</div>
             <div class="menu-item" @click="didLogoutClick">注销</div>
+            <div class="menu-item" @click="workStatusClick">{{worktState}}</div>
           </template>
         </i-poptip>
       </div>
     </div>
     <pwdEditModal ref="pwdEditModal"></pwdEditModal>
     <confirmModal ref="confirmModal"></confirmModal>
+    <workStatusModal ref="workStatusModal"></workStatusModal>
   </div>
 </template>
 
 <script>
 import WinBar from '../WinBar';
+import workStatusModal from '../../pages/components/workStatusModal';
 import pwdEditModal from '../../pages/businessComponents/pwdEditModal';
+import { workStatusMap } from '../../assets/enums';
 import { mapGetters, mapActions } from 'vuex';
 export default {
   components: {
     WinBar,
-    pwdEditModal
+    pwdEditModal,
+    workStatusModal
   },
   props: {
     tool: {
@@ -68,8 +73,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'windowState'
-    ])
+      'windowState',
+      'workStatus'
+    ]),
+    worktState () {
+      return this.workStatus === workStatusMap.workOff ? '上班' : '下班';
+    }
   },
   methods: {
     ...mapActions([
@@ -87,6 +96,9 @@ export default {
           });
         }
       });
+    },
+    workStatusClick () {
+      this.$refs.workStatusModal.show();
     },
     go (name) {
       this.$router.push({

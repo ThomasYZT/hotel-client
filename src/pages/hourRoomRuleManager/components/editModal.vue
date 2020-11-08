@@ -69,7 +69,7 @@
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
 import { hourRoomChargeTypeList } from '../../../assets/enums';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
   computed: {
     ...mapGetters([
@@ -139,12 +139,15 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      'getAllRoomType'
+    ]),
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || !item) return;
       this.formData = defaultsDeep({}, item, this.formData);
       if (type === 'edit') {
-        this.formData.initialPrice = parseFloat((this.formData.initialPrice / 100).toFixed(2));
-        this.formData.chargePrice = parseFloat((this.formData.chargePrice / 100).toFixed(2));
+        this.formData.initialPrice = this.$util.toYuan(this.formData.initialPrice);
+        this.formData.chargePrice = this.$util.toYuan(this.formData.chargePrice);
       }
       this.$util.valueToStr(this.formData, ['type', 'roomTypeId']);
 
@@ -181,8 +184,8 @@ export default {
         apiKey: this.type === 'add' ? 'hoursRoomRuleAdd' : 'hoursRoomRuleUpdate',
         params: {
           ...this.formData,
-          initialPrice: Number(this.formData.initialPrice) * 100,
-          chargePrice: Number(this.formData.chargePrice) * 100
+          initialPrice: this.$util.toCent(this.formData.initialPrice),
+          chargePrice: this.$util.toCent(this.formData.chargePrice)
         },
         loading: false
       }).then(() => {
@@ -191,21 +194,6 @@ export default {
         this.reset();
       }).catch(err => {
         this.$message.error(`${this.type === 'add' ? '添加' : '编辑'}失败${err.msg ? ': ' + err.msg : ''}`);
-      });
-    },
-    getAllRoomType (hotelId) {
-      return new Promise((resolve, reject) => {
-        this.$ajax.get({
-          apiKey: 'roomTypeGetAllList',
-          params: {
-            hotelId
-          },
-          loading: false
-        }).then(data => {
-          resolve(data);
-        }).catch(err => {
-          reject(err);
-        });
       });
     },
     reset () {
