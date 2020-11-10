@@ -38,7 +38,7 @@ const mutations = {
     state.dictionary = data;
   },
   UPDATE_WORK_STATUS (state, data) {
-    state.workStatus = data
+    state.workStatus = data;
   }
 };
 
@@ -85,7 +85,12 @@ const actions = {
           apiKey: 'userMenuList',
           params: { hotelUserId: userInfo.id }
         }).then(data => {
-          resolve(dispatch('generateRouteInfo', data));
+          if (data && data.length > 0) {
+            resolve(dispatch('generateRouteInfo', data));
+          } else {
+            tip && dispatch('showMessage', { type: 'error', msg: '获取权限失败' });
+            reject({ type: 'permissionError', err: { msg: '该用户没有菜单权限' } });
+          }
         }).catch(err => {
           tip && dispatch('showMessage', { type: 'error', msg: '获取权限失败' });
           reject({ type: 'permissionError', err });

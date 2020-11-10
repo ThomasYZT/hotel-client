@@ -207,6 +207,11 @@ export default {
         this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
       });
     }
+  },
+  mounted () {
+    if (!this.showOrgTree) {
+      this.getList();
+    }
   }
 };
 </script>

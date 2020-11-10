@@ -152,7 +152,9 @@ export default {
     }
   },
   mounted () {
-
+    if (!this.isAdmin) {
+      this.getList();
+    }
   }
 };
 </script>

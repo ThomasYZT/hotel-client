@@ -47,7 +47,17 @@ export default {
       return isClose ? [] : _arr;
     },
     treeData () {
-      return this.routeInfo || [];
+      return this.routeInfo ? this.routeInfo.sort((a, b) => {
+        if (a.meta.order && b.meta.order) {
+          return 0;
+        } else if (a.meta.order && !b.meta.order) {
+          return -1;
+        } else if (b.meta.order && !a.meta.order) {
+          return 1;
+        } else {
+          return 1;
+        }
+      }) : [];
     }
   },
   data () {

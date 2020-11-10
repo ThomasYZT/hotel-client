@@ -9,7 +9,8 @@ export default {
       menuName: '代理商管理',
       iconClass: 'icon-dailishang',
       activePath: `${topName}`,
-      isMenu: true
+      isMenu: true,
+      order: 1
     },
     children: {
       // 菜单列表

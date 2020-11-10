@@ -25,12 +25,20 @@
                   <i-input type="text" placeholder="请输入加收费用" v-model.trim="formData.chargePrice" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="最晚退房时间" prop="latestTfTime">
-                  <i-date-picker v-model="formData.latestTfTime"
+                  <i-time-picker v-model="formData.latestTfTime"
                                  :editable="false"
                                  transfer
-                                 type="datetime"
-                                 format="yyyy-MM-dd"
-                                 placeholder="请选择最晚退房时间"></i-date-picker>
+                                 format="HH:mm"
+                                 placeholder="请选择最晚退房时间"
+                                 style="width: 100%;"></i-time-picker>
+                </FormItem>
+                <FormItem class="inline-form-item" label="边界时间" prop="rangeTime">
+                  <i-time-picker v-model="formData.rangeTime"
+                                 :editable="false"
+                                 transfer
+                                 format="HH:mm"
+                                 placeholder="边界时间"
+                                 style="width: 100%;"></i-time-picker>
                 </FormItem>
                 <FormItem class="inline-form-item" label="加收费最大时长" prop="maxDuration">
                   <i-input type="text" placeholder="请输入分钟数" v-model.trim="formData.maxDuration" />
@@ -94,7 +102,10 @@ export default {
           { validator: validateMoney, trigger: 'blur' }
         ],
         latestTfTime: [
-          { required: true, type: 'date', message: '请选择最晚退房时间', trigger: 'blur' }
+          { required: true, message: '请选择最晚退房时间', trigger: 'blur' }
+        ],
+        rangeTime: [
+          { required: true, message: '请选择边界时间', trigger: 'blur' }
         ],
         maxDuration: [
           { required: true, message: '请输入加收费最大时长', trigger: 'blur' },
@@ -143,8 +154,7 @@ export default {
         apiKey: this.type === 'add' ? 'roomRuleAdd' : 'roomRuleUpdate',
         params: {
           ...this.formData,
-          chargePrice: this.$util.toCent(this.formData.chargePrice),
-          latestTfTime: this.$date(this.formData.latestTfTime).format('YYYY-MM-DD HH:mm:ss')
+          chargePrice: this.$util.toCent(this.formData.chargePrice)
         },
         loading: false
       }).then(() => {

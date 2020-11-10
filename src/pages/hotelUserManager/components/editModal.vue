@@ -105,7 +105,7 @@ export default {
       formRule: {
         cardNo: [
           { required: true, message: '请输入身份证', trigger: 'blur' },
-          { validator: validateIdCard, trigger: 'blur' }
+          // { validator: validateIdCard, trigger: 'blur' }
         ],
         gender: [
           { required: true, type: 'number', message: '请选择性别', trigger: 'blur' }

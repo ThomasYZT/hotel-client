@@ -9,7 +9,8 @@ export default {
       menuName: '交班管理',
       iconClass: 'icon-dailishang',
       activePath: `${topName}`,
-      isMenu: true
+      isMenu: true,
+      order: 4
     },
     children: {
       // 列表

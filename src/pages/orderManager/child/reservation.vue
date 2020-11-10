@@ -40,6 +40,7 @@
                      :key="index"
                      class="room-block"
                      :class="{ 'active': item.id === activeRoom.id }"
+                     :style="{ backgroundColor: roowStatusList.find(state => item.status === state.value).bgColor }"
                      @click="onRoomClick(item)">
                   <div>{{item.roomNumber}}</div>
                   <div>{{item.roomTypeName}}</div>
@@ -142,7 +143,11 @@ export default {
   data () {
     return {
       roomStatus,
-      roowStatusList,
+      roowStatusList: [{
+        label: '全部',
+        value: '',
+        bgColor: '#4e6ef2'
+      }].concat(roowStatusList),
       functionType,
       orderType,
       functionList: [],
@@ -383,6 +388,9 @@ export default {
   },
   mounted () {
     this.getTools();
+    if (!this.showOrgTree) {
+      this.getList();
+    }
   }
 };
 </script>
@@ -483,7 +491,7 @@ export default {
           cursor: pointer;
 
           &.active {
-            background-color: $normalGreen;
+            opacity: .6;
           }
         }
       }
@@ -497,7 +505,7 @@ export default {
       .filter-item {
         @include flex_set(1, 0, auto);
         @include flex_layout(row, center, center);
-        margin-right: 20px;
+        margin-right: 10px;
         width: auto !important;
         padding: 5px 0;
         height: 42px;

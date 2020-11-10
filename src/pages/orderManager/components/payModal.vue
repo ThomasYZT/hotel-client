@@ -3,7 +3,7 @@
     <el-dialog title="支付"
                :visible.sync="visible"
                :close-on-click-modal="false"
-               width="30%"
+               width="45%"
                custom-class="form-dialog"
                @close="cancel"
                center>

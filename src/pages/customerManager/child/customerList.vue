@@ -180,7 +180,9 @@ export default {
     }
   },
   mounted () {
-
+    if (!this.showOrgTree) {
+      this.getList();
+    }
   }
 };
 </script>

@@ -2,7 +2,7 @@
   <div class="echarts"></div>
 </template>
 
-<style>
+<style lang="scss">
     .echarts {
         height: 100%;
     }

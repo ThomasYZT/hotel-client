@@ -114,7 +114,8 @@ export const functionMapList = [
   },
   {
     label: '增加消费',
-    name: functionType.consume
+    name: functionType.consume,
+    icon: 'icon-xiaofei01'
   },
   {
     label: '结账离店',
@@ -147,9 +148,9 @@ export const functionMapList = [
     icon: 'icon-dengji'
   },
   {
-    label: '会员设置',
+    label: '会员充值',
     name: functionType.vipSetting,
-    icon: 'icon-dengji'
+    icon: 'icon-huiyuanchongzhi'
   }
 ];
 

@@ -18,7 +18,18 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
-            <template slot="col5"
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{$util.toYuan(row.chargePrice)}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col6"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -155,7 +166,9 @@ export default {
     }
   },
   mounted () {
-
+    if (!this.showOrgTree) {
+      this.getList();
+    }
   }
 };
 </script>

@@ -21,6 +21,7 @@ import {
   Icon,
   Transfer,
   DatePicker,
+  TimePicker,
   Tooltip,
   InputNumber,
   RadioGroup,
@@ -64,6 +65,7 @@ export default {
     Vue.component('iRadio', Radio);
     Vue.component('iPoptip', Poptip);
     Vue.component('iCheckboxGroup', CheckboxGroup);
+    Vue.component('iTimePicker', TimePicker);
     Vue.prototype.$message = Message;
 
     Message.config({

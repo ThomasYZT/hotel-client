@@ -5,18 +5,18 @@
                (menuData.children.length > 0 && menuData.children.filter(item => item.meta.isMenu).length === 0)"
              :to="menuData.path"
              :name="menuData.meta.activePath">
-    <span class="item-label" v-if="expand">
+    <span class="item-label" v-show="expand">
       <i class="menu-icon iconfont" :class="menuData.meta.iconClass"></i>
       {{menuData.meta.menuName}}
     </span>
-    <i-tooltip v-else
+    <i-tooltip v-show="!expand"
                transfer
                :content="menuData.meta.menuName" placement="left">
       <i class="menu-icon iconfont" :class="menuData.meta.iconClass"></i>
     </i-tooltip>
   </iMenuItem>
   <div v-else>
-    <Submenu v-if="expand" :name="menuData.meta.activePath">
+    <Submenu v-show="expand" :name="menuData.meta.activePath">
       <template slot="title">
         <i class="menu-icon iconfont" :class="menuData.meta.iconClass"></i>
         {{menuData.meta.menuName}}
@@ -25,7 +25,7 @@
                 :key="item.name"
                 :menu-data="item"></menu-com>
     </Submenu>
-    <i-poptip v-else
+    <i-poptip v-show="!expand"
               transfer
               padding="0"
               trigger="hover"

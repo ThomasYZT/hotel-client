@@ -8,7 +8,7 @@
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
             <div class="tool-wrapper left-box">
-              
+
             </div>
             <div class="filter-block right-box">
               <div class="filter-item">
@@ -117,7 +117,9 @@ export default {
     }
   },
   mounted () {
-
+    if (!this.showOrgTree) {
+      this.getList();
+    }
   }
 };
 </script>

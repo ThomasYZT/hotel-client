@@ -170,25 +170,24 @@ export default {
     editRole (item) {
       this.$refs.roleEditModal.show({ item });
     },
-    resetPwd(item){
+    resetPwd (item) {
       this.$refs.confirmModal.show({
         title: '警告',
         content: `是否重置密码？`,
         confirm: () => {
-            this.$ajax.post({
-              apiKey: 'userResetPwd',
-              params: {
-                id: item.id
-              }
-            }).then(() => {
-              this.getList();
-              this.$message.success('重置密码成功，密码为：88888888');
-            }).catch(err => {
-              this.$message.error(`重置密码失败${err.msg ? ': ' + err.msg : ''}`);
-            });
+          this.$ajax.post({
+            apiKey: 'userResetPwd',
+            params: {
+              id: item.id
+            }
+          }).then(() => {
+            this.getList();
+            this.$message.success('重置密码成功，密码为：88888888');
+          }).catch(err => {
+            this.$message.error(`重置密码失败${err.msg ? ': ' + err.msg : ''}`);
+          });
         }
       });
-
     },
     delItem (item) {
       this.$ajax.post({
@@ -205,7 +204,9 @@ export default {
     }
   },
   mounted () {
-
+    if (!this.showOrgTree) {
+      this.getList();
+    }
   }
 };
 </script>

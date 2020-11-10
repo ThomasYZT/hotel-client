@@ -9,7 +9,8 @@ export default {
       menuName: '品牌管理',
       iconClass: 'icon-pinpaisheji',
       activePath: `${topName}`,
-      isMenu: true
+      isMenu: true,
+      order: 2
     },
     children: {
       // 菜单列表

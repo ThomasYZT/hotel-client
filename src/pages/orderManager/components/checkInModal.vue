@@ -1,6 +1,7 @@
 <template>
   <div class="modal-wrapper">
     <el-dialog title="登记入住"
+               v-show="showModal"
                :visible.sync="visible"
                :close-on-click-modal="false"
                width="45%"
@@ -173,6 +174,7 @@ export default {
       ordainRoomTypeList,
       genderList,
       visible: false,
+      showModal: true,
       isLoading: false,
       item: {},
       roomInfo: {},
@@ -236,42 +238,45 @@ export default {
       this.visible = true;
     },
     getByMobile () {
-      this.$ajax.get({
-        apiKey: 'orderGetByMobile',
-        params: {
-          mobile: this.queryFromData.mobile
-        }
-      }).then(data => {
-        if (data) {
-          if (data.status === orderStatus.payed) {
-            this.modalState = modalStatus.checkin;
-          } else {
-            this.modalState = modalStatus.orderPreview;
-          }
-          this.isReserved = true;
-          this.item.code = data.code;
-          this.reserveFromData = defaultsDeep({}, data, this.reserveFromData);
-          this.checkinFormData = defaultsDeep({}, this.item, {
-            phone: this.reserveFromData.mobile,
-            name: this.reserveFromData.customer
-          }, this.checkinFormData);
-        } else {
-          return Promise.reject(new Error());
-        }
-      }).catch(err => {
-        this.isReserved = false;
-        if (Object.keys(this.roomInfo).length > 0) {
-          this.modalState = modalStatus.orderPreview;
-          this.reserveFromData = defaultsDeep({}, {
-            roomNumber: this.roomInfo.roomNumber,
-            roomTypeId: this.roomInfo.roomTypeId,
-            roomType: this.roomInfo.roomTypeName,
-            roomId: this.roomInfo.id,
+      this.$refs.Form.validate(valid => {
+        if (!valid) return;
+        this.$ajax.get({
+          apiKey: 'orderGetByMobile',
+          params: {
             mobile: this.queryFromData.mobile
-          }, this.item, this.reserveFromData);
-        } else {
-          this.$message.error(`查询失败${err.msg ? ': ' + err.msg : ''}`);
-        }
+          }
+        }).then(data => {
+          if (data) {
+            if (data.status === orderStatus.payed) {
+              this.modalState = modalStatus.checkin;
+            } else {
+              this.modalState = modalStatus.orderPreview;
+            }
+            this.isReserved = true;
+            this.item.code = data.code;
+            this.reserveFromData = defaultsDeep({}, data, this.reserveFromData);
+            this.checkinFormData = defaultsDeep({}, this.item, {
+              phone: this.reserveFromData.mobile,
+              name: this.reserveFromData.customer
+            }, this.checkinFormData);
+          } else {
+            return Promise.reject(new Error());
+          }
+        }).catch(err => {
+          this.isReserved = false;
+          if (Object.keys(this.roomInfo).length > 0) {
+            this.modalState = modalStatus.orderPreview;
+            this.reserveFromData = defaultsDeep({}, {
+              roomNumber: this.roomInfo.roomNumber,
+              roomTypeId: this.roomInfo.roomTypeId,
+              roomType: this.roomInfo.roomTypeName,
+              roomId: this.roomInfo.id,
+              mobile: this.queryFromData.mobile
+            }, this.item, this.reserveFromData);
+          } else {
+            this.$message.error(`查询失败${err.msg ? ': ' + err.msg : ''}`);
+          }
+        });
       });
     },
     payConfirm () {
@@ -286,19 +291,19 @@ export default {
       }
     },
     payment () {
-      this.visible = false;
+      this.showModal = false;
       this.$refs.payModal.show({
         item: this.$util.removeProp({
           orderCode: this.item.code,
           ...this.item
         }, ['orderType', 'code']),
         confirmFn: () => {
-          this.visible = true;
+          this.showModal = true;
           this.modalState = modalStatus.checkin;
           this.checkinFormData = defaultsDeep({}, this.item, this.checkinFormData);
         },
         cancelFn: () => {
-          this.visible = false;
+          this.showModal = true;
         }
       });
     },

@@ -204,6 +204,7 @@ export default {
               code: item.code
             }
           }).then(() => {
+            this.getList();
             this.$message.success('取消成功');
           }).catch(err => {
             this.$message.error(`取消失败${err.msg ? ': ' + err.msg : ''}`);
@@ -222,12 +223,18 @@ export default {
               code: item.code
             }
           }).then(() => {
+            this.getList();
             this.$message.success('退款成功');
           }).catch(err => {
             this.$message.error(`退款失败${err.msg ? ': ' + err.msg : ''}`);
           });
         }
       });
+    }
+  },
+  mounted () {
+    if (!this.showOrgTree) {
+      this.getList();
     }
   }
 };

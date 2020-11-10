@@ -1,6 +1,7 @@
 <template>
   <div class="modal-wrapper">
     <el-dialog title="结账离店"
+               v-show="showModal"
                :visible.sync="visible"
                :close-on-click-modal="false"
                width="45%"
@@ -82,6 +83,7 @@ export default {
   data () {
     return {
       visible: false,
+      showModal: true,
       isLoading: false,
       item: {},
       roomInfo: {},
@@ -120,17 +122,18 @@ export default {
     },
     confirm () {
       if (this.roomOverVo.price) {
-        this.visible = false;
+        this.showModal = false;
         this.$refs.payModal.show({
           item: {
             ...this.item,
+            orderCode: this.orderInfo.code,
             money: String(this.roomOverVo.price)
           },
           confirmFn: () => {
             this.checkout();
           },
           cancelFn: () => {
-            this.visible = true;
+            this.showModal = true;
           }
         });
       } else {
@@ -159,8 +162,8 @@ export default {
         },
         loading: false
       }).then(() => {
-        this.reset();
         this.confirmFn && this.confirmFn();
+        this.reset();
         this.$message.success('结账成功');
       }).catch(err => {
         this.$message.error(`结账失败${err.msg ? ': ' + err.err : ''}`);

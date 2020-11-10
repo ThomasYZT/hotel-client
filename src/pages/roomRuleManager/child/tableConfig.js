@@ -2,6 +2,7 @@ export const tableConfig = [
   {
     prop: 'bufferTime',
     label: '缓冲时长(分钟)',
+    fixed: 'left',
     minWidth: '150px'
   },
   {
@@ -12,6 +13,11 @@ export const tableConfig = [
   {
     prop: 'latestTfTime',
     label: '最晚退房时间',
+    minWidth: '130px'
+  },
+  {
+    prop: 'rangeTime',
+    label: '边界时间',
     minWidth: '130px'
   },
   {
