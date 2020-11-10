@@ -55,10 +55,25 @@ const actions = {
         const _routes = generateRoutes(menuInfo);
         resetRouter(_routes);
         commit('UPDATE_ROUTEINFO', _routes);
-        resolve(dispatch('getDictionary', _routes[0]));
+        resolve(_routes[0]);
       } catch (err) {
         reject(err);
       }
+    });
+  },
+  getDictionaryByCode ({ commit }, { hotelId, typeCode } = {}) {
+    return new Promise((resolve) => {
+      ajax.get({
+        apiKey: 'dicGetByTypeCode',
+        params: {
+          hotelId,
+          typeCode
+        }
+      }).then(data => {
+        resolve(data || []);
+      }).catch(() => {
+        resolve([]);
+      });
     });
   },
   getDictionary ({ commit }, route) {

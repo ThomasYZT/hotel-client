@@ -71,8 +71,7 @@ import { mapGetters } from 'vuex';
 export default {
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
+      'userInfo'
     ])
   },
   data () {

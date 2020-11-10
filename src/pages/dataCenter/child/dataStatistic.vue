@@ -31,8 +31,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
+      'userInfo'
     ]),
     orgParams () {
       let level;

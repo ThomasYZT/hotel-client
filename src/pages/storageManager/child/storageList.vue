@@ -91,16 +91,17 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType, storageStatusList, genderList, dictionaryCodeType } from '../../../assets/enums';
+import { userType, storageStatusList, genderList } from '../../../assets/enums';
+import XLJCDictionaryMixin from '../../../mixins/XLJCDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
+  mixins: [XLJCDictionaryMixin],
   components: {
     editModal
   },
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
+      'userInfo'
     ]),
     orgParams () {
       let level;
@@ -129,11 +130,6 @@ export default {
     },
     showAddBtn () {
       return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
-    },
-    consignTypeList () {
-      return this.dictionary[this.userInfo.id]
-        ? this.dictionary[this.userInfo.id][dictionaryCodeType.consignType]
-        : [];
     }
   },
   data () {
@@ -155,6 +151,7 @@ export default {
   methods: {
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
+      this.getConsignTypeList(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId, false);
       if (!isDefault) {
         this.getList();
       }
@@ -262,6 +259,7 @@ export default {
   },
   mounted () {
     if (!this.showOrgTree) {
+      this.getConsignTypeList(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId, false);
       this.getList();
     }
   }

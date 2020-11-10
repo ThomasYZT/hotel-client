@@ -98,16 +98,17 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType, dictionaryCodeType } from '../../../assets/enums';
+import { userType } from '../../../assets/enums';
+import floorDictionaryMixin from '../../../mixins/floorDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
+  mixins: [floorDictionaryMixin],
   components: {
     editModal
   },
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
+      'userInfo'
     ]),
     orgParams () {
       let level;
@@ -136,11 +137,6 @@ export default {
     },
     showAddBtn () {
       return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
-    },
-    floorList () {
-      return this.dictionary[this.userInfo.id]
-        ? [{ id: 0, dictName: '全部' }].concat(this.dictionary[this.userInfo.id][dictionaryCodeType.floor])
-        : [];
     }
   },
   data () {
@@ -162,6 +158,7 @@ export default {
   methods: {
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
+      this.getFloors(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId);
       if (!isDefault) {
         this.getList();
       }
@@ -253,6 +250,7 @@ export default {
   },
   mounted () {
     if (!this.showOrgTree) {
+      this.getFloors(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId);
       this.getList();
     }
   }

@@ -92,24 +92,20 @@
         </div>
       </div>
     </div>
-    <editModal ref="editModal"></editModal>
     <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
 <script>
-import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType, dictionaryCodeType, orderStatus, orderStatusList, orderTypeList, ordainRoomTypeList } from '../../../assets/enums';
+import { userType, orderStatus, orderStatusList, orderTypeList, ordainRoomTypeList } from '../../../assets/enums';
 import { mapGetters, mapActions } from 'vuex';
+import floorDictionaryMixin from '../../../mixins/floorDictionaryMixin';
 export default {
-  components: {
-    editModal
-  },
+  mixins: [floorDictionaryMixin],
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
+      'userInfo'
     ]),
     orgParams () {
       let level;
@@ -138,11 +134,6 @@ export default {
     },
     showAddBtn () {
       return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
-    },
-    floorList () {
-      return this.dictionary[this.userInfo.id]
-        ? [{ id: 0, dictName: '全部' }].concat(this.dictionary[this.userInfo.id][dictionaryCodeType.floor])
-        : [];
     }
   },
   data () {
@@ -170,6 +161,7 @@ export default {
     ]),
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
+      this.getFloors(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId);
       this.getAllRoomType(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId).then(data => {
         this.roomTypeList = data || [];
       });
@@ -234,6 +226,10 @@ export default {
   },
   mounted () {
     if (!this.showOrgTree) {
+      this.getAllRoomType(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId).then(data => {
+        this.roomTypeList = data || [];
+      });
+      this.getFloors(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId);
       this.getList();
     }
   }

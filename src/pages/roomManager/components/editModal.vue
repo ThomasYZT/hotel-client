@@ -82,19 +82,14 @@
 
 <script>
 import defaultsDeep from 'lodash/defaultsDeep';
-import { dictionaryCodeType } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
+import roomAttrDictionaryMixin from '../../../mixins/roomAttrDictionaryMixin';
 export default {
+  mixins: [roomAttrDictionaryMixin],
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
-    ]),
-    roomAttrs () {
-      return this.dictionary[this.userInfo.id]
-        ? this.dictionary[this.userInfo.id][dictionaryCodeType.roomAttrs]
-        : [];
-    }
+      'userInfo'
+    ])
   },
   data () {
     return {
@@ -148,22 +143,23 @@ export default {
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
-
-      if (type === 'add') {
-        this.formData.attributeList = this.roomAttrs.map(item => ({
-          attributeValue: 0,
-          dictionaryId: item.id
-        }));
-        this.visible = true;
-      } else {
-        this.getRoomAttrs(item.id).then(data => {
-          this.formData.attributeList = data;
-          this.attributeList = data.filter(item => item.attributeValue === 1).map(item => item.dictionaryId);
+      this.getRoomAttrsList(item.hotelId, false).then(() => {
+        if (type === 'add') {
+          this.formData.attributeList = this.roomAttrs.map(item => ({
+            attributeValue: 0,
+            dictionaryId: item.id
+          }));
           this.visible = true;
-        }).catch(() => {
-          this.$message.error('获取房间属性失败');
-        });
-      }
+        } else {
+          this.getRoomAttrs(item.id).then(data => {
+            this.formData.attributeList = data;
+            this.attributeList = data.filter(item => item.attributeValue === 1).map(item => item.dictionaryId);
+            this.visible = true;
+          }).catch(() => {
+            this.$message.error('获取房间属性失败');
+          });
+        }
+      });
     },
     cancel () {
       this.cancelFn && this.cancelFn();

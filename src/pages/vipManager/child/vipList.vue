@@ -78,16 +78,17 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType, genderList, dictionaryCodeType } from '../../../assets/enums';
+import { userType, genderList } from '../../../assets/enums';
+import vipLevelDictionaryMixin from '../../../mixins/vipLevelDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
+  mixins: [vipLevelDictionaryMixin],
   components: {
     editModal
   },
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
+      'userInfo'
     ]),
     orgParams () {
       let level;
@@ -116,11 +117,6 @@ export default {
     },
     showAddBtn () {
       return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
-    },
-    vipLevelList () {
-      return this.dictionary[this.userInfo.id]
-        ? this.dictionary[this.userInfo.id][dictionaryCodeType.vipLevel]
-        : [];
     }
   },
   data () {
@@ -141,6 +137,7 @@ export default {
   methods: {
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
+      this.getVipList(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId, false);
       if (!isDefault) {
         this.getList();
       }
@@ -198,6 +195,7 @@ export default {
   },
   mounted () {
     if (!this.showOrgTree) {
+      this.getVipList(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId, false);
       this.getList();
     }
   }

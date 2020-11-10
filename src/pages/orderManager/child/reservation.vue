@@ -91,13 +91,15 @@
 </template>
 
 <script>
-import { userType, dictionaryCodeType, roowStatusList, functionType, functionMapList, roomStatus, orderType } from '../../../assets/enums';
+import { userType, roowStatusList, functionType, functionMapList, roomStatus, orderType } from '../../../assets/enums';
 import addToolModal from '../components/addToolModal';
 import ordainModal from '../components/ordainModal';
 import checkInModal from '../components/checkInModal';
 import checkoutModal from '../components/checkoutModal';
+import floorDictionaryMixin from '../../../mixins/floorDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
+  mixins: [floorDictionaryMixin],
   components: {
     addToolModal,
     ordainModal,
@@ -106,8 +108,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'userInfo',
-      'dictionary'
+      'userInfo'
     ]),
     orgParams () {
       let level;
@@ -130,14 +131,6 @@ export default {
     },
     showOrgTree () {
       return [userType.admin, userType.agent, userType.brand].includes(this.userInfo.type);
-    },
-    showPanel () {
-      return !this.showOrgTree || Object.keys(this.nodeData).length > 0;
-    },
-    floorList () {
-      return this.dictionary[this.userInfo.id]
-        ? [{ id: 0, dictName: '全部楼层' }].concat(this.dictionary[this.userInfo.id][dictionaryCodeType.floor])
-        : [];
     }
   },
   data () {
@@ -167,6 +160,7 @@ export default {
   methods: {
     onNodeClick ({ data }) {
       this.nodeData = data;
+      this.getFloors(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId);
       this.getList();
       this.statusStat();
     },
@@ -390,6 +384,7 @@ export default {
     this.getTools();
     if (!this.showOrgTree) {
       this.getList();
+      this.getFloors(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId);
     }
   }
 };
