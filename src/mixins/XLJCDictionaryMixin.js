@@ -19,7 +19,7 @@ export default {
         hotelId,
         typeCode: dictionaryCodeType.consignType
       }).then(data => {
-        this.consignTypeList = needAll ? [{ id: 0, dictName: '全部类型' }].concat(data || []) : [];
+        this.consignTypeList = needAll ? [{ id: 0, dictName: '全部类型' }].concat(data || []) : (data || []);
       });
     }
   }

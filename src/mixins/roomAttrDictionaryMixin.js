@@ -19,7 +19,7 @@ export default {
         hotelId,
         typeCode: dictionaryCodeType.roomAttrs
       }).then(data => {
-        this.roomAttrs = needAll ? [{ id: 0, dictName: '全部属性' }].concat(data || []) : [];
+        this.roomAttrs = needAll ? [{ id: 0, dictName: '全部属性' }].concat(data || []) : (data || []);
       });
     }
   }

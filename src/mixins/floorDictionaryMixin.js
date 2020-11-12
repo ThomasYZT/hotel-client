@@ -19,7 +19,7 @@ export default {
         hotelId,
         typeCode: dictionaryCodeType.floor
       }).then(data => {
-        this.floorList = needAll ? [{ id: 0, dictName: '全部楼层' }].concat(data || []) : [];
+        this.floorList = needAll ? [{ id: 0, dictName: '全部楼层' }].concat(data || []) : (data || []);
       });
     }
   }

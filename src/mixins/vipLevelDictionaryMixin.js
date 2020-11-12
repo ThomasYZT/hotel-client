@@ -19,7 +19,7 @@ export default {
         hotelId,
         typeCode: dictionaryCodeType.vipLevel
       }).then(data => {
-        this.vipLevelList = needAll ? [{ id: 0, dictName: '全部等级' }].concat(data || []) : [];
+        this.vipLevelList = needAll ? [{ id: 0, dictName: '全部等级' }].concat(data || []) : (data || []);
       });
     }
   }

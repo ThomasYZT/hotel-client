@@ -44,6 +44,9 @@
                      @click="onRoomClick(item)">
                   <div>{{item.roomNumber}}</div>
                   <div>{{item.roomTypeName}}</div>
+                  <div class="status-btn"
+                       v-if="[roomStatus.clean, roomStatus.error, roomStatus.outClearing].includes(item.status)"
+                       @click.stop="changeStatus(item)">修改状态</div>
                 </div>
               </div>
             </div>
@@ -87,6 +90,7 @@
     <ordainModal ref="ordainModal"></ordainModal>
     <checkInModal ref="checkInModal"></checkInModal>
     <checkoutModal ref="checkoutModal"></checkoutModal>
+    <changeStatusModal ref="changeStatusModal"></changeStatusModal>
   </div>
 </template>
 
@@ -96,6 +100,7 @@ import addToolModal from '../components/addToolModal';
 import ordainModal from '../components/ordainModal';
 import checkInModal from '../components/checkInModal';
 import checkoutModal from '../components/checkoutModal';
+import changeStatusModal from '../components/changeStatusModal';
 import floorDictionaryMixin from '../../../mixins/floorDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
@@ -104,7 +109,8 @@ export default {
     addToolModal,
     ordainModal,
     checkInModal,
-    checkoutModal
+    checkoutModal,
+    changeStatusModal
   },
   computed: {
     ...mapGetters([
@@ -138,7 +144,7 @@ export default {
       roomStatus,
       roowStatusList: [{
         label: '全部',
-        value: '',
+        value: '-1',
         bgColor: '#4e6ef2'
       }].concat(roowStatusList),
       functionType,
@@ -146,6 +152,7 @@ export default {
       functionList: [],
       tableData: [],
       filterParams: {
+        status: -1,
         roomNumber: '',
         floorId: 0,
         roomTypeId: 0
@@ -327,7 +334,7 @@ export default {
         }
       }).then(data => {
         this.allRoomCount = (data || []).reduce((pre, cur) => pre + cur.cnt, 0);
-        this.stayCount = (data || []).filter(item => [roomStatus.live, roomStatus.clean].includes(item.status)).reduce((pre, cur) => pre + cur.cnt, 0);
+        this.stayCount = (data || []).filter(item => [roomStatus.live, roomStatus.hourRoom].includes(item.status)).reduce((pre, cur) => pre + cur.cnt, 0);
       }).catch(() => {
         this.allRoomCount = 0;
         this.stayCount = 0;
@@ -376,6 +383,14 @@ export default {
           }).catch(() => {
             this.$message.error('删除失败');
           });
+        }
+      });
+    },
+    changeStatus (item) {
+      this.$refs.changeStatusModal.show({
+        item,
+        confirmFn: () => {
+          this.getList();
         }
       });
     }
@@ -484,6 +499,12 @@ export default {
           background-color: $lightGreen;
           border-radius: 4px;
           cursor: pointer;
+
+          .status-btn {
+            font-size: 14px;
+            color: #2d8cf0;
+            cursor: pointer;
+          }
 
           &.active {
             opacity: .6;
