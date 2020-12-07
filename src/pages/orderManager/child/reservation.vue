@@ -47,6 +47,8 @@
                   <div class="status-btn"
                        v-if="[roomStatus.clean, roomStatus.error, roomStatus.outClearing].includes(item.status)"
                        @click.stop="changeStatus(item)">修改状态</div>
+                  <div class="desc"
+                       v-if="[roomStatus.reserved].includes(item.status)">{{item.customer || '-'}}</div>
                 </div>
               </div>
             </div>
@@ -175,15 +177,13 @@ export default {
       this.activeRoom = {};
       this.getAllRoomType().then(() => {
         this.$ajax.post({
-          apiKey: 'roomPageList',
+          apiKey: 'roomList',
           params: {
             hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
-            pageNum: 1,
-            pageSize: 999999,
             ...this.filterParams
           }
         }).then(data => {
-          this.tableData = data.data || [];
+          this.tableData = data || [];
         }).catch(err => {
           this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
         });
@@ -232,11 +232,11 @@ export default {
       switch (item.id) {
         case functionType.reserve:
           // 预定
-          this.reservationAndCheckin('reservation');
+          this.reservation();
           break;
         case functionType.check:
           // 登记入住
-          this.reservationAndCheckin('checkin');
+          this.checkin();
           break;
         case functionType.reservationQuiry:
           // 订单查询
@@ -286,45 +286,38 @@ export default {
           break;
       }
     },
-    reservationAndCheckin (type) {
-      // 预定
-      if (type === 'reservation') {
-        if (Object.keys(this.activeRoom).length === 0 ||
-            ![roomStatus.clean].includes(this.activeRoom.status)) {
-          this.$message.warning('请选择一个空净房');
-          return;
-        }
-        this.$refs.ordainModal.show({
-          item: {
-            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
-            hotelUserId: this.userInfo.id,
-            orderType: orderType.mobile
-          },
-          activeRoom: this.activeRoom,
-          confirmFn: () => {
-            this.getList();
-          }
-        });
+    reservation () {
+      if (Object.keys(this.activeRoom).length > 0 &&
+        ![roomStatus.clean].includes(this.activeRoom.status)) {
+        this.$message.warning('请选择空净房');
+        return;
       }
-      // 登记入住
-      if (type === 'checkin') {
-        if (Object.keys(this.activeRoom).length > 0 &&
-          ![roomStatus.clean, roomStatus.reserved].includes(this.activeRoom.status)) {
-          this.$message.warning('请选择空净房');
-          return;
+      this.$refs.ordainModal.show({
+        item: {
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+          hotelUserId: this.userInfo.id,
+          orderType: orderType.mobile
+        },
+        activeRoom: this.activeRoom,
+        roomTypeList: this.roomTypeList.filter(item => item.id !== 0),
+        confirmFn: () => {
+          this.getList();
         }
-        this.$refs.checkInModal.show({
-          item: {
-            hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
-            hotelUserId: this.userInfo.id,
-            orderType: orderType.hotel
-          },
-          activeRoom: this.activeRoom,
-          confirmFn: () => {
-            this.getList();
-          }
-        });
+      });
+    },
+    checkin () {
+      if (Object.keys(this.activeRoom).length > 0) {
+        return this.reservation();
       }
+      this.$refs.checkInModal.show({
+        item: {
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+          hotelUserId: this.userInfo.id
+        },
+        confirmFn: () => {
+          this.getList();
+        }
+      });
     },
     statusStat () {
       this.$ajax.get({

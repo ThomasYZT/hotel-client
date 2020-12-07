@@ -8,6 +8,14 @@ export const tableConfig = [
     label: '价格'
   },
   {
+    prop: 'cashPledge',
+    label: '押金'
+  },
+  {
+    prop: 'num',
+    label: '入住人数'
+  },
+  {
     prop: 'operate',
     label: '操作'
   }

@@ -31,7 +31,7 @@
                     </i-option>
                   </i-select>
                 </FormItem>
-                <FormItem class="inline-form-item" label="楼层" prop="floorId" >
+                <FormItem class="inline-form-item" label="楼层" prop="floorId">
                   <i-select v-model="formData.floorId"
                             placeholder="请选择">
                     <i-option v-for="item in floorList"

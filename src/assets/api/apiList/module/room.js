@@ -7,5 +7,6 @@ export default {
   delete: '/room/delete',
   update: '/room/update',
   statusStat: '/room/hotelRoomStatusStat',
-  updateStatus: '/room/updateStatus'
+  updateStatus: '/room/updateStatus',
+  list: '/room/hotelRooms'
 };

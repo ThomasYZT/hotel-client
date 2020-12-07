@@ -25,7 +25,29 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{$util.toYuan(row.price)}}</span>
+                </template>
+              </el-table-column>
+            </template>
             <template slot="col2"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{$util.toYuan(row.cashPledge)}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col4"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"

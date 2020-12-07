@@ -4,5 +4,6 @@ export default {
   get: '/payment/get',
   getByOrderCode: '/payment/getByOrderCode',
   pageList: '/payment/pageList',
-  pay: '/payment/payment'
+  pay: '/payment/payment',
+  order: '/payment/orderPayment'
 };

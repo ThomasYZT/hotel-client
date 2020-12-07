@@ -255,19 +255,19 @@ export const ordainRoomTypeList = [
 export const payTypeList = [
   {
     label: '微信',
-    value: 0
+    value: '0'
   },
   {
     label: '支付宝',
-    value: 1
+    value: '1'
   },
   {
     label: '现金',
-    value: 2
+    value: '2'
   },
   {
     label: '扫码枪',
-    value: 3
+    value: '3'
   }
 ];
 

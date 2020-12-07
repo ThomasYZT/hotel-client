@@ -21,8 +21,14 @@
                 <FormItem class="block-form-item" label="房间类型名称" prop="typeName">
                   <i-input type="text" placeholder="房间类型名称" v-model.trim="formData.typeName" />
                 </FormItem>
-                <FormItem class="block-form-item" label="价格" prop="price">
+                <FormItem class="inline-form-item" label="价格" prop="price">
                   <i-input type="text" placeholder="价格" v-model.trim="formData.price" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="押金" prop="cashPledge">
+                  <i-input type="text" placeholder="押金" v-model.trim="formData.cashPledge" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="入住人数" prop="num">
+                  <i-input type="text" placeholder="入住人数" v-model.trim="formData.num" />
                 </FormItem>
                 <FormItem class="block-form-item" label="图片" prop="attachList">
                   <img-uploader v-model="formData.attachList"></img-uploader>
@@ -53,6 +59,14 @@ export default {
         callback(err);
       });
     };
+    const validateNumber = (rule, value, callback) => {
+      if (!value) callback();
+      if (this.$validator.isBothNumber(value)) {
+        callback();
+      } else {
+        callback(new Error('请输入数字'));
+      }
+    };
     return {
       visible: false,
       isLoading: false,
@@ -72,7 +86,15 @@ export default {
         price: [
           { required: true, message: '请输入价格', trigger: 'blur' },
           { validator: validateMoney, trigger: 'blur' }
-        ]
+        ],
+        cashPledge: [
+          { required: true, message: '请输入押金', trigger: 'blur' },
+          { validator: validateMoney, trigger: 'blur' }
+        ],
+        num: [
+          { required: true, message: '请输入入住人数', trigger: 'blur' },
+          { validator: validateNumber, trigger: 'blur' }
+        ],
       }
     };
   },
@@ -91,6 +113,11 @@ export default {
 
       if (cancelFn) {
         this.cancelFn = cancelFn;
+      }
+
+      if (type === 'edit') {
+        this.formData.price = this.$util.toYuan(this.formData.price);
+        this.formData.cashPledge = this.$util.toYuan(this.formData.cashPledge);
       }
 
       if (type === 'add' || (type === 'edit' && !item.attachId)) {
@@ -116,7 +143,11 @@ export default {
     submitForm () {
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'roomTypeAdd' : 'roomTypeUpdate',
-        params: this.formData,
+        params: {
+          ...this.formData,
+          price: this.$util.toCent(this.formData.price),
+          cashPledge: this.$util.toCent(this.formData.cashPledge)
+        },
         loading: false,
         config: {
           headers: { 'Content-Type': 'application/json;charset-UTF-8' }

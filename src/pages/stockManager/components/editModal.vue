@@ -359,7 +359,7 @@ export default {
 @import "~@/assets/styles/scss/base";
 .dialog-wrapper {
   @include flex_layout(row, center, flex-start);
-  height: 550px;
+  height: 400px;
   .form-wrapper {
     height: 100%;
     width: 100%;

@@ -28,7 +28,7 @@
                     </i-option>
                   </i-select>
                 </FormItem>
-                <FormItem class="inline-form-item" label="支付类型" prop="type">
+                <!--<FormItem class="inline-form-item" label="支付类型" prop="type">
                   <i-select v-model="formData.type"
                             placeholder="请选择">
                     <i-option v-for="item in payTargetList"
@@ -37,13 +37,15 @@
                       {{ item.label }}
                     </i-option>
                   </i-select>
-                </FormItem>
-                <FormItem class="inline-form-item" label="支付金额" prop="money">
-                  <i-input type="text" placeholder="支付金额" v-model.trim="formData.money" />
+                </FormItem>-->
+                <FormItem class="inline-form-item" label="支付金额" prop="totalMoney">
+                  <i-input type="text" placeholder="支付金额" v-model.trim="formData.totalMoney" />
                 </FormItem>
               </div>
             </div>
           </i-form>
+
+          <div v-if="showDetail" v-html="detailTemplate"></div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -80,29 +82,41 @@ export default {
       isLoading: false,
       confirmFn: null,
       cancelFn: null,
+      item: {},
+      config: {},
       formData: {
         userId: 0,
-        type: 0,
-        money: ''
+        // type: 0,
+        totalMoney: ''
       },
       formRule: {
         payType: [
-          { required: true, type: 'number', message: '请选择支付方式', trigger: 'blur' }
+          { required: true, message: '请选择支付方式', trigger: 'blur' }
         ],
-        type: [
-          { required: true, type: 'number', message: '请选择支付类型', trigger: 'blur' }
-        ],
-        money: [
+        // type: [
+        //   { required: true, type: 'number', message: '请选择支付类型', trigger: 'blur' }
+        // ],
+        totalMoney: [
           { required: true, message: '请输入支付金额', trigger: 'blur' },
           { validator: validateMoney, trigger: 'blur' }
         ]
-      }
+      },
+      showDetail: false,
+      detailTemplate: ''
     };
   },
   methods: {
-    show ({ item, confirmFn, cancelFn }) {
-      if (!item) return;
-      this.formData = defaultsDeep({}, item, this.formData);
+    show ({
+      item,
+      config = { cashPledge: true, roomMoney: true, consume: true },
+      confirmFn,
+      cancelFn,
+      showDetail = false
+    }) {
+      if (!item || !item.orderPaymentVos || item.orderPaymentVos.length === 0) {
+        this.$message.warning('缺少支付信息');
+        return;
+      }
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -110,6 +124,12 @@ export default {
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
+      this.item = item;
+      this.config = config;
+      this.showDetail = showDetail;
+      this.formData = defaultsDeep({}, item, this.formData);
+      this.formData.totalMoney = this.calcTotalMoney(item);
+      showDetail && (this.detailTemplate = this.getDetailTemplate(item));
       this.visible = true;
     },
     cancel () {
@@ -123,18 +143,54 @@ export default {
         }
       });
     },
-    submitForm () {
-      if (['hotelId', 'hotelUserId', 'orderCode', 'payType', 'type', 'userId'].some(key => {
-        return this.formData[key] === undefined;
-      })) {
-        this.$message.error('支付失败：缺省参数');
-        return;
+    calcTotalMoney (item) {
+      let sum = 0;
+      if (this.config.cashPledge) {
+        sum += item.orderPaymentVos.reduce((pre, cur) => {
+          return pre + cur.cashPledge;
+        }, 0);
       }
+
+      if (this.config.roomMoney) {
+        sum += item.orderPaymentVos.reduce((pre, cur) => {
+          return pre + cur.roomMoney;
+        }, 0);
+      }
+
+      if (this.config.consume) {
+        sum += item.orderPaymentVos.reduce((pre, cur) => {
+          return pre + cur.consumeRecords.reduce((t, preGood) => {
+            return t + preGood.unitPrice * preGood.num;
+          }, 0);
+        }, 0);
+      }
+
+      return this.$util.toYuan(sum);
+    },
+    getDetailTemplate (item) {
+      let temp = '<div class="detail">';
+      item.orderPaymentVos.forEach(order => {
+        temp += `<div><div>订单号：${order.orderCode}</div>`;
+        temp += `<div>${this.config.roomMoney && `<span>房费：${this.$util.toYuan(order.roomMoney)}</span>`} ${this.config.cashPledge && `<span>押金：${this.$util.toYuan(order.cashPledge)}</span>`}</div>`
+        temp += `<div>增加消费：`;
+        order.consumeRecords.length === 0
+          ? temp += '无</div>'
+          : order.consumeRecords.forEach(item => {
+            temp += `<span>${item.goodsName}：${this.$util.toYuan(item.unitPrice)} * ${item.num} = ${this.$util.toYuan(item.unitPrice * item.num)}</span>`;
+          });
+        temp += `<span>合计：${this.$util.toYuan(order.roomMoney + order.cashPledge + order.consumeRecords.reduce((p, c) => p + c.unitPrice * c.num, 0))}</span></div></div>`;
+      });
+      return temp + `<div>总计：${this.formData.totalMoney}</div></div>`;
+    },
+    submitForm () {
       this.$ajax.post({
-        apiKey: 'paymentPay',
+        apiKey: 'paymentOrder',
         params: {
           ...this.formData,
-          money: Number(this.formData.money) * 100
+          totalMoney: this.$util.toCent(this.formData.totalMoney)
+        },
+        config: {
+          headers: { 'Content-Type': 'application/json;charset-UTF-8' }
         },
         loading: false
       }).then(() => {
@@ -149,13 +205,17 @@ export default {
       this.$refs.Form.resetFields();
       this.formData = {
         userId: 0,
-        type: 0,
-        money: ''
+        // type: 0,
+        totalMoney: ''
       };
       this.confirmFn = null;
       this.cancelFn = null;
       this.visible = false;
       this.isLoading = false;
+      this.item = {};
+      this.config = {};
+      this.showDetail = false;
+      this.detailTemplate = '';
     }
   }
 };
