@@ -155,11 +155,11 @@ export default {
   width: 100%;
   height: 100%;
   max-width: 100%;
-
+  /deep/ .el-table__empty-block {
+    width: 100% !important;
+  }
   .empty-content {
     @include flex_layout(row, center, center);
-    width: 100%;
-    height: 100%;
   }
   .pagination-wrapper {
     @include flex_layout(row, flex-start, flex-end);

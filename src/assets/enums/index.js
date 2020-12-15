@@ -342,3 +342,24 @@ export const workStatusMap = {
   workOn: '0',
   workOff: '1'
 };
+
+export const couponsType = {
+  moneyOff: 0,
+  discount: 1,
+  exchange: 2
+};
+
+export const couponsTypeList = [
+  {
+    value: couponsType.moneyOff,
+    label: '满减券'
+  },
+  {
+    value: couponsType.discount,
+    label: '折扣券'
+  },
+  {
+    value: couponsType.exchange,
+    label: '兑换券'
+  }
+];
