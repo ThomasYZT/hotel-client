@@ -7,10 +7,12 @@
               size="medium"
               :data="data"
               :height="hasPage && data.length > 0 ? 'calc(100% - 50px)' : '100%'"
+              :show-overflow-tooltip="true"
               header-row-class-name="custom-header-row"
               header-cell-class-name="custom-header-cell"
               row-class-name="custom-row"
-              cell-class-name="custom-cell">
+              cell-class-name="custom-cell"
+              @selection-change="onSelectionChange">
       <slot v-for="(item, index) in config"
             :item="item"
             :name="`col${index}`">
@@ -123,7 +125,17 @@ export default {
       this.$nextTick(() => {
         this.reset = false;
       });
-    }, 500)
+    }, 500),
+    onSelectionChange (selection) {
+      this.$emit('selectChange', selection);
+    },
+    toggleRowSelections (rows) {
+      this.$nextTick(() => {
+        rows.forEach(row => {
+          this.$refs.Table.toggleRowSelection(row);
+        });
+      });
+    }
   },
   created () {
     this.getList();

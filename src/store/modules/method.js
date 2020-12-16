@@ -39,7 +39,26 @@ const actions = {
         reject(err);
       });
     });
-  }
+  },
+  getVipListByBrandId ({ commit, dispatch }, { brandId } = {}) {
+    return new Promise((resolve, reject) => {
+      if (brandId === null || brandId === undefined) {
+        return reject({ msg: '缺省参数' });
+      }
+      ajax.post({
+        apiKey: 'vipLevelPageList',
+        params: {
+          brandId,
+          pageNum: 1,
+          pageSize: 999999
+        }
+      }).then(data => {
+        resolve(data.data || []);
+      }).catch(err => {
+        reject(err);
+      });
+    });
+  },
 };
 
 export default {

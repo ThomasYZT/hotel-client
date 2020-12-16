@@ -1,5 +1,4 @@
 import { mapActions } from 'vuex';
-import { dictionaryCodeType } from '../assets/enums';
 export default {
   data () {
     return {
@@ -8,16 +7,15 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getDictionaryByCode'
+      'getVipListByBrandId'
     ]),
-    getVipList (hotelId, needAll = true) {
-      if (!hotelId) {
+    getVipList (brandId, needAll = true) {
+      if (!brandId) {
         this.$message.error('缺省参数');
         return;
       }
-      return this.getDictionaryByCode({
-        hotelId,
-        typeCode: dictionaryCodeType.vipLevel
+      return this.getVipListByBrandId({
+        brandId
       }).then(data => {
         this.vipLevelList = needAll ? [{ id: 0, dictName: '全部等级' }].concat(data || []) : (data || []);
       });

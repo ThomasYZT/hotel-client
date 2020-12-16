@@ -22,6 +22,6 @@ export default {
     return Number(val) * 100;
   },
   toYuan (val) {
-    return String(parseFloat((Number(val) / 100).toFixed(2)));
+    return val ? String(parseFloat((Number(val) / 100).toFixed(2))) : '';
   }
 };

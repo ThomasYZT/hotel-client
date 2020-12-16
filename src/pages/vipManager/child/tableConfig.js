@@ -98,17 +98,57 @@ export const couponListTableConfig = [
   {
     prop: 'startTime',
     label: '有效开始时间',
-    minWidth: '150px'
+    minWidth: '160px'
   },
   {
     prop: 'endTime',
+    label: '有效结束时间',
+    minWidth: '160px'
+  },
+  {
+    prop: 'operate',
+    label: '操作',
+    minWidth: '150px',
+    fixed: 'right'
+  }
+];
+
+export const vipChargeTableConfig = [
+  {
+    prop: 'giveExperience',
+    label: '赠送经验',
+    fixed: 'left',
+    minWidth: '130px'
+  },
+  {
+    prop: 'giveIntegral',
+    label: '赠送积分',
+    minWidth: '150px'
+  },
+  {
+    prop: 'giveMoney',
+    label: '赠送金额',
+    minWidth: '150px'
+  },
+  {
+    prop: 'topUpMoney',
+    label: '充值金额',
+    minWidth: '150px'
+  },
+  {
+    prop: 'status',
+    label: '状态',
+    minWidth: '150px'
+  },
+  {
+    prop: 'remark',
     label: '有效结束时间',
     minWidth: '150px'
   },
   {
     prop: 'operate',
     label: '操作',
-    minWidth: '150px',
+    minWidth: '200px',
     fixed: 'right'
   }
 ];

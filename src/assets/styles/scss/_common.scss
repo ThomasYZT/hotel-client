@@ -19,6 +19,7 @@ html,body{
 
 //page
 .page-container {
+  position: relative;
   padding: 10px 10px;
   width: 100%;
   height: 100%;
@@ -35,34 +36,35 @@ html,body{
     height: 100%;
     width: 100%;
 
-    .data-box {
-      padding: 15px 15px;
-      background-color: #FFFFFF;
-      border-radius: 5px;
+  }
+}
+.data-box {
+  padding: 15px 15px;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  height: 100%;
 
-      .operation-wrapper {
-        height: 40px;
-        .left-box {
-          @include flex_layout(row, null, flex-start);
-        }
-        .right-box {
-          @include flex_layout(row, flex-end, flex-start);
-        }
+  .operation-wrapper {
+    height: 40px !important;
+    .left-box {
+      @include flex_layout(row, null, flex-start);
+    }
+    .right-box {
+      @include flex_layout(row, flex-end, flex-start);
+    }
 
-        .tool-wrapper {
-          width: 100%;
-        }
-        .filter-block {
-          .filter-item {
-            @include flex_layout(row, flex-start, center);
-            margin-right: 10px;
-            width: 300px;
-            .filter-label {
-              margin-right: 10px;
-              font-size: 14px;
-              white-space: nowrap;
-            }
-          }
+    .tool-wrapper {
+      width: 100%;
+    }
+    .filter-block {
+      .filter-item {
+        @include flex_layout(row, flex-start, center);
+        margin-right: 10px;
+        width: 300px;
+        .filter-label {
+          margin-right: 10px;
+          font-size: 14px;
+          white-space: nowrap;
         }
       }
     }

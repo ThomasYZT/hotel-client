@@ -7,5 +7,6 @@ export default {
   outShelves: '/coupons/outShelves',
   pageList: '/coupons/pageList',
   shelves: '/coupons/shelves',
-  update: '/coupons/update'
+  update: '/coupons/update',
+  getHotelInfo: '/couponsHotel/getAllList'
 };

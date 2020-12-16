@@ -7,6 +7,7 @@ import orgTree from '../../components/orgTree';
 import NoData from '../../components/noData';
 import ImgUploader from '../../components/ImgUploader';
 import FileUploader from '../../components/FileUploader';
+import PageBoard from '../../components/PageBoard';
 import validator from '../share/validator';
 import globalUtil from '../share/globalUtil';
 import ajax from '../../assets/api';
@@ -25,6 +26,7 @@ export default {
     Vue.component(confirmModal.name, confirmModal);
     Vue.component(orgTree.name, orgTree);
     Vue.component(NoData.name, NoData);
+    Vue.component(PageBoard.name, PageBoard);
     Vue.component(ImgUploader.name, ImgUploader);
     Vue.component(FileUploader.name, FileUploader);
     Vue.use(Viewer, {

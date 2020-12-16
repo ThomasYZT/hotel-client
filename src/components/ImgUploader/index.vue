@@ -35,11 +35,11 @@ import { attachType } from '../../assets/enums';
 export default {
   name: 'ImgUploader',
   model: {
-    prop: 'value',
+    prop: 'fileList',
     event: 'change'
   },
   props: {
-    value: {
+    fileList: {
       type: Array,
       default () {
         return [];
@@ -123,10 +123,11 @@ export default {
     }
   },
   watch: {
-    value: {
+    fileList: {
       handler (newVal) {
         this.uploadList = newVal;
       },
+      immediate: true,
       deep: true
     }
   }

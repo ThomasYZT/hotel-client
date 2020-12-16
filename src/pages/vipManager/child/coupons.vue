@@ -54,7 +54,31 @@
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
                   <span>{{vipLevelList.find(item => item.id === row.levelId) ?
-                    vipLevelList.find(item => item.id === row.level).dictName : ''}}</span>
+                    vipLevelList.find(item => item.id === row.levelId).name : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col4"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{couponStatusList.find(item => item.value === row.state) ?
+                    couponStatusList.find(item => item.value === row.state).label : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col5"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{couponsTypeList.find(item => item.value === row.purpose) ?
+                    couponsTypeList.find(item => item.value === row.purpose).label : ''}}</span>
                 </template>
               </el-table-column>
             </template>
@@ -82,9 +106,9 @@
 </template>
 
 <script>
-import editModal from '../components/editModal';
+import editModal from '../components/couponEditModal';
 import { couponListTableConfig } from './tableConfig.js';
-import { userType, couponsTypeList } from '../../../assets/enums';
+import { userType, couponsTypeList, couponStatusList } from '../../../assets/enums';
 import vipLevelDictionaryMixin from '../../../mixins/vipLevelDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
@@ -124,6 +148,7 @@ export default {
   },
   data () {
     return {
+      couponStatusList,
       couponsTypeList,
       couponListTableConfig,
       tableData: [],
@@ -140,7 +165,7 @@ export default {
   methods: {
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
-      this.getVipList(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId, false);
+      this.getVipList(this.showOrgTree ? this.nodeData.id : this.userInfo.brandId, false);
       if (!isDefault) {
         this.getList();
       }
@@ -158,7 +183,6 @@ export default {
         this.tableData = data.data || [];
         this.totalSize = data.totalSize || 0;
       }).catch(err => {
-        console.log(err);
         this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
@@ -166,18 +190,24 @@ export default {
       this.$refs.editModal.show({
         type: 'add',
         item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
+          brandId: this.showOrgTree ? this.nodeData.id : this.userInfo.brandId
         },
+        vipLevelList: this.vipLevelList,
         confirmFn: this.getList
       });
     },
     editItem (item) {
-      this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
+      this.$refs.editModal.show({
+        type: 'edit',
+        item,
+        vipLevelList: this.vipLevelList,
+        confirmFn: this.getList
+      });
     },
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.companyName}`,
+        content: `是否删除 ${item.title}`,
         confirm: () => {
           this.delItem(item);
         }
@@ -206,11 +236,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  @import "~@/assets/styles/scss/base";
-  .flex-box {
-    height: 100%;
-    /deep/ .table-wrapper{
-      height: calc(100% - 40px);
-    }
+@import "~@/assets/styles/scss/base";
+.flex-box {
+  height: 100%;
+  /deep/ .table-wrapper{
+    height: calc(100% - 40px);
   }
+}
 </style>

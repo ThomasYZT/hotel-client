@@ -290,6 +290,7 @@ export const payTargetList = [
   }
 ];
 
+// 订单状态
 export const orderStatus = {
   // 0-下单未支付 1-已支付 2-已入住 3-已完成 4-退款中 5-退款完成
   unPay: 0,
@@ -300,6 +301,7 @@ export const orderStatus = {
   refunded: 5
 };
 
+// 订单状态列表
 export const orderStatusList = [
   {
     label: '下单未支付',
@@ -338,17 +340,20 @@ export const hourRoomChargeTypeList = [
   }
 ];
 
+// 工作状态
 export const workStatusMap = {
   workOn: '0',
   workOff: '1'
 };
 
+// 优惠券类型
 export const couponsType = {
   moneyOff: 0,
   discount: 1,
   exchange: 2
 };
 
+// 优惠券类型列表
 export const couponsTypeList = [
   {
     value: couponsType.moneyOff,
@@ -361,5 +366,40 @@ export const couponsTypeList = [
   {
     value: couponsType.exchange,
     label: '兑换券'
+  }
+];
+
+// 优惠券状态
+export const couponStatus = {
+  down: 0,
+  up: 1
+};
+
+export const couponStatusList = [
+  {
+    label: '下架',
+    value: couponStatus.down
+  },
+  {
+    label: '上架',
+    value: couponStatus.up
+  }
+];
+
+// 会员充值设置状态
+export const vipChargeConfigStatus = {
+  off: 0,
+  on: 1
+};
+
+// 会员充值设置状态列表
+export const vipChargeConfigStatusList = [
+  {
+    label: '停用',
+    value: vipChargeConfigStatus.off
+  },
+  {
+    label: '启用',
+    value: vipChargeConfigStatus.on
   }
 ];
