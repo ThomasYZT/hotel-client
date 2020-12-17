@@ -63,7 +63,7 @@
                 <FormItem class="block-form-item" label="送多少积分" prop="sendIntegral">
                   <i-input type="text" placeholder="送多少积分" v-model="formData.sendIntegral" />
                 </FormItem>
-                <div class="form-item-block">
+                <FormItem class="block-form-item">
                   <table-com :data="formData.priceList"
                              :has-page="false"
                              :config="tableConfig">
@@ -83,7 +83,7 @@
                       </el-table-column>
                     </template>
                   </table-com>
-                </div>
+                </FormItem>
                 <FormItem>
                   <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
                   <i-button @click="cancel">取 消</i-button>
@@ -125,7 +125,6 @@ export default {
       formData: {
         priceList: []
       },
-      vipLevelList: [],
       confirmFn: null,
       cancelFn: null,
       formRule: {
@@ -194,21 +193,25 @@ export default {
     };
   },
   methods: {
-    show ({ type = '', vipLevelList, item, confirmFn, cancelFn }) {
-      if (!type || !vipLevelList || (type === 'edit' && !item)) return;
+    show ({ type = '', item, confirmFn, cancelFn }) {
+      if (!type || (type === 'edit' && !item)) return;
       this.type = type;
       this.item = item;
-      this.getChargeCoupons(item.id).then(couponsList => {
-        this.vipLevelList = vipLevelList;
+      Promise.all([
+        this.getChargeCoupons(item.id),
+        this.getPriceList(type === 'add' ? item.brandId : item.id, type)
+      ]).then(([couponsList, priceList]) => {
         this.formData = defaultsDeep({}, {
           ...item,
+          couponsList,
+          priceList,
           giveMoney: this.$util.toYuan(item.giveMoney),
           openCardAmount: this.$util.toYuan(item.openCardAmount),
           consumptionMoney: this.$util.toYuan(item.consumptionMoney),
-          recommendMoney: this.$util.toYuan(item.recommendMoney),
-          couponsList
+          recommendMoney: this.$util.toYuan(item.recommendMoney)
         }, this.formData);
-        this.$util.valueToStr(this.formData, ['status']);
+
+        this.$util.valueToStr(this.formData);
         if (confirmFn) {
           this.confirmFn = confirmFn;
         }
@@ -245,6 +248,11 @@ export default {
           recommendMoney: this.$util.toCent(this.formData.recommendMoney),
           couponsList: this.formData.couponsList.map(item => ({
             couponsId: item.id
+          })),
+          priceList: this.formData.priceList.map(item => ({
+            ...item,
+            originalPrice: this.$util.toCent(item.originalPrice),
+            discountPrice: this.$util.toCent(item.discountPrice)
           }))
         },
         config: {
@@ -284,16 +292,33 @@ export default {
         return coupon.id !== item.id;
       });
     },
-    getChargeCoupons (vipTopUpId) {
+    getChargeCoupons (vipLevelId) {
       return new Promise((resolve, reject) => {
         if (this.type === 'add') return resolve([]);
         this.$ajax.get({
           apiKey: 'vipLevelGetCoupons',
           params: {
-            vipTopUpId
+            vipLevelId
           }
         }).then(res => {
           resolve(res);
+        }).catch(err => {
+          reject(err);
+        });
+      });
+    },
+    getPriceList (id, type) {
+      const params = type === 'add' ? { brandId: id } : { vipLevelId: id };
+      return new Promise((resolve, reject) => {
+        this.$ajax.get({
+          apiKey: type === 'add' ? 'vipLevelRoomTypeList' : 'vipLevelPriceList',
+          params
+        }).then(data => {
+          resolve(data.map(item => ({
+            ...item,
+            originalPrice: this.$util.toYuan(item.originalPrice),
+            discountPrice: this.$util.toYuan(item.discountPrice)
+          })));
         }).catch(err => {
           reject(err);
         });
@@ -320,6 +345,10 @@ export default {
         &:last-child {
           margin: 0;
         }
+      }
+
+      .table-item-block {
+        margin-left: 20px;
       }
     }
   }

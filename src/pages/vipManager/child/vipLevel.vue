@@ -6,6 +6,11 @@
           <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
         </div>
         <div class="data-box right-box">
+          <div class="operation-wrapper flex-box">
+            <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
+            </div>
+          </div>
           <table-com v-if="showTable"
                      :data="tableData"
                      :page-num.sync="pageNum"
@@ -81,7 +86,7 @@
 </template>
 
 <script>
-import editModal from '../components/couponEditModal';
+import editModal from '../components/vipLevelEditModal';
 import { vipLevelListTableConfig } from './tableConfig.js';
 import { userType } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
@@ -205,7 +210,7 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: 100%;
+    height: calc(100% - 40px);
   }
 }
 </style>

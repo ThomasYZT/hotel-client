@@ -21,7 +21,6 @@
                              :key="item.value"
                              :label="item.value">{{item.label}}</i-radio>
                   </i-radio-group>
-                  <i-input type="text" placeholder="商品状态" v-model="formData.state" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="优惠券" prop="couponsId">
                   <i-select v-model="formData.couponsId"
@@ -36,7 +35,7 @@
                 <FormItem class="block-form-item" label="兑换所需积分" prop="integralNumber">
                   <i-input type="text" placeholder="兑换所需积分" v-model="formData.integralNumber" />
                 </FormItem>
-                <FormItem class="inline-form-item" label="使用条件" prop="conditions">
+                <FormItem class="block-form-item" label="使用条件" prop="conditions">
                   <i-input type="text" placeholder="使用条件" v-model="formData.conditions" />
                 </FormItem>
                 <FormItem>
@@ -77,7 +76,7 @@ export default {
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
         state: [
-          { required: true, message: '请选择商品状态', trigger: 'blur' }
+          { required: true, type: 'number', message: '请选择商品状态', trigger: 'blur' }
         ],
         couponsId: [
           { required: true, type: 'number', message: '请选择优惠券', trigger: 'blur' }
@@ -92,8 +91,8 @@ export default {
     };
   },
   methods: {
-    show ({ type = '', vipLevelList, item, confirmFn, cancelFn }) {
-      if (!type || !vipLevelList || (type === 'edit' && !item)) return;
+    show ({ type = '', item, confirmFn, cancelFn }) {
+      if (!type || (type === 'edit' && !item)) return;
       this.type = type;
       this.getAllCouponList(item.brandId).then((couponList) => {
         this.couponList = couponList;
@@ -130,10 +129,7 @@ export default {
         params: {
           ...this.formData
         },
-        loading: false,
-        config: {
-          headers: { 'Content-Type': 'application/json;charset-UTF-8' }
-        }
+        loading: false
       }).then(() => {
         this.$message.success(this.type === 'add' ? '添加成功' : '编辑成功');
         this.confirmFn && this.confirmFn();
@@ -182,6 +178,7 @@ export default {
       @include flex_layout(row, space-between, flex-start);
 
       .form-item-block {
+        width: 100%;
         margin-right: 20px;
 
         &:last-child {

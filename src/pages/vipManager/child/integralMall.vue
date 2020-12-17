@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import editModal from '../components/vipChargeEditModal';
+import editModal from '../components/integralGoodEditModal';
 import { integralMallTableConfig } from './tableConfig.js';
 import { userType, integralGoodStatus, integralGoodStatusList } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
@@ -179,13 +179,13 @@ export default {
       });
     },
     toggleStatus (item) {
-      const operateName = item.status === integralGoodStatus.on ? '下架' : '上架';
+      const operateName = item.state === integralGoodStatus.up ? '下架' : '上架';
       this.$refs.confirmModal.show({
         title: '警告',
         content: `是否 ${operateName}`,
         confirm: () => {
           this.$ajax.get({
-            apiKey: item.status === integralGoodStatus.up ? 'integralMallDown' : 'integralMallUp',
+            apiKey: item.state === integralGoodStatus.up ? 'integralMallDown' : 'integralMallUp',
             params: {
               id: item.id
             }

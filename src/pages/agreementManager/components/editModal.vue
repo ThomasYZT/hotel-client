@@ -164,7 +164,7 @@ export default {
           this.formData.priceList = data.map(item => {
             return {
               ...item,
-              originalPrice: this.$util.toYuan(item.price),
+              originalPrice: item.price,
               discountPrice: this.$util.toYuan(item.price)
             };
           });
@@ -178,7 +178,6 @@ export default {
           this.formData.priceList = data.map(item => {
             return {
               ...item,
-              originalPrice: this.$util.toYuan(item.originalPrice),
               discountPrice: this.$util.toYuan(item.discountPrice)
             };
           });
@@ -240,7 +239,6 @@ export default {
         ...this.formData,
         priceList: this.formData.priceList.map(item => ({
           ...item,
-          originalPrice: this.$util.toCent(item.originalPrice),
           discountPrice: this.$util.toCent(item.discountPrice)
         }))
       };

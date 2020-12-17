@@ -6,5 +6,7 @@ export default {
   get: '/vipLevel/get',
   pageList: '/vipLevel/pageList',
   update: '/vipLevel/update',
-  getCoupons: 'vipLevelCoupons/getVipLevelCouponsList'
+  getCoupons: '/vipLevelCoupons/pageList',
+  priceList: '/vipLevelPrice/getVipLevelIdList',
+  roomTypeList: '/hotelInfo/getRoomTypeList'
 };
