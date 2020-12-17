@@ -27,7 +27,7 @@
                      :page-num.sync="pageNum"
                      :page-size.sync="pageSize"
                      :total-size="totalSize"
-                     :config="tableConfig"
+                     :config="vipListTableConfig"
                      :getList="getList">
             <template slot="col1"
                       slot-scope="{ item }">
@@ -77,7 +77,7 @@
 
 <script>
 import editModal from '../components/editModal';
-import { tableConfig } from './tableConfig.js';
+import { vipListTableConfig } from './tableConfig.js';
 import { userType, genderList } from '../../../assets/enums';
 import vipLevelDictionaryMixin from '../../../mixins/vipLevelDictionaryMixin';
 import { mapGetters } from 'vuex';
@@ -122,7 +122,7 @@ export default {
   data () {
     return {
       genderList,
-      tableConfig,
+      vipListTableConfig,
       tableData: [],
       pageNum: 1,
       pageSize: 10,

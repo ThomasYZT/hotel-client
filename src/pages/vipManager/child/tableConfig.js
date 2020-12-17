@@ -1,4 +1,4 @@
-export const tableConfig = [
+export const vipListTableConfig = [
   {
     prop: 'name',
     label: '姓名',
@@ -143,6 +143,111 @@ export const vipChargeTableConfig = [
   {
     prop: 'remark',
     label: '有效结束时间',
+    minWidth: '150px'
+  },
+  {
+    prop: 'operate',
+    label: '操作',
+    minWidth: '200px',
+    fixed: 'right'
+  }
+];
+
+export const vipLevelListTableConfig = [
+  {
+    prop: 'name',
+    label: '等级名称',
+    minWidth: '150px',
+    fixed: 'left'
+  },
+  {
+    prop: 'sortNo',
+    label: '序号',
+    minWidth: '150px'
+  },
+  {
+    prop: 'upgradeExperience',
+    label: '升级经验',
+    minWidth: '150px'
+  },
+  {
+    prop: 'giveMoney',
+    label: '赠送金额',
+    minWidth: '150px'
+  },
+  {
+    prop: 'openCardAmount',
+    label: '开卡金额',
+    minWidth: '150px'
+  },
+  {
+    prop: 'consumptionMoney',
+    label: '每消费多少钱',
+    minWidth: '130px'
+  },
+  {
+    prop: 'giveExperienceMax',
+    label: '赠送经验上限',
+    minWidth: '150px'
+  },
+  {
+    prop: 'giveIntegralMax',
+    label: '赠送积分上限',
+    minWidth: '150px'
+  },
+  {
+    prop: 'recommendExperience',
+    label: '推荐奖励经验',
+    minWidth: '150px'
+  },
+  {
+    prop: 'recommendIntegral',
+    label: '推荐奖励积分',
+    minWidth: '150px'
+  },
+  {
+    prop: 'recommendMoney',
+    label: '推荐奖励金额',
+    minWidth: '150px'
+  },
+  {
+    prop: 'sendExperience',
+    label: '送多少经验',
+    minWidth: '150px'
+  },
+  {
+    prop: 'sendIntegral',
+    label: '送多少积分',
+    minWidth: '150px'
+  },
+  {
+    prop: 'operate',
+    label: '操作',
+    minWidth: '200px',
+    fixed: 'right'
+  }
+];
+
+export const integralMallTableConfig = [
+  {
+    prop: 'title',
+    label: '标题',
+    fixed: 'left',
+    minWidth: '130px'
+  },
+  {
+    prop: 'state',
+    label: '商品状态',
+    minWidth: '150px'
+  },
+  {
+    prop: 'integralNumber',
+    label: '兑换所需积分',
+    minWidth: '150px'
+  },
+  {
+    prop: 'conditions',
+    label: '使用条件',
     minWidth: '150px'
   },
   {

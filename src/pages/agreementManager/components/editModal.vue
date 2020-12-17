@@ -27,15 +27,6 @@
                 <FormItem class="inline-form-item" label="联系电话" prop="phone">
                   <i-input type="text" placeholder="联系电话" v-model.trim="formData.phone" />
                 </FormItem>
-                <!--<FormItem label="签订时间" prop="signedTime">
-                  <i-date-picker v-model="formData.signedTime"
-                                 :editable="false"
-                                 transfer
-                                 type="datetime"
-                                 format="yyyy-MM-dd HH:mm"
-                                 placeholder="签订时间"></i-date-picker>
-
-                </FormItem>-->
                 <FormItem class="block-form-item" label="备注" prop="remark">
                   <i-input type="textarea" placeholder="备注" v-model.trim="formData.remark" />
                 </FormItem>
@@ -47,6 +38,17 @@
                 <table-com :data="formData.priceList"
                            :has-page="false"
                            :config="tableConfig">
+                  <template slot="col1"
+                            slot-scope="{ item }">
+                    <el-table-column :prop="item.prop"
+                                     :label="item.label"
+                                     :fixed="item.fixed"
+                                     :min-width="item.minWidth">
+                      <template slot-scope="{ row }">
+                        <span>{{$util.toYuan(row.originalPrice)}}</span>
+                      </template>
+                    </el-table-column>
+                  </template>
                   <template slot="col2"
                             slot-scope="{ item }">
                     <el-table-column :prop="item.prop"
@@ -162,8 +164,8 @@ export default {
           this.formData.priceList = data.map(item => {
             return {
               ...item,
-              originalPrice: String(item.price),
-              discountPrice: String(item.price)
+              originalPrice: this.$util.toYuan(item.price),
+              discountPrice: this.$util.toYuan(item.price)
             };
           });
           this.visible = true;
@@ -176,7 +178,8 @@ export default {
           this.formData.priceList = data.map(item => {
             return {
               ...item,
-              discountPrice: String(item.discountPrice)
+              originalPrice: this.$util.toYuan(item.originalPrice),
+              discountPrice: this.$util.toYuan(item.discountPrice)
             };
           });
           if (item.attachId) {
@@ -233,10 +236,18 @@ export default {
       });
     },
     submitForm () {
-      this.$util.removeProp(this.formData, ['signedTime', 'attachId']);
+      const formData = {
+        ...this.formData,
+        priceList: this.formData.priceList.map(item => ({
+          ...item,
+          originalPrice: this.$util.toCent(item.originalPrice),
+          discountPrice: this.$util.toCent(item.discountPrice)
+        }))
+      };
+      this.$util.removeProp(formData, ['signedTime', 'attachId']);
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'agreementAdd' : 'agreementUpdate',
-        params: this.formData,
+        params: formData,
         loading: false,
         config: {
           headers: { 'Content-Type': 'application/json;charset-UTF-8' }

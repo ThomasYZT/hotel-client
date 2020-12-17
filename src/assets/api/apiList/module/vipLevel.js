@@ -5,5 +5,6 @@ export default {
   delete: '/vipLevel/delete',
   get: '/vipLevel/get',
   pageList: '/vipLevel/pageList',
-  update: '/vipLevel/update'
+  update: '/vipLevel/update',
+  getCoupons: 'vipLevelCoupons/getVipLevelCouponsList'
 };

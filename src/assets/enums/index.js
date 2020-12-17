@@ -403,3 +403,20 @@ export const vipChargeConfigStatusList = [
     value: vipChargeConfigStatus.on
   }
 ];
+
+// 商城物品状态
+export const integralGoodStatus = {
+  down: 0,
+  up: 1
+};
+
+export const integralGoodStatusList = [
+  {
+    label: '下架',
+    value: integralGoodStatus.down
+  },
+  {
+    label: '上架',
+    value: integralGoodStatus.up
+  }
+];
