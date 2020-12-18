@@ -424,3 +424,184 @@ export const integralGoodStatusList = [
     value: integralGoodStatus.up
   }
 ];
+
+// 消费来源
+export const consumeSource = {
+  miniProgram: 0,
+  cashier: 1
+};
+
+export const consumeSourceList = [
+  {
+    value: consumeSource.miniProgram,
+    label: '小程序'
+  },
+  {
+    value: consumeSource.cashier,
+    label: '收银'
+  }
+];
+
+// 支付状态
+export const paymentStatus = {
+  unPay: 0,
+  paySuccess: 1,
+  payFail: 2,
+  toRefund: 3
+};
+
+export const paymentStatusList = [
+  {
+    value: paymentStatus.unPay,
+    label: '未支付'
+  },
+  {
+    value: paymentStatus.paySuccess,
+    label: '支付成功'
+  },
+  {
+    value: paymentStatus.payFail,
+    label: '支付失败'
+  },
+  {
+    value: paymentStatus.toRefund,
+    label: '转入退款'
+  }
+];
+
+// 经验记录类型
+export const recordType = {
+  out: 0,
+  in: 1
+};
+
+export const recordTypeList = [
+  {
+    value: recordType.out,
+    label: '支出'
+  },
+  {
+    value: recordType.in,
+    label: '收入'
+  }
+];
+
+// 经验来源
+export const expSource = {
+  charge: 0,
+  consume: 1
+};
+
+export const expSourceList = [
+  {
+    value: expSource.charge,
+    label: '充值赠送'
+  },
+  {
+    value: expSource.consume,
+    label: '消费赠送'
+  }
+];
+
+// 积分来源
+export const integralSource = {
+  charge: 0,
+  deduct: 1,
+  consume: 2
+};
+
+export const integralSourceList = [
+  {
+    value: integralSource.charge,
+    label: '充值赠送'
+  },
+  {
+    value: integralSource.deduct,
+    label: '积分抵扣'
+  },
+  {
+    value: integralSource.consume,
+    label: '消费赠送'
+  }
+];
+
+// 钱包来源
+export const walletSource = {
+  refund: 0,
+  charge: 1,
+  consume: 2
+};
+
+export const walletSourceList = [
+  {
+    value: walletSource.refund,
+    label: '退款'
+  },
+  {
+    value: walletSource.charge,
+    label: '会员充值'
+  },
+  {
+    value: walletSource.consume,
+    label: '消费'
+  }
+];
+
+export const couponExpireStatus = {
+  unuse: 0,
+  used: 1,
+  expired: 2
+};
+
+export const couponExpireStatusList = [
+  {
+    value: couponExpireStatus.unuse,
+    label: '未使用'
+  },
+  {
+    value: couponExpireStatus.used,
+    label: '已使用'
+  },
+  {
+    value: couponExpireStatus.expired,
+    label: '已过期'
+  }
+];
+
+export const vipActiveStatus = {
+  unActive: 0,
+  activited: 1
+};
+
+export const vipActiveStatusList = [
+  {
+    value: vipActiveStatus.unActive,
+    label: '未激活'
+  },
+  {
+    value: vipActiveStatus.activited,
+    label: '已激活'
+  }
+];
+
+// 会员注册状态
+export const registerStatus = {
+  unRegister: 0,
+  registered: 1,
+  withdraw: 2
+};
+
+export const registerStatusList = [
+  {
+    value: registerStatus.unRegister,
+    label: '未注册'
+  },
+  {
+    value: registerStatus.registered,
+    label: '已注册'
+  },
+  {
+    value: registerStatus.withdraw,
+    label: '注销'
+  }
+];

@@ -14,7 +14,7 @@ export default {
       vipList: {
         path: '/vipManager/vipList',
         name: 'vipList',
-        component: () => import('../../pages/vipManager/child/vipList.vue'),
+        component: () => import('../../pages/vipManager/child/vipInfo.vue'),
         meta: {
           menuName: '会员列表',
           iconClass: 'icon-huiyuan',

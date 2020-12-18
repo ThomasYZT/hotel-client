@@ -11,13 +11,18 @@ export const vipListTableConfig = [
     minWidth: '100px'
   },
   {
-    prop: 'phone',
-    label: '手机号',
+    prop: 'birthday',
+    label: '出生日期',
+    minWidth: '150px'
+  },
+  {
+    prop: 'idCard',
+    label: '身份证信息',
     minWidth: '130px'
   },
   {
-    prop: 'level',
-    label: '会员等级',
+    prop: 'phone',
+    label: '手机号',
     minWidth: '130px'
   },
   {
@@ -31,8 +36,28 @@ export const vipListTableConfig = [
     minWidth: '150px'
   },
   {
-    prop: 'birthday',
-    label: '出生日期',
+    prop: 'vipLevelName',
+    label: '会员等级',
+    minWidth: '130px'
+  },
+  {
+    prop: 'registerHotelName',
+    label: '注册酒店名称',
+    minWidth: '150px'
+  },
+  {
+    prop: 'actHotelName',
+    label: '激活酒店名称',
+    minWidth: '150px'
+  },
+  {
+    prop: 'registerTime',
+    label: '注册时间',
+    minWidth: '150px'
+  },
+  {
+    prop: 'operate',
+    label: '操作',
     minWidth: '150px',
     fixed: 'right'
   }

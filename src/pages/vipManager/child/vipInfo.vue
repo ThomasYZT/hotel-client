@@ -7,17 +7,30 @@
         </div>
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
-            <div class="tool-wrapper left-box">
-
-            </div>
             <div class="filter-block right-box">
               <div class="filter-item">
                 <div class="filter-label">姓名：</div>
                 <i-input v-model="filterParams.name" placeholder="姓名模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
               <div class="filter-item">
+                <div class="filter-label">身份证号：</div>
+                <i-input v-model="filterParams.idCard" placeholder="身份证号查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
+              </div>
+              <div class="filter-item">
                 <div class="filter-label">手机号码：</div>
                 <i-input v-model="filterParams.phone" placeholder="手机号码模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
+              </div>
+              <div class="filter-item">
+                <div class="filter-label">会员等级：</div>
+                <i-select v-model="filterParams.vipLevelId"
+                          transfer
+                          placeholder="请选择">
+                  <i-option v-for="item in vipLevelList"
+                            :value="item.id"
+                            :key="item.id">
+                    {{ item.name }}
+                  </i-option>
+                </i-select>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
@@ -29,30 +42,7 @@
                      :total-size="totalSize"
                      :config="vipListTableConfig"
                      :getList="getList">
-            <template slot="col1"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
-                  <span>{{genderList.find(item => item.value === row.sex).label}}</span>
-                </template>
-              </el-table-column>
-            </template>
-            <template slot="col3"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
-                  <span>{{vipLevelList.find(item => item.id === row.level) ?
-                    vipLevelList.find(item => item.id === row.level).dictName : ''}}</span>
-                </template>
-              </el-table-column>
-            </template>
-            <!--<template slot="col9"
+            <template slot="col11"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -60,31 +50,27 @@
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
                   <div class="operate-block">
-                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                    <i-button type="primary" class="table-btn" size="small" @click="showDetail(row)">查 询</i-button>
                   </div>
                 </template>
               </el-table-column>
-            </template>-->
+            </template>
           </table-com>
         </div>
       </div>
     </div>
-    <editModal ref="editModal"></editModal>
-    <confirmModal ref="confirmModal"></confirmModal>
+    <vipInfoModal ref="vipInfoModal"></vipInfoModal>
   </div>
 </template>
 
 <script>
-import editModal from '../components/editModal';
+import vipInfoModal from '../components/vipInfoModal.vue';
 import { vipListTableConfig } from './tableConfig.js';
 import { userType, genderList } from '../../../assets/enums';
-import vipLevelDictionaryMixin from '../../../mixins/vipLevelDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
-  mixins: [vipLevelDictionaryMixin],
   components: {
-    editModal
+    vipInfoModal
   },
   computed: {
     ...mapGetters([
@@ -94,12 +80,9 @@ export default {
       let level;
       switch (this.userInfo.type) {
         case userType.admin:
-          level = 3;
-          break;
-        case userType.agent:
           level = 2;
           break;
-        case userType.brand:
+        case userType.agent:
           level = 1;
           break;
       }
@@ -110,13 +93,10 @@ export default {
       };
     },
     showOrgTree () {
-      return [userType.admin, userType.agent, userType.brand].includes(this.userInfo.type);
+      return [userType.admin, userType.agent].includes(this.userInfo.type);
     },
     showTable () {
       return !this.showOrgTree || Object.keys(this.nodeData).length > 0;
-    },
-    showAddBtn () {
-      return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
     }
   },
   data () {
@@ -124,12 +104,15 @@ export default {
       genderList,
       vipListTableConfig,
       tableData: [],
+      vipLevelList: [],
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
       filterParams: {
         name: '',
-        phone: ''
+        phone: '',
+        idCard: '',
+        vipLevelId: ''
       },
       nodeData: {}
     };
@@ -137,16 +120,16 @@ export default {
   methods: {
     onNodeClick ({ data, isDefault }) {
       this.nodeData = data;
-      this.getVipList(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId, false);
+      this.getVipLevelByBrandId(this.showOrgTree ? this.nodeData.id : this.userInfo.brandId, false);
       if (!isDefault) {
         this.getList();
       }
     },
     getList () {
       this.$ajax.post({
-        apiKey: 'vipPageList',
+        apiKey: 'vipInfoPageList',
         params: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+          brandId: this.showOrgTree ? this.nodeData.id : this.userInfo.brandId,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams
@@ -158,44 +141,23 @@ export default {
         this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
-    // addItem () {
-    //   this.$refs.editModal.show({
-    //     type: 'add',
-    //     item: {
-    //       hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.id
-    //     },
-    //     confirmFn: this.getList
-    //   });
-    // },
-    editItem (item) {
-      this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
+    showDetail (item) {
+      this.$refs.vipInfoModal.show({ item });
     },
-    delClick (item) {
-      this.$refs.confirmModal.show({
-        title: '警告',
-        content: `是否删除 ${item.name}`,
-        confirm: () => {
-          this.delItem(item);
-        }
-      });
-    },
-    delItem (item) {
+    getVipLevelByBrandId (brandId) {
       this.$ajax.get({
-        apiKey: 'vipDelete',
+        apiKey: 'vipLevelGetByBrandId',
         params: {
-          id: item.id
+          brandId
         }
-      }).then(() => {
-        this.getList();
-        this.$message.success('删除成功');
-      }).catch(err => {
-        this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
+      }).then(res => {
+        this.vipLevelList = res || [];
       });
     }
   },
   mounted () {
     if (!this.showOrgTree) {
-      this.getVipList(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId, false);
+      this.getVipLevelByBrandId(this.userInfo.brandId, false);
       this.getList();
     }
   }

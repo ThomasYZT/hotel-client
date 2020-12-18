@@ -8,5 +8,6 @@ export default {
   update: '/vipLevel/update',
   getCoupons: '/vipLevelCoupons/pageList',
   priceList: '/vipLevelPrice/getVipLevelIdList',
-  roomTypeList: '/hotelInfo/getRoomTypeList'
+  roomTypeList: '/hotelInfo/getRoomTypeList',
+  getByBrandId: '/vipLevel/getByBrandId'
 };
