@@ -268,6 +268,10 @@ export const payTypeList = [
   {
     label: '扫码枪',
     value: '3'
+  },
+  {
+    label: '刷卡',
+    value: '4'
   }
 ];
 
