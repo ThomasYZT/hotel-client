@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-/deep/ .table-wrapper {
-  height: 500px;
+.table-wrapper {
+  height: 400px;
 }
 </style>

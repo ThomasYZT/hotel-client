@@ -48,12 +48,12 @@ export const vipListTableConfig = [
   {
     prop: 'actHotelName',
     label: '激活酒店名称',
-    minWidth: '150px'
+    minWidth: '170px'
   },
   {
     prop: 'registerTime',
     label: '注册时间',
-    minWidth: '150px'
+    minWidth: '170px'
   },
   {
     prop: 'operate',
