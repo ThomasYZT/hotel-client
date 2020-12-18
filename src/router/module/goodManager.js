@@ -58,6 +58,30 @@ export default {
             }
           }
         }
+      },
+      goodManager: {
+        path: '/goodsOutStorageManager',
+        component: () => import('../../pages/goodsOutStorageManager/index.vue'),
+        redirect: () => { return { name: 'goodsOutStorageList' }; },
+        meta: {
+          menuName: '出库查询',
+          iconClass: 'icon-shangpin',
+          activePath: `${topName}.goodsOutStorageManager`,
+          isMenu: true
+        },
+        children: {
+          // 菜单列表
+          menuList: {
+            path: '/goodsOutStorageManager/list',
+            name: 'goodsOutStorageList',
+            component: () => import('../../pages/goodsOutStorageManager/child/goodsOutStorageList.vue'),
+            meta: {
+              menuName: '出库列表',
+              activePath: `${topName}.goodsOutStorageManager`,
+              isMenu: false
+            }
+          }
+        }
       }
     }
   }

@@ -2,22 +2,13 @@
   <div class="page-container">
     <div class="page-content">
       <div class="flex-box">
-        <div class="left-box">
-          <org-tree v-if="showOrgTree" :params="orgParams" @nodeClick="onNodeClick"></org-tree>
-        </div>
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
             <div class="tool-wrapper left-box">
               <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
             </div>
-            <div class="tool-wrapper left-box" style="margin-left: 10px;">
-              <i-button v-if="showAddBtn" class="normal-width-btn" type="primary" @click="warnPerson">预警接收人</i-button>
-            </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-                <div class="filter-label">商品代码：</div>
-                <i-input v-model="filterParams.code" placeholder="商品代码模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
-              </div>
               <div class="filter-item">
                 <div class="filter-label">商品名称：</div>
                 <i-input v-model="filterParams.name" placeholder="商品名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
@@ -39,12 +30,12 @@
                                :fixed="item.fixed"
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
-                  <span v-if="row.status === 1">上架</span>
-                  <span v-else>下架</span>
+                  <span v-if="row.status === 0">置顶</span>
+                  <span v-else>不置顶</span>
                 </template>
               </el-table-column>
             </template>
-            <template slot="col8"
+            <template slot="col3"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -54,12 +45,11 @@
                   <div class="operate-block">
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
-                    <i-button type="warning" class="table-btn" size="small" @click="withdrawClick(row)">出 库</i-button>
-                    <i-switch size="large" :true-value="1" :false-value="0" v-model="row.status"
+                    <!-- <i-switch size="large" :true-value="1" :false-value="0" v-model="row.status"
                               @on-change="statusChange($event, row)">
-                      <span slot="open">下架</span>
-                      <span slot="close">上架</span>
-                    </i-switch>
+                      <span slot="open">置顶</span>
+                      <span slot="close">不置顶</span>
+                    </i-switch> -->
                   </div>
                 </template>
               </el-table-column>
@@ -69,57 +59,18 @@
       </div>
     </div>
     <editModal ref="editModal"></editModal>
-    <withdrawModal ref="withdrawModal"></withdrawModal>
     <confirmModal ref="confirmModal"></confirmModal>
-    <warnPersonModal ref="warnPersonModal"></warnPersonModal>
   </div>
 </template>
 
 <script>
 import editModal from '../components/editModal';
-import withdrawModal from '../components/withdrawModal';
-import warnPersonModal from '../components/warnPersonModal';
 import { tableConfig } from './tableConfig.js';
 import { userType } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
   components: {
-    editModal,
-    withdrawModal,
-    warnPersonModal
-  },
-  computed: {
-    ...mapGetters([
-      'userInfo'
-    ]),
-    orgParams () {
-      let level;
-      switch (this.userInfo.type) {
-        case userType.admin:
-          level = 3;
-          break;
-        case userType.agent:
-          level = 2;
-          break;
-        case userType.brand:
-          level = 1;
-          break;
-      }
-      return {
-        typeId: this.userInfo.id,
-        type: this.userInfo.type,
-        level
-      };
-    },
-    showOrgTree () {
-      return [userType.admin, userType.agent, userType.brand].includes(this.userInfo.type);
-    },
-    showTable () {
-      return !this.showOrgTree || Object.keys(this.nodeData).length > 0;
-    },
-    showAddBtn () {
-      return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
-    }
+    editModal
   },
   data () {
     return {
@@ -129,8 +80,7 @@ export default {
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-        name: '',
-        code: ''
+        name: ''
       },
       nodeData: {}
     };
@@ -158,69 +108,24 @@ export default {
         this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
-    statusChange (val, item) {
-      if (val === 0) {
-        this.$ajax.get({
-          apiKey: 'goodOutShelvesGoods',
-          params: {
-            id: item.id
-          }
-        }).then(() => {
-          this.$message.success('下架成功');
-        }).catch(err => {
-          this.$message.success(`下架失败${err.msg ? ': ' + err.msg : ''}`);
-        });
-      } else {
-        this.$ajax.get({
-          apiKey: 'goodShelvesGoods',
-          params: {
-            id: item.id
-          }
-        }).then(() => {
-          this.$message.success('上架成功');
-        }).catch(err => {
-          this.$message.success(`上架失败${err.msg ? ': ' + err.msg : ''}`);
-        });
-      }
-    },
-    warnPerson () {
-      this.$refs.warnPersonModal.show({
-        item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
-        }
-      });
-    },
     addItem () {
       this.$refs.editModal.show({
         type: 'add',
-        item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
-        },
+        item: {},
         confirmFn: this.getList
       });
     },
     editItem (item) {
       this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
     },
-    withdrawClick (item) {
-      this.$refs.withdrawModal.show({ item: {
-          id: item.id,
-          hotelId: item.hotelId,
-          name: item.name
-        }, confirmFn: this.getList });
-    },
     delClick (item) {
-      if (item.status === 1) {
-        this.$message.warning('必须先下架该商品，才能删除');
-      } else {
         this.$refs.confirmModal.show({
-          title: '警告',
-          content: `是否删除 ${item.name}`,
-          confirm: () => {
+            title: '警告',
+            content: `是否删除 ${item.name}`,
+            confirm: () => {
             this.delItem(item);
-          }
+            }
         });
-      }
     },
     delItem (item) {
       this.$ajax.get({

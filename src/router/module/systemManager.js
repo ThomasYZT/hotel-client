@@ -118,6 +118,54 @@ export default {
             }
           }
         }
+      },
+      menuManager: {
+        path: '/labelManager',
+        component: () => import('../../pages/labelManager/index.vue'),
+        redirect: () => { return { name: 'labelList' }; },
+        meta: {
+          menuName: '标签管理',
+          iconClass: 'icon-caidan',
+          activePath: `${topName}`,
+          isMenu: true
+        },
+        children: {
+          // 菜单列表
+          menuList: {
+            path: '/labelManager/list',
+            name: 'labelList',
+            component: () => import('../../pages/labelManager/child/labelList.vue'),
+            meta: {
+              menuName: '标签列表',
+              activePath: `${topName}`,
+              isMenu: false
+            }
+          }
+        }
+      },
+      menuManager: {
+        path: '/sysLog',
+        component: () => import('../../pages/sysLog/index.vue'),
+        redirect: () => { return { name: 'logList' }; },
+        meta: {
+          menuName: '系统日志查询',
+          iconClass: 'icon-caidan',
+          activePath: `${topName}`,
+          isMenu: true
+        },
+        children: {
+          // 菜单列表
+          menuList: {
+            path: '/sysLog/list',
+            name: 'logList',
+            component: () => import('../../pages/sysLog/child/logList.vue'),
+            meta: {
+              menuName: '系统日志查询',
+              activePath: `${topName}`,
+              isMenu: false
+            }
+          }
+        }
       }
     }
   }
