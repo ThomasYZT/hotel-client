@@ -1,16 +1,10 @@
 <template>
-  <div class="modal-wrapper">
-    <el-dialog :title="type === 'add' ? '添加酒店信息' : '编辑酒店信息'"
-               :visible.sync="visible"
-               :close-on-click-modal="false"
-               width="50%"
-               custom-class="form-dialog"
-               @close="cancel"
-               center>
+  <div class="board-wrapper">
+    <page-board v-model="visible"
+                @close="cancel">
       <div class="dialog-wrapper">
         <div class="form-wrapper">
           <i-form ref="Form"
-                  inline
                   :disabled="isLoading"
                   :model="formData"
                   :rules="formRule"
@@ -42,34 +36,33 @@
                 <FormItem class="block-form-item" label="图片" prop="attachList">
                   <img-uploader v-model="formData.attachList"></img-uploader>
                 </FormItem>
-                <!--<FormItem class="inline-form-item" label="X坐标" prop="baiduX">
+                <FormItem class="inline-form-item" label="X坐标" prop="baiduX">
                   <i-input type="text" placeholder="X坐标" v-model.trim="formData.baiduX" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="Y坐标" prop="baiduY">
                   <i-input type="text" placeholder="Y坐标" v-model.trim="formData.baiduY" />
-                </FormItem>-->
-                <!--<FormItem class="no-label block-form-item">
+                </FormItem>
+                <FormItem class="block-form-item" label="位置搜索">
                   <div class="map-wrapper">
-                    <place-search></place-search>
+                    <place-search @change="positionChange"></place-search>
                   </div>
-                  <i-button @click="showMapModal">获取坐标</i-button>
-                </FormItem>-->
+                </FormItem>
                 <FormItem class="block-form-item" label="酒店地址" prop="address">
                   <i-input type="text" placeholder="酒店地址" v-model.trim="formData.address" />
                 </FormItem>
                 <FormItem class="block-form-item" label="酒店简介" prop="introduce">
                   <i-input type="textarea" placeholder="酒店简介" v-model.trim="formData.introduce" />
                 </FormItem>
+                <FormItem>
+                  <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
+                  <i-button @click="cancel">取 消</i-button>
+                </FormItem>
               </div>
             </div>
           </i-form>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
-        <i-button @click="cancel">取 消</i-button>
-      </span>
-    </el-dialog>
+    </page-board>
   </div>
 </template>
 
@@ -212,8 +205,9 @@ export default {
         this.$message.error(`${this.type === 'add' ? '添加' : '编辑'}失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
-    showMapModal () {
-
+    positionChange ({ x, y }) {
+      this.formData.baiduX = x;
+      this.formData.baiduY = y;
     },
     reset () {
       this.$refs.Form.resetFields();
@@ -243,24 +237,15 @@ export default {
 
 <style scoped lang="scss">
 @import "~@/assets/styles/scss/base";
-/deep/ .el-dialog__body {
-  padding: 25px 0 30px;
-}
 .dialog-wrapper {
-  @include flex_layout(row, center, flex-start);
-  padding: 0 25px 0;
+  @include flex_layout(row, flex-start, flex-start);
   .form-wrapper {
-    width: 100%;
+    width: 60%;
 
     .form-item-wrapper {
+      @include flex_layout(row, space-between, flex-start);
 
       .form-item-block {
-        margin-right: 20px;
-        max-height: 430px;
-        overflow-y: auto;
-        font-size: 13px;
-        color: #333333;
-
         .form-item-block-title {
           font-size: 16px;
           margin-bottom: 10px;
@@ -276,11 +261,6 @@ export default {
   .map-wrapper {
     height: 300px;
     width: 80%;
-  }
-}
-.no-label {
-  /deep/.ivu-form-item-content {
-    margin-left: 0 !important;
   }
 }
 
