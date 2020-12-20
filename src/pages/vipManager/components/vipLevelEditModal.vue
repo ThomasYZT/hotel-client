@@ -67,7 +67,7 @@
                   <table-com :data="formData.priceList"
                              :has-page="false"
                              :config="tableConfig">
-                    <template slot="col2"
+                    <template slot="col3"
                               slot-scope="{ item }">
                       <el-table-column :prop="item.prop"
                                        :label="item.label"
@@ -177,6 +177,10 @@ export default {
         { validator: validateMoney, trigger: 'blur' }
       ],
       tableConfig: [
+        {
+          prop: 'hotelName',
+          label: '酒店名称'
+        },
         {
           prop: 'typeName',
           label: '房间类型名称'

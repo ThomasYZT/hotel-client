@@ -7,6 +7,10 @@
           <div class="info-header">会员详情</div>
           <div class="info-field-box">
             <div class="info-field">
+              <div class="field-label">会员ID:</div>
+              <div class="field-info">{{detail.vipUserId || '-'}}</div>
+            </div>
+            <div class="info-field">
               <div class="field-label">姓名:</div>
               <div class="field-info">{{detail.name || '-'}}</div>
             </div>

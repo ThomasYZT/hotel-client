@@ -7,7 +7,7 @@
         </div>
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
-            <div class="filter-block right-box">
+            <div class="filter-block left-box">
               <div class="filter-item">
                 <div class="filter-label">姓名：</div>
                 <i-input v-model="filterParams.name" placeholder="姓名模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
@@ -32,6 +32,8 @@
                   </i-option>
                 </i-select>
               </div>
+            </div>
+            <div class="right-box">
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
           </div>
@@ -50,7 +52,7 @@
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
                   <div class="operate-block">
-                    <i-button type="primary" class="table-btn" size="small" @click="showDetail(row)">查 询</i-button>
+                    <i-button type="primary" class="table-btn" size="small" @click="showDetail(row)">查 看</i-button>
                   </div>
                 </template>
               </el-table-column>
@@ -151,7 +153,10 @@ export default {
           brandId
         }
       }).then(res => {
-        this.vipLevelList = res || [];
+        this.vipLevelList = [{
+          id: 0,
+          name: '全部'
+        }].concat(res || []);
       });
     }
   },
@@ -169,7 +174,26 @@ export default {
 .flex-box {
   height: 100%;
   /deep/ .table-wrapper{
-    height: calc(100% - 40px);
+    height: calc(100% - 80px);
   }
 }
+
+.operation-wrapper {
+  height: 80px !important;
+
+  .left-box {
+    @include flex_set(0, 1, auto);
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    .filter-item {
+      width: 45%;
+    }
+  }
+  .right-box {
+    @include flex_set(1, 0, auto);
+    width: 70px;
+  }
+}
+
 </style>

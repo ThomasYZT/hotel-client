@@ -149,7 +149,7 @@ export default {
   data () {
     return {
       couponStatusList,
-      couponsTypeList,
+      couponsTypeList: [{ value: '', label: '全部' }].concat(couponsTypeList),
       couponListTableConfig,
       tableData: [],
       pageNum: 1,
@@ -215,7 +215,7 @@ export default {
     },
     delItem (item) {
       this.$ajax.get({
-        apiKey: 'couponsDelete',
+        apiKey: 'couponDelete',
         params: {
           id: item.id
         }

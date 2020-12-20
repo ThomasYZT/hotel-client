@@ -15,14 +15,8 @@
                 <FormItem class="block-form-item" label="标题" prop="title">
                   <i-input type="text" placeholder="标题" v-model="formData.title" />
                 </FormItem>
-                <FormItem class="block-form-item" label="兑换内容" prop="exchangeContent">
-                  <i-input type="text" placeholder="兑换内容" v-model="formData.exchangeContent" />
-                </FormItem>
                 <FormItem class="block-form-item" label="图片" prop="attachList">
                   <img-uploader v-model="formData.attachList"></img-uploader>
-                </FormItem>
-                <FormItem class="block-form-item" label="品牌名称" prop="brandName">
-                  <i-input type="text" placeholder="品牌名称" v-model="formData.brandName" />
                 </FormItem>
                 <FormItem class="block-form-item" label="状态" prop="state">
                   <i-radio-group v-model="formData.state">
@@ -31,11 +25,14 @@
                              :label="item.value">{{item.label}}</i-radio>
                   </i-radio-group>
                 </FormItem>
+                <FormItem class="block-form-item" label="品牌名称" prop="brandName">
+                  <i-input type="text" placeholder="品牌名称" v-model="formData.brandName" />
+                </FormItem>
                 <FormItem class="inline-form-item" label="卡券颜色" prop="cardColor">
                   <i-input type="text" placeholder="卡券颜色" v-model="formData.cardColor" />
                 </FormItem>
-                <FormItem class="inline-form-item" label="优惠金额(元)" prop="subtractAmount">
-                  <i-input type="text" placeholder="优惠金额(元)" v-model="formData.subtractAmount" />
+                <FormItem class="inline-form-item" label="单人领券数量上限" prop="limitNumber">
+                  <i-input type="text" placeholder="单人领券数量上限" v-model="formData.limitNumber" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="会员等级" prop="levelId">
                   <i-select v-model="formData.levelId"
@@ -90,12 +87,24 @@
                     </i-option>
                   </i-select>
                 </FormItem>
-                <FormItem class="inline-form-item" label="单人领券数量上限" prop="limitNumber">
-                  <i-input type="text" placeholder="单人领券数量上限" v-model="formData.limitNumber" />
-                </FormItem>
-                <FormItem class="inline-form-item" label="最低消费" prop="fullAmount">
-                  <i-input type="text" placeholder="最低消费" v-model="formData.fullAmount" />
-                </FormItem>
+                <template v-if="formData.purpose === couponsType.moneyOff">
+                  <FormItem class="inline-form-item" label="优惠金额(元)" prop="subtractAmount">
+                    <i-input type="text" placeholder="优惠金额(元)" v-model="formData.subtractAmount" />
+                  </FormItem>
+                  <FormItem class="inline-form-item" label="最低消费" prop="fullAmount">
+                    <i-input type="text" placeholder="最低消费" v-model="formData.fullAmount" />
+                  </FormItem>
+                </template>
+                <template v-else-if="formData.purpose === couponsType.discount">
+                  <FormItem class="inline-form-item" label="折扣" prop="discount">
+                    <i-input type="text" placeholder="折扣" v-model="formData.discount" />
+                  </FormItem>
+                </template>
+                <template v-else-if="formData.purpose === couponsType.exchange">
+                  <FormItem class="block-form-item" label="兑换内容" prop="exchangeContent">
+                    <i-input type="textarea" placeholder="兑换内容" v-model="formData.exchangeContent" />
+                  </FormItem>
+                </template>
                 <FormItem>
                   <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
                   <i-button @click="cancel">取 消</i-button>
@@ -110,7 +119,7 @@
 </template>
 
 <script>
-import { couponsTypeList, couponStatusList } from '../../../assets/enums';
+import { couponsType, couponsTypeList, couponStatusList } from '../../../assets/enums';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { mapGetters, mapActions } from 'vuex';
 export default {
@@ -129,12 +138,14 @@ export default {
       });
     };
     return {
+      couponsType,
       couponStatusList,
       couponsTypeList,
       visible: false,
       isLoading: false,
       type: '',
       formData: {
+        purpose: 0,
         attachList: []
       },
       vipLevelList: [],
@@ -182,6 +193,9 @@ export default {
         fullAmount: [
           { required: true, message: '请输入最低消费', trigger: 'blur' },
           { validator: validateMoney, trigger: 'blur' }
+        ],
+        discount: [
+          { required: true, message: '请输入折扣', trigger: 'blur' }
         ]
       }
     };
@@ -269,6 +283,7 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
+        purpose: 0,
         attachList: []
       };
       this.confirmFn = null;

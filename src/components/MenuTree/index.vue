@@ -8,7 +8,7 @@
       <div class="trigger-tool"
            :class="{ 'is-rollup': !expand }"
            @click="menuTrigger">
-        <div v-if="expand" class="title">uu智慧酒店</div>
+        <div v-if="expand" class="title">松鼠智慧酒店</div>
         <div class="trigger-icon"><i class="iconfont" :class="expand ? 'icon-daohangshouqi-' : 'icon-daohangzhankai-'"></i></div>
       </div>
       <template v-for="(item) in treeData">

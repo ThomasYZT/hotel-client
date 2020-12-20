@@ -6,7 +6,7 @@
     <template slot="content">
       <div class="page-content">
         <div class="title-bar">
-          <div class="title">UU智慧酒店管理系统</div>
+          <div class="title">松鼠智慧酒店</div>
         </div>
         <div class="auth-box">
           <div class="tab-wrapper">
