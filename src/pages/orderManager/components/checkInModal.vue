@@ -354,7 +354,7 @@ export default {
     };
   },
   methods: {
-    show ({ item, confirmFn, cancelFn }) {
+    show ({ item, phone, confirmFn, cancelFn }) {
       if (!item) return;
       this.item = { ...item, userId: 0 };
       if (confirmFn) {
@@ -366,6 +366,10 @@ export default {
       }
       this.getGoodsList(item.hotelId).then(data => {
         this.goodsList = data;
+        if (phone) {
+          this.queryFromData.mobile = phone;
+          this.getByMobile();
+        }
         this.visible = true;
       }).catch(err => {
         this.reset();

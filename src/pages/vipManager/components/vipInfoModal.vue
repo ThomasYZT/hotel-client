@@ -5,7 +5,7 @@
       <div class="dialog-wrapper">
         <div class="info-wrapper">
           <div class="info-header">会员详情</div>
-          <div class="info-field-box">
+          <div class="info-content">
             <div class="info-field">
               <div class="field-label">会员ID:</div>
               <div class="field-info">{{detail.vipUserId || '-'}}</div>
@@ -170,7 +170,7 @@ export default {
       font-size: 18px;
       font-weight: bold;
     }
-    .info-field-box {
+    .info-content {
       @include flex_layout(row, center, flex-start);
       flex-wrap: wrap;
       .info-field {

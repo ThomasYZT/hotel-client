@@ -605,3 +605,20 @@ export const registerStatusList = [
     label: '注销'
   }
 ];
+
+// 消费时间类型
+export const consumeTimeType = {
+  before: 1,
+  after: 2
+};
+
+export const consumeTimeTypeList = [
+  {
+    value: consumeTimeType.before,
+    label: '入住前'
+  },
+  {
+    value: consumeTimeType.before,
+    label: '入住后'
+  }
+];

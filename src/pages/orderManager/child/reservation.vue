@@ -89,10 +89,11 @@
     </div>
     <confirmModal ref="confirmModal"></confirmModal>
     <addToolModal ref="addToolModal"></addToolModal>
-    <ordainModal ref="ordainModal"></ordainModal>
+    <ordainModal ref="ordainModal" @checkin="checkin"></ordainModal>
     <checkInModal ref="checkInModal"></checkInModal>
     <checkoutModal ref="checkoutModal"></checkoutModal>
     <changeStatusModal ref="changeStatusModal"></changeStatusModal>
+    <addConsumeModal ref="addConsumeModal"></addConsumeModal>
   </div>
 </template>
 
@@ -103,6 +104,7 @@ import ordainModal from '../components/ordainModal';
 import checkInModal from '../components/checkInModal';
 import checkoutModal from '../components/checkoutModal';
 import changeStatusModal from '../components/changeStatusModal';
+import addConsumeModal from '../components/addConsumeModal';
 import floorDictionaryMixin from '../../../mixins/floorDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
@@ -112,7 +114,8 @@ export default {
     ordainModal,
     checkInModal,
     checkoutModal,
-    changeStatusModal
+    changeStatusModal,
+    addConsumeModal
   },
   computed: {
     ...mapGetters([
@@ -278,6 +281,9 @@ export default {
             }
           });
           break;
+        case functionType.consume:
+          this.addConsume();
+          break;
         case functionType.addTool:
           this.$refs.addToolModal.show({
             funcList: this.functionList,
@@ -305,15 +311,32 @@ export default {
         }
       });
     },
-    checkin () {
+    checkin (phone) {
       if (Object.keys(this.activeRoom).length > 0) {
         return this.reservation();
       }
       this.$refs.checkInModal.show({
         item: {
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+          hotelUserId: this.userInfo.id,
+          phone
+        },
+        confirmFn: () => {
+          this.getList();
+        }
+      });
+    },
+    addConsume () {
+      if (![roomStatus.live].includes(this.activeRoom.status)) {
+        this.$message.warning('请选择在住房');
+        return;
+      }
+      this.$refs.addConsumeModal.show({
+        item: {
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
           hotelUserId: this.userInfo.id
         },
+        activeRoom: this.activeRoom,
         confirmFn: () => {
           this.getList();
         }
@@ -334,6 +357,12 @@ export default {
       });
     },
     getTools () {
+      const addToolConfig = {
+        id: functionType.addTool,
+        name: '添加工具',
+        ord: 0,
+        icon: 'icon-15'
+      };
       this.$ajax.get({
         apiKey: 'userTools',
         loading: false,
@@ -344,19 +373,9 @@ export default {
         this.functionList = (data.map(item => ({
           ...item,
           icon: functionMapList.find(tool => tool.name === item.id).icon
-        })) || []).concat({
-          id: functionType.addTool,
-          name: '添加工具',
-          ord: 0,
-          icon: 'icon-15'
-        });
+        })) || []).concat(addToolConfig);
       }).catch(() => {
-        this.functionList = [{
-          id: functionType.addTool,
-          name: '添加工具',
-          ord: 0,
-          icon: 'icon-15'
-        }];
+        this.functionList = [addToolConfig];
         this.$message.error('获取工具列表失败');
       });
     },
