@@ -45,7 +45,7 @@
                           <i-select v-model="row.goodsId"
                                     transfer
                                     placeholder="请选择商品"
-                                    @on-change="onGoodChange($event, formIndex,  $index)">
+                                    @on-change="onGoodChange($event,  $index)">
                             <i-option v-for="item in goodsList"
                                       :value="item.id"
                                       :key="item.id">
@@ -83,7 +83,7 @@
                                      :label="item.label">
                       <template slot-scope="{ row, $index }">
                         <div class="operate-block">
-                          <i-button type="error" class="table-btn" size="small" @click="delGood(formIndex, $index)">删除</i-button>
+                          <i-button type="error" class="table-btn" size="small" @click="delGood($index)">删除</i-button>
                         </div>
                       </template>
                     </el-table-column>
@@ -114,7 +114,9 @@ export default {
       isLoading: false,
       item: {},
       goodsList: [],
-      formData: {},
+      formData: {
+        consumeRecords: [],
+      },
       orderDetail: {},
       confirmFn: null,
       cancelFn: null
@@ -148,10 +150,10 @@ export default {
     addGood () {
       this.formData.consumeRecords.push({});
     },
-    delGood (formIndex, index) {
+    delGood (index) {
       this.formData.consumeRecords.splice(index, 1);
     },
-    onGoodChange (goodId, formIndex, $index) {
+    onGoodChange (goodId, $index) {
       if (goodId === null || goodId === undefined) return;
       Object.assign(this.formData.consumeRecords[$index], this.getGoodParams(goodId));
     },
@@ -207,7 +209,7 @@ export default {
     addConsume () {
       this.$ajax.post({
         apiKey: 'consumeAdd',
-        params: this.formData,
+        params: this.formData.consumeRecords,
         config: {
           headers: { 'Content-Type': 'application/json;charset-UTF-8' }
         }
@@ -224,7 +226,10 @@ export default {
       this.reset();
     },
     reset () {
-      this.$refs.Form.forEach(item => item.resetFields());
+      this.$refs.Form.resetFields();
+      this.formData = {
+        consumeRecords: []
+      };
       this.item = {};
       this.confirmFn = null;
       this.cancelFn = null;

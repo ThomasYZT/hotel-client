@@ -43,7 +43,18 @@
             </div>
           </div>
           <div class="info-header">商品消费信息:</div>
-          <div class="info-field">
+          <div class="info-content"
+               v-for="item in consumeRecords"
+               :key="item.id">
+            <div class="info-field">
+              <div class="field-label">商品名称</div>
+              <div class="field-info">{{item.goodsName || '-'}}</div>
+            </div>
+            <div class="info-field">
+              <div class="field-info">单价:{{item.unitPrice || '-'}}，数量:{{item.num || '-'}}</div>
+            </div>
+          </div>
+          <div class="info-field" style="margin-top: 20px">
             <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
             <i-button @click="cancel">取 消</i-button>
           </div>
@@ -56,7 +67,8 @@
 </template>
 
 <script>
-import payModal from '../components/payModal';
+import { orderStatus } from '../../../assets/enums/index';
+import payModal from '../components/checkoutPayModal';
 export default {
   components: {
     payModal
@@ -70,6 +82,7 @@ export default {
       roomInfo: {},
       orderInfo: {},
       roomOverVo: {},
+      consumeRecords: [],
       isReserved: false,
       confirmFn: null,
       cancelFn: null
@@ -81,9 +94,10 @@ export default {
       this.roomInfo = roomInfo;
       this.getOrderByRoom().then(data => {
         this.orderInfo = data.order;
+        this.consumeRecords = data.consumeRecords.filter(item => item.status === orderStatus.unPay);
         this.roomOverVo = {
           ...data.roomOverVo,
-          price: this.$util.toYuan(data.roomOverVo.price)
+          price: this.$util.toYuan(data.roomOverVo.price) || 0
         };
         if (confirmFn) {
           this.confirmFn = confirmFn;
@@ -102,13 +116,15 @@ export default {
       this.reset();
     },
     confirm () {
-      if (this.roomOverVo.price) {
+      if (this.roomOverVo.price || this.consumeRecords.length > 0) {
         this.showModal = false;
         this.$refs.payModal.show({
-          item: {
-            ...this.item,
-            orderCode: this.orderInfo.code,
-            money: String(this.roomOverVo.price)
+          item: this.item,
+          orderInfo: this.orderInfo,
+          consumeRecords: this.consumeRecords,
+          roomOverVo: {
+            ...this.roomOverVo,
+            price: this.$util.toCent(this.roomOverVo.price) || 0
           },
           confirmFn: () => {
             this.checkout();
@@ -155,6 +171,7 @@ export default {
       this.roomInfo = {};
       this.orderInfo = {};
       this.roomOverVo = {};
+      this.consumeRecords = [];
       this.isReserved = false;
       this.confirmFn = null;
       this.cancelFn = null;

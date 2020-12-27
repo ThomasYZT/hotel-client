@@ -9,57 +9,58 @@
             </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-              <div class="filter-item">
-                <div class="filter-label">商品名称：</div>
-                <i-input v-model="filterParams.name" placeholder="商品名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
+                <div class="filter-item">
+                  <div class="filter-label">商品名称：</div>
+                  <i-input v-model="filterParams.name" placeholder="商品名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
+                </div>
+                <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
               </div>
-              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
-          </div>
-          <table-com v-if="showTable"
-                     :data="tableData"
-                     :page-num.sync="pageNum"
-                     :page-size.sync="pageSize"
-                     :total-size="totalSize"
-                     :config="tableConfig"
-                     :getList="getList">
-            <template slot="col7"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
-                  <span v-if="row.status === 0">置顶</span>
-                  <span v-else>不置顶</span>
-                </template>
-              </el-table-column>
-            </template>
-            <template slot="col3"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
-                  <div class="operate-block">
-                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+            <table-com v-if="showTable"
+                       :data="tableData"
+                       :page-num.sync="pageNum"
+                       :page-size.sync="pageSize"
+                       :total-size="totalSize"
+                       :config="tableConfig"
+                       :getList="getList">
+              <template slot="col7"
+                        slot-scope="{ item }">
+                <el-table-column :prop="item.prop"
+                                 :label="item.label"
+                                 :fixed="item.fixed"
+                                 :min-width="item.minWidth">
+                  <template slot-scope="{ row }">
+                    <span v-if="row.status === 0">置顶</span>
+                    <span v-else>不置顶</span>
+                  </template>
+                </el-table-column>
+              </template>
+              <template slot="col3"
+                        slot-scope="{ item }">
+                <el-table-column :prop="item.prop"
+                                 :label="item.label"
+                                 :fixed="item.fixed"
+                                 :min-width="item.minWidth">
+                  <template slot-scope="{ row }">
+                    <div class="operate-block">
+                      <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                      <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
                     <!-- <i-switch size="large" :true-value="1" :false-value="0" v-model="row.status"
                               @on-change="statusChange($event, row)">
                       <span slot="open">置顶</span>
                       <span slot="close">不置顶</span>
                     </i-switch> -->
-                  </div>
-                </template>
-              </el-table-column>
-            </template>
-          </table-com>
+                    </div>
+                  </template>
+                </el-table-column>
+              </template>
+            </table-com>
+          </div>
         </div>
       </div>
+      <editModal ref="editModal"></editModal>
+      <confirmModal ref="confirmModal"></confirmModal>
     </div>
-    <editModal ref="editModal"></editModal>
-    <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
@@ -119,13 +120,13 @@ export default {
       this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
     },
     delClick (item) {
-        this.$refs.confirmModal.show({
-            title: '警告',
-            content: `是否删除 ${item.name}`,
-            confirm: () => {
-            this.delItem(item);
-            }
-        });
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否删除 ${item.name}`,
+        confirm: () => {
+          this.delItem(item);
+        }
+      });
     },
     delItem (item) {
       this.$ajax.get({
