@@ -6,7 +6,7 @@ import store from '../../store';
 const isProduct = process.env.NODE_ENV === 'production';
 export let domain;
 if (isProduct) {
-  domain = 'https://uujd.com.cn';
+  domain = 'https://sszhjd.com';
 } else {
   domain = 'http://139.155.42.50:8080';
 }
