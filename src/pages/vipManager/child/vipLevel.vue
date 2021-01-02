@@ -58,17 +58,6 @@
                                :fixed="item.fixed"
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
-                  <span>{{$util.toYuan(row.recommendMoney)}}</span>
-                </template>
-              </el-table-column>
-            </template>
-            <template slot="col13"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
                   <div class="operate-block">
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
@@ -177,7 +166,7 @@ export default {
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.title}`,
+        content: `是否删除 ${item.name}`,
         confirm: () => {
           this.delItem(item);
         }

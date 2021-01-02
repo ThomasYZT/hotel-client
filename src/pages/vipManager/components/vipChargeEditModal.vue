@@ -12,17 +12,17 @@
                   label-position="right">
             <div class="form-item-wrapper">
               <div class="form-item-block">
+                <FormItem class="block-form-item" label="充值金额" prop="topUpMoney">
+                  <i-input type="text" placeholder="充值金额" v-model="formData.topUpMoney" />
+                </FormItem>
+                <FormItem class="block-form-item" label="赠送金额" prop="giveMoney">
+                  <i-input type="text" placeholder="赠送金额" v-model="formData.giveMoney" />
+                </FormItem>
                 <FormItem class="block-form-item" label="赠送积分" prop="giveIntegral">
                   <i-input type="text" placeholder="赠送积分" v-model="formData.giveIntegral" />
                 </FormItem>
                 <FormItem class="block-form-item" label="赠送经验" prop="giveExperience">
                   <i-input type="text" placeholder="赠送经验" v-model="formData.giveExperience" />
-                </FormItem>
-                <FormItem class="block-form-item" label="赠送金额" prop="giveMoney">
-                  <i-input type="text" placeholder="赠送金额" v-model="formData.giveMoney" />
-                </FormItem>
-                <FormItem class="block-form-item" label="充值金额" prop="topUpMoney">
-                  <i-input type="text" placeholder="充值金额" v-model="formData.topUpMoney" />
                 </FormItem>
                 <FormItem class="block-form-item" label="优惠券" prop="couponsList">
                   <i-button type="primary" @click="checkCoupons">选择优惠券</i-button>
@@ -44,7 +44,7 @@
                   </i-radio-group>
                 </FormItem>
                 <FormItem class="block-form-item" label="备注" prop="remark">
-                  <i-input type="text" placeholder="备注" v-model="formData.remark" />
+                  <i-input type="textarea" placeholder="备注" v-model="formData.remark" />
                 </FormItem>
                 <FormItem>
                   <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
@@ -104,10 +104,7 @@ export default {
           { validator: validateMoney, trigger: 'blur' }
         ],
         status: [
-          { required: true, type: 'number', message: '请输入状态', trigger: 'blur' }
-        ],
-        remark: [
-          { required: true, message: '请输入备注', trigger: 'blur' }
+          { required: true, type: 'number', message: '请选择状态', trigger: 'blur' }
         ]
       }
     };

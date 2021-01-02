@@ -119,14 +119,14 @@ export default {
           }
         }
       },
-      menuManager: {
+      labelManager: {
         path: '/labelManager',
         component: () => import('../../pages/labelManager/index.vue'),
         redirect: () => { return { name: 'labelList' }; },
         meta: {
           menuName: '标签管理',
           iconClass: 'icon-caidan',
-          activePath: `${topName}`,
+          activePath: `${topName}.labelManager`,
           isMenu: true
         },
         children: {
@@ -137,20 +137,20 @@ export default {
             component: () => import('../../pages/labelManager/child/labelList.vue'),
             meta: {
               menuName: '标签列表',
-              activePath: `${topName}`,
+              activePath: `${topName}.labelManager`,
               isMenu: false
             }
           }
         }
       },
-      menuManager: {
+      sysLog: {
         path: '/sysLog',
         component: () => import('../../pages/sysLog/index.vue'),
         redirect: () => { return { name: 'logList' }; },
         meta: {
           menuName: '系统日志查询',
           iconClass: 'icon-caidan',
-          activePath: `${topName}`,
+          activePath: `${topName}.sysLog`,
           isMenu: true
         },
         children: {
@@ -161,7 +161,7 @@ export default {
             component: () => import('../../pages/sysLog/child/logList.vue'),
             meta: {
               menuName: '系统日志查询',
-              activePath: `${topName}`,
+              activePath: `${topName}.sysLog`,
               isMenu: false
             }
           }

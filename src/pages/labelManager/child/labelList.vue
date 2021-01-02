@@ -5,62 +5,59 @@
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
             <div class="tool-wrapper left-box">
-              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
+              <i-button type="primary" @click="addItem">添加</i-button>
             </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-                <div class="filter-item">
-                  <div class="filter-label">商品名称：</div>
-                  <i-input v-model="filterParams.name" placeholder="商品名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
-                </div>
-                <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
+                <div class="filter-label">商品名称：</div>
+                <i-input v-model="filterParams.name" placeholder="商品名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
+              <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
-            <table-com v-if="showTable"
-                       :data="tableData"
-                       :page-num.sync="pageNum"
-                       :page-size.sync="pageSize"
-                       :total-size="totalSize"
-                       :config="tableConfig"
-                       :getList="getList">
-              <template slot="col7"
-                        slot-scope="{ item }">
-                <el-table-column :prop="item.prop"
-                                 :label="item.label"
-                                 :fixed="item.fixed"
-                                 :min-width="item.minWidth">
-                  <template slot-scope="{ row }">
-                    <span v-if="row.status === 0">置顶</span>
-                    <span v-else>不置顶</span>
-                  </template>
-                </el-table-column>
-              </template>
-              <template slot="col3"
-                        slot-scope="{ item }">
-                <el-table-column :prop="item.prop"
-                                 :label="item.label"
-                                 :fixed="item.fixed"
-                                 :min-width="item.minWidth">
-                  <template slot-scope="{ row }">
-                    <div class="operate-block">
-                      <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
-                      <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+          </div>
+          <table-com :data="tableData"
+                     :page-num.sync="pageNum"
+                     :page-size.sync="pageSize"
+                     :total-size="totalSize"
+                     :config="tableConfig"
+                     :getList="getList">
+            <template slot="col1"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               min-width="130px">
+                <template slot-scope="{ row }">
+                  <span v-if="row.isTop === 0">置顶</span>
+                  <span v-else>不置顶</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col3"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <div class="operate-block">
+                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
                     <!-- <i-switch size="large" :true-value="1" :false-value="0" v-model="row.status"
                               @on-change="statusChange($event, row)">
                       <span slot="open">置顶</span>
                       <span slot="close">不置顶</span>
                     </i-switch> -->
-                    </div>
-                  </template>
-                </el-table-column>
-              </template>
-            </table-com>
-          </div>
+                  </div>
+                </template>
+              </el-table-column>
+            </template>
+          </table-com>
         </div>
       </div>
-      <editModal ref="editModal"></editModal>
-      <confirmModal ref="confirmModal"></confirmModal>
     </div>
+    <editModal ref="editModal"></editModal>
+    <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
@@ -73,6 +70,14 @@ export default {
   components: {
     editModal
   },
+  // computed: {
+  //   showTable () {
+  //     return !this.showOrgTree || Object.keys(this.nodeData).length > 0;
+  //   },
+  //   showAddBtn () {
+  //     return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
+  //   }
+  // },
   data () {
     return {
       tableConfig,
@@ -87,17 +92,10 @@ export default {
     };
   },
   methods: {
-    onNodeClick ({ data, isDefault }) {
-      this.nodeData = data;
-      if (!isDefault) {
-        this.getList();
-      }
-    },
     getList () {
       this.$ajax.post({
-        apiKey: 'goodPageList',
+        apiKey: 'labelPageList',
         params: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams
@@ -120,17 +118,17 @@ export default {
       this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
     },
     delClick (item) {
-      this.$refs.confirmModal.show({
-        title: '警告',
-        content: `是否删除 ${item.name}`,
-        confirm: () => {
-          this.delItem(item);
-        }
-      });
+        this.$refs.confirmModal.show({
+            title: '警告',
+            content: `是否删除 ${item.labelName}`,
+            confirm: () => {
+            this.delItem(item);
+            }
+        });
     },
     delItem (item) {
       this.$ajax.get({
-        apiKey: 'goodDelete',
+        apiKey: 'labelDelete',
         params: {
           id: item.id
         }

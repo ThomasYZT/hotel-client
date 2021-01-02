@@ -7,10 +7,6 @@
           <div class="info-header">会员详情</div>
           <div class="info-content">
             <div class="info-field">
-              <div class="field-label">会员ID:</div>
-              <div class="field-info">{{detail.vipUserId || '-'}}</div>
-            </div>
-            <div class="info-field">
               <div class="field-label">姓名:</div>
               <div class="field-info">{{detail.name || '-'}}</div>
             </div>
@@ -30,10 +26,6 @@
               <div class="field-label">性别:</div>
               <div class="field-info">{{genderList.find(item => item.value === detail.sex) ?
                 genderList.find(item => item.value === detail.sex).label : ''}}</div>
-            </div>
-            <div class="info-field">
-              <div class="field-label">出生日期:</div>
-              <div class="field-info">{{detail.birthday || '-'}}</div>
             </div>
             <div class="info-field">
               <div class="field-label">生日:</div>
@@ -56,10 +48,6 @@
               <div class="field-info">{{detail.remainingSum || '-'}}</div>
             </div>
             <div class="info-field">
-              <div class="field-label">到期时间:</div>
-              <div class="field-info">{{detail.expireDate || '-'}}</div>
-            </div>
-            <div class="info-field">
               <div class="field-label">激活状态:</div>
               <div class="field-info">{{vipActiveStatusList.find(item => item.value === detail.isActivation) ?
                 vipActiveStatusList.find(item => item.value === detail.isActivation).label : ''}}</div>
@@ -78,6 +66,14 @@
                 registerStatusList.find(item => item.value === detail.status).label : ''}}</div>
             </div>
             <div class="info-field">
+              <div class="field-label">注册酒店:</div>
+              <div class="field-info">{{detail.registerHotelName || '-'}}</div>
+            </div>
+            <div class="info-field">
+              <div class="field-label">注册时间:</div>
+              <div class="field-info">{{detail.registerTime || '-'}}</div>
+            </div>
+            <div class="info-field">
               <div class="field-label">激活时间:</div>
               <div class="field-info">{{detail.actTime || '-'}}</div>
             </div>
@@ -86,12 +82,8 @@
               <div class="field-info">{{detail.actHotelName || '-'}}</div>
             </div>
             <div class="info-field">
-              <div class="field-label">注册酒店名称:</div>
-              <div class="field-info">{{detail.registerHotelName || '-'}}</div>
-            </div>
-            <div class="info-field">
-              <div class="field-label">注册时间:</div>
-              <div class="field-info">{{detail.registerTime || '-'}}</div>
+              <div class="field-label">到期时间:</div>
+              <div class="field-info">{{detail.expireDate || '-'}}</div>
             </div>
           </div>
         </div>
@@ -120,6 +112,7 @@ export default {
       registerStatusList,
       vipActiveStatusList,
       detail: {},
+      vipId: '',
       visible: false,
       isLoading: false
     };
@@ -127,6 +120,7 @@ export default {
   methods: {
     show ({ item }) {
       if (!item) return;
+      this.vipId = item.id
       this.getVipInfo(item.id).then(res => {
         this.detail = res;
         this.visible = true;

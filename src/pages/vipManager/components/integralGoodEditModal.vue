@@ -15,13 +15,6 @@
                 <FormItem class="block-form-item" label="标题" prop="title">
                   <i-input type="text" placeholder="标题" v-model="formData.title" />
                 </FormItem>
-                <FormItem class="block-form-item" label="商品状态" prop="state">
-                  <i-radio-group v-model="formData.state">
-                    <i-radio v-for="item in integralGoodStatusList"
-                             :key="item.value"
-                             :label="item.value">{{item.label}}</i-radio>
-                  </i-radio-group>
-                </FormItem>
                 <FormItem class="inline-form-item" label="优惠券" prop="couponsId">
                   <i-select v-model="formData.couponsId"
                             placeholder="请选择">
@@ -35,8 +28,15 @@
                 <FormItem class="block-form-item" label="兑换所需积分" prop="integralNumber">
                   <i-input type="text" placeholder="兑换所需积分" v-model="formData.integralNumber" />
                 </FormItem>
+                <FormItem class="block-form-item" label="商品状态" prop="state">
+                  <i-radio-group v-model="formData.state">
+                    <i-radio v-for="item in integralGoodStatusList"
+                             :key="item.value"
+                             :label="item.value">{{item.label}}</i-radio>
+                  </i-radio-group>
+                </FormItem>
                 <FormItem class="block-form-item" label="使用条件" prop="conditions">
-                  <i-input type="text" placeholder="使用条件" v-model="formData.conditions" />
+                  <i-input type="textarea" placeholder="使用条件" v-model="formData.conditions" />
                 </FormItem>
                 <FormItem>
                   <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
@@ -76,16 +76,13 @@ export default {
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
         state: [
-          { required: true, type: 'number', message: '请选择商品状态', trigger: 'blur' }
+          { required: true, type: 'number', message: '请选择状态', trigger: 'blur' }
         ],
         couponsId: [
           { required: true, type: 'number', message: '请选择优惠券', trigger: 'blur' }
         ],
         integralNumber: [
           { required: true, message: '请选择兑换所需积分', trigger: 'blur' }
-        ],
-        conditions: [
-          { required: true, message: '请输入使用条件', trigger: 'blur' }
         ]
       }
     };

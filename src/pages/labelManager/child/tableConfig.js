@@ -8,7 +8,7 @@ export const tableConfig = [
     {
       prop: 'isTop',
       label: '是否置顶',
-      width: '150px'
+      width: '130px'
     },
     {
       prop: 'remark',

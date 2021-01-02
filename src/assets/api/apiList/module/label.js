@@ -1,7 +1,7 @@
 export default {
     module: 'label',
   
-    add: '/hotelGoods/add',
+    add: '/label/add',
     pageList: '/label/pageList',
     delete: '/label/delete',
     update: '/label/update'

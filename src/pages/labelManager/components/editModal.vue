@@ -19,10 +19,10 @@
             <div class="form-item-wrapper">
               <div class="form-item-block">
                 <FormItem class="block-form-item" label="标签名称" prop="labelName">
-                  <i-input-number style="width: 100%;" type="text" placeholder="标签名称" v-model.trim="formData.labelName" />
+                  <i-input type="text" placeholder="标签名称" v-model.trim="formData.labelName" />
                 </FormItem>
                 <FormItem class="block-form-item" label="是否置顶" prop="isTop">
-                  <i-switch size="large" :true-value="'1'" :false-value="'0'" v-model="formData.isTop">
+                  <i-switch size="large" :true-value="'0'" :false-value="'1'" v-model="formData.isTop">
                     <span slot="open">置顶</span>
                     <span slot="close">不置顶</span>
                   </i-switch>
@@ -74,6 +74,9 @@ export default {
       this.$util.valueToStr(this.formData);
       this.type = type;
 
+      if (type === 'add' || (type === 'edit' && !item.attachId)) {
+        this.visible = true;
+      }
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }

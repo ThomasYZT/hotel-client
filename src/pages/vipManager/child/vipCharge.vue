@@ -18,7 +18,7 @@
                      :total-size="totalSize"
                      :config="vipChargeTableConfig"
                      :getList="getList">
-            <template slot="col2"
+            <template slot="col1"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -29,7 +29,7 @@
                 </template>
               </el-table-column>
             </template>
-            <template slot="col3"
+            <template slot="col0"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -177,7 +177,7 @@ export default {
     delClick (item) {
       this.$refs.confirmModal.show({
         title: '警告',
-        content: `是否删除 ${item.title}`,
+        content: `是否删除`,
         confirm: () => {
           this.delItem(item);
         }

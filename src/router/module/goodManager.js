@@ -59,7 +59,7 @@ export default {
           }
         }
       },
-      goodManager: {
+      goodsOutStorageManager: {
         path: '/goodsOutStorageManager',
         component: () => import('../../pages/goodsOutStorageManager/index.vue'),
         redirect: () => { return { name: 'goodsOutStorageList' }; },
