@@ -15,36 +15,35 @@
                 <FormItem class="block-form-item" label="标题" prop="title">
                   <i-input type="text" placeholder="标题" v-model="formData.title" />
                 </FormItem>
-                <FormItem class="block-form-item" label="图片" prop="attachList">
-                  <img-uploader v-model="formData.attachList"></img-uploader>
-                </FormItem>
-                <FormItem class="block-form-item" label="状态" prop="state">
-                  <i-radio-group v-model="formData.state">
-                    <i-radio v-for="item in couponStatusList"
-                             :key="item.value"
-                             :label="item.value">{{item.label}}</i-radio>
-                  </i-radio-group>
-                </FormItem>
-                <FormItem class="block-form-item" label="品牌名称" prop="brandName">
-                  <i-input type="text" placeholder="品牌名称" v-model="formData.brandName" />
-                </FormItem>
-                <FormItem class="inline-form-item" label="卡券颜色" prop="cardColor">
-                  <i-input type="text" placeholder="卡券颜色" v-model="formData.cardColor" />
-                </FormItem>
-                <FormItem class="inline-form-item" label="单人领券数量上限" prop="limitNumber">
-                  <i-input type="text" placeholder="单人领券数量上限" v-model="formData.limitNumber" />
-                </FormItem>
-                <FormItem class="inline-form-item" label="会员等级" prop="levelId">
-                  <i-select v-model="formData.levelId"
+                <FormItem class="block-form-item" label="优惠券类型" prop="purpose">
+                  <i-select v-model="formData.purpose"
                             placeholder="请选择">
-                    <i-option v-for="item in vipLevelList"
-                              :value="item.id"
-                              :key="item.id">
-                      {{ item.name }}
+                    <i-option v-for="item in couponsTypeList"
+                              :value="item.value"
+                              :key="item.value">
+                      {{ item.label }}
                     </i-option>
                   </i-select>
                 </FormItem>
-                <FormItem class="inline-form-item" label="酒店" prop="levelId">
+                <template v-if="formData.purpose === couponsType.moneyOff">
+                  <FormItem class="inline-form-item" label="最低消费" prop="fullAmount">
+                    <i-input type="text" placeholder="最低消费" v-model="formData.fullAmount" />
+                  </FormItem>
+                  <FormItem class="inline-form-item" label="优惠金额(元)" prop="subtractAmount">
+                    <i-input type="text" placeholder="优惠金额(元)" v-model="formData.subtractAmount" />
+                  </FormItem>
+                </template>
+                <template v-else-if="formData.purpose === couponsType.discount">
+                  <FormItem class="block-form-item" label="折扣" prop="discount">
+                    <i-input type="text" placeholder="折扣" v-model="formData.discount" />
+                  </FormItem>
+                </template>
+                <template v-else-if="formData.purpose === couponsType.exchange">
+                  <FormItem class="block-form-item" label="兑换内容" prop="exchangeContent">
+                    <i-input type="textarea" placeholder="兑换内容" v-model="formData.exchangeContent" />
+                  </FormItem>
+                </template>
+                <FormItem class="block-form-item" label="酒店" prop="levelId">
                   <i-select v-model="formData.hotelList"
                             multiple
                             transfer
@@ -58,6 +57,9 @@
                 </FormItem>
                 <FormItem class="inline-form-item" label="投放数量" prop="castNumber">
                   <i-input type="text" placeholder="投放数量" v-model="formData.castNumber" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="单人领券数量上限" prop="limitNumber">
+                  <i-input type="text" placeholder="单人领券数量上限" v-model="formData.limitNumber" />
                 </FormItem>
                 <FormItem class="inline-form-item" label="有效开始时间" prop="startTime">
                   <i-date-picker v-model="formData.startTime"
@@ -77,34 +79,35 @@
                                  style="width: 100%;"
                                  placeholder="有效结束时间"></i-date-picker>
                 </FormItem>
-                <FormItem class="inline-form-item" label="优惠券类型" prop="purpose">
-                  <i-select v-model="formData.purpose"
+                <FormItem class="inline-form-item" label="会员等级" prop="levelId">
+                  <i-select v-model="formData.levelId"
                             placeholder="请选择">
-                    <i-option v-for="item in couponsTypeList"
-                              :value="item.value"
-                              :key="item.value">
-                      {{ item.label }}
+                    <i-option v-for="item in vipLevelList"
+                              :value="item.id"
+                              :key="item.id">
+                      {{ item.name }}
                     </i-option>
                   </i-select>
                 </FormItem>
-                <template v-if="formData.purpose === couponsType.moneyOff">
-                  <FormItem class="inline-form-item" label="优惠金额(元)" prop="subtractAmount">
-                    <i-input type="text" placeholder="优惠金额(元)" v-model="formData.subtractAmount" />
-                  </FormItem>
-                  <FormItem class="inline-form-item" label="最低消费" prop="fullAmount">
-                    <i-input type="text" placeholder="最低消费" v-model="formData.fullAmount" />
-                  </FormItem>
-                </template>
-                <template v-else-if="formData.purpose === couponsType.discount">
-                  <FormItem class="inline-form-item" label="折扣" prop="discount">
-                    <i-input type="text" placeholder="折扣" v-model="formData.discount" />
-                  </FormItem>
-                </template>
-                <template v-else-if="formData.purpose === couponsType.exchange">
-                  <FormItem class="block-form-item" label="兑换内容" prop="exchangeContent">
-                    <i-input type="textarea" placeholder="兑换内容" v-model="formData.exchangeContent" />
-                  </FormItem>
-                </template>
+                <FormItem class="inline-form-item" label="状态" prop="state">
+                  <i-radio-group v-model="formData.state">
+                    <i-radio v-for="item in couponStatusList"
+                             :key="item.value"
+                             :label="item.value">{{item.label}}</i-radio>
+                  </i-radio-group>
+                </FormItem>
+                <FormItem class="block-form-item" label="图片" prop="attachList">
+                  <img-uploader v-model="formData.attachList"></img-uploader>
+                </FormItem>
+                <FormItem class="block-form-item" label="使用条件" prop="conditions">
+                  <i-input type="textarea" placeholder="使用条件" v-model="formData.conditions" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="品牌名称" prop="brandName">
+                  <i-input type="text" placeholder="品牌名称" v-model="formData.brandName" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="卡券颜色" prop="cardColor">
+                  <i-input type="text" placeholder="卡券颜色" v-model="formData.cardColor" />
+                </FormItem>
                 <FormItem>
                   <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
                   <i-button @click="cancel">取 消</i-button>
@@ -171,9 +174,6 @@ export default {
         subtractAmount: [
           { required: true, message: '请输入优惠金额', trigger: 'blur' },
           { validator: validateMoney, trigger: 'blur' }
-        ],
-        levelId: [
-          { required: true, type: 'number', message: '请选择会员等级', trigger: 'blur' }
         ],
         startTime: [
           { required: true, type: 'date', message: '请输入有效开始时间', trigger: 'blur' }

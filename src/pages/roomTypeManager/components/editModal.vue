@@ -30,6 +30,18 @@
                 <FormItem class="inline-form-item" label="入住人数" prop="num">
                   <i-input type="text" placeholder="入住人数" v-model.trim="formData.num" />
                 </FormItem>
+                <FormItem class="block-form-item" label="标签" prop="dictionaryId">
+                  <i-select v-model="formData.attributeList"
+                            multiple
+                            transfer
+                            placeholder="请选择">
+                    <i-option v-for="item in attributeList"
+                              :value="item.id"
+                              :key="item.id">
+                      {{ item.dictName }}
+                    </i-option>
+                  </i-select>
+                </FormItem>
                 <FormItem class="block-form-item" label="图片" prop="attachList">
                   <img-uploader v-model="formData.attachList"></img-uploader>
                 </FormItem>
@@ -77,6 +89,7 @@ export default {
         attachId: 0,
         attachList: []
       },
+      attributeList: [],
       confirmFn: null,
       cancelFn: null,
       formRule: {
@@ -94,7 +107,7 @@ export default {
         num: [
           { required: true, message: '请输入入住人数', trigger: 'blur' },
           { validator: validateNumber, trigger: 'blur' }
-        ],
+        ]
       }
     };
   },
@@ -104,9 +117,20 @@ export default {
     ]),
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || !item) return;
-      this.formData = defaultsDeep({}, item, this.formData);
+      // this.formData = defaultsDeep({}, item, this.formData);
       this.$util.valueToStr(this.formData);
       this.type = type;
+
+      Promise.all([
+        this.getAttributeList(item.hotelId),
+        this.getRoomTypeAttribute(item.id)
+      ]).then(([attributeList, attributeInfo]) => {
+        this.attributeList = attributeList;
+        this.formData = defaultsDeep({}, {
+          ...item,
+          attributeList: attributeInfo.map(item => item.dictionaryId)
+        }, this.formData);
+        
       if (confirmFn) {
         this.confirmFn = confirmFn;
       }
@@ -114,10 +138,10 @@ export default {
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
-
       if (type === 'edit') {
         this.formData.price = this.$util.toYuan(this.formData.price);
         this.formData.cashPledge = this.$util.toYuan(this.formData.cashPledge);
+        this.formData.num = item.num;
       }
 
       if (type === 'add' || (type === 'edit' && !item.attachId)) {
@@ -128,6 +152,11 @@ export default {
           this.visible = true;
         });
       }
+        this.visible = true;
+      }).catch(() => {
+        this.$message.error(`获取数据失败`);
+        this.reset();
+      });
     },
     cancel () {
       this.cancelFn && this.cancelFn();
@@ -146,7 +175,10 @@ export default {
         params: {
           ...this.formData,
           price: this.$util.toCent(this.formData.price),
-          cashPledge: this.$util.toCent(this.formData.cashPledge)
+          cashPledge: this.$util.toCent(this.formData.cashPledge),
+          attributeList: this.formData.attributeList.map(id => ({
+            dictionaryId: id
+          }))
         },
         loading: false,
         config: {
@@ -172,6 +204,38 @@ export default {
       this.visible = false;
       this.isLoading = false;
       this.type = '';
+    },
+    getRoomTypeAttribute(roomTypeId) {
+      return new Promise((resolve, reject) => {
+        if (this.type === 'add') return resolve([]);
+        this.$ajax.get({
+          apiKey: 'roomTypeGetRoomTypeAttribute',
+          params: {
+            roomTypeId: roomTypeId
+          },
+          loading: false
+        }).then(res => {
+          resolve(res);
+        }).catch(err => {
+          reject(err);
+        });
+      });
+    },
+    getAttributeList (hotelId) {
+      return new Promise((resolve, reject) => {
+        this.$ajax.get({
+          apiKey: 'dicGetByTypeCode',
+          params: {
+            hotelId: hotelId,
+            typeCode: 'FJLXSX'
+          },
+          loading: false
+        }).then(data => {
+           resolve(data || []);
+        }).catch(err => {
+          reject(err);
+        });
+      });
     }
   }
 };

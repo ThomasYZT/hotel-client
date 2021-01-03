@@ -6,6 +6,11 @@ export const vipListTableConfig = [
     minWidth: '130px'
   },
   {
+    prop: 'vipLevelName',
+    label: '会员等级',
+    minWidth: '130px'
+  },
+  {
     prop: 'sex',
     label: '性别',
     minWidth: '100px'
@@ -34,11 +39,6 @@ export const vipListTableConfig = [
     prop: 'city',
     label: '城市',
     minWidth: '150px'
-  },
-  {
-    prop: 'vipLevelName',
-    label: '会员等级',
-    minWidth: '130px'
   },
   {
     prop: 'registerHotelName',
@@ -71,43 +71,28 @@ export const couponListTableConfig = [
     minWidth: '130px'
   },
   {
-    prop: 'subtractAmount',
-    label: '优惠金额(元)',
-    minWidth: '130px'
-  },
-  {
-    prop: 'levelId',
-    label: '会员等级',
-    minWidth: '130px'
-  },
-  {
-    prop: 'state',
-    label: '商品状态',
-    minWidth: '130px'
-  },
-  {
     prop: 'purpose',
     label: '优惠券类型',
     minWidth: '130px'
   },
   {
-    prop: 'limitNumber',
-    label: '单人领券数量上限',
-    minWidth: '150px'
-  },
-  {
     prop: 'fullAmount',
-    label: '最低消费',
+    label: '最低消费金额',
     minWidth: '130px'
   },
   {
-    prop: 'exchangeContent',
-    label: '兑换内容',
+    prop: 'subtractAmount',
+    label: '优惠金额(元)',
     minWidth: '130px'
   },
   {
     prop: 'discount',
     label: '折扣',
+    minWidth: '130px'
+  },
+  {
+    prop: 'exchangeContent',
+    label: '兑换内容',
     minWidth: '130px'
   },
   {
@@ -126,9 +111,14 @@ export const couponListTableConfig = [
     minWidth: '160px'
   },
   {
+    prop: 'state',
+    label: '状态',
+    minWidth: '130px'
+  },
+  {
     prop: 'operate',
     label: '操作',
-    minWidth: '150px',
+    minWidth: '180px',
     fixed: 'right'
   }
 ];

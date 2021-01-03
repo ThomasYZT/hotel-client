@@ -5,5 +5,6 @@ export default {
   pageList: '/roomType/pageList',
   delete: '/roomType/delete',
   update: '/roomType/update',
-  getAllList: '/roomType/getAllList'
+  getAllList: '/roomType/getAllList',
+  getRoomTypeAttribute: '/roomTypeAttribute/getByRoomTypeId'
 };

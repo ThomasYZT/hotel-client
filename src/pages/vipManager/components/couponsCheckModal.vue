@@ -145,6 +145,7 @@ export default {
         apiKey: 'couponPageList',
         params: {
           brandId: this.brandId,
+          state: 1,
           pageNum: 1,
           pageSize: 99999,
           ...this.filterParams

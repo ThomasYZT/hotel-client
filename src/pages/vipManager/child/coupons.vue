@@ -35,42 +35,7 @@
                      :total-size="totalSize"
                      :config="couponListTableConfig"
                      :getList="getList">
-            <template slot="col2"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
-                  <span>{{$util.toYuan(row.subtractAmount)}}</span>
-                </template>
-              </el-table-column>
-            </template>
-            <template slot="col3"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
-                  <span>{{vipLevelList.find(item => item.id === row.levelId) ?
-                    vipLevelList.find(item => item.id === row.levelId).name : ''}}</span>
-                </template>
-              </el-table-column>
-            </template>
-            <template slot="col4"
-                      slot-scope="{ item }">
-              <el-table-column :prop="item.prop"
-                               :label="item.label"
-                               :fixed="item.fixed"
-                               :min-width="item.minWidth">
-                <template slot-scope="{ row }">
-                  <span>{{couponStatusList.find(item => item.value === row.state) ?
-                    couponStatusList.find(item => item.value === row.state).label : ''}}</span>
-                </template>
-              </el-table-column>
-            </template>
-            <template slot="col5"
+            <template slot="col1"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -82,7 +47,53 @@
                 </template>
               </el-table-column>
             </template>
-            <template slot="col13"
+            <template slot="col2"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{$util.toYuan(row.fullAmount)}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col3"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{$util.toYuan(row.subtractAmount)}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <!-- <template slot="col3"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{vipLevelList.find(item => item.id === row.levelId) ?
+                    vipLevelList.find(item => item.id === row.levelId).name : ''}}</span>
+                </template>
+              </el-table-column>
+            </template> -->
+            <template slot="col9"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{couponStatusList.find(item => item.value === row.state) ?
+                    couponStatusList.find(item => item.value === row.state).label : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col10"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -92,6 +103,9 @@
                   <div class="operate-block">
                     <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
                     <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                    <i-button type="warning" class="table-btn" size="small" @click="toggleStatus(row)">
+                      {{ row.state === couponStatus.up ? '下架' : '上架' }}
+                    </i-button>
                   </div>
                 </template>
               </el-table-column>
@@ -108,7 +122,7 @@
 <script>
 import editModal from '../components/couponEditModal';
 import { couponListTableConfig } from './tableConfig.js';
-import { userType, couponsTypeList, couponStatusList } from '../../../assets/enums';
+import { userType, couponsTypeList, couponStatusList, couponStatus } from '../../../assets/enums';
 import vipLevelDictionaryMixin from '../../../mixins/vipLevelDictionaryMixin';
 import { mapGetters } from 'vuex';
 export default {
@@ -148,6 +162,7 @@ export default {
   },
   data () {
     return {
+      couponStatus,
       couponStatusList,
       couponsTypeList: [{ value: '', label: '全部' }].concat(couponsTypeList),
       couponListTableConfig,
@@ -224,6 +239,26 @@ export default {
         this.$message.success('删除成功');
       }).catch(err => {
         this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
+      });
+    },
+    toggleStatus (item) {
+      const operateName = item.state === couponStatus.up ? '下架' : '上架';
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否 ${operateName}`,
+        confirm: () => {
+          this.$ajax.get({
+            apiKey: item.state === couponStatus.up ? 'couponOutShelves' : 'couponShelves',
+            params: {
+              id: item.id
+            }
+          }).then(() => {
+            this.getList();
+            this.$message.success(`${operateName}成功`);
+          }).catch(err => {
+            this.$message.error(`${operateName}失败${err.msg ? ': ' + err.msg : ''}`);
+          });
+        }
       });
     }
   },

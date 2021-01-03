@@ -33,35 +33,35 @@
                 <FormItem class="block-form-item" label="升级经验" prop="upgradeExperience">
                   <i-input type="text" placeholder="升级经验" v-model="formData.upgradeExperience" />
                 </FormItem>
-                <FormItem class="block-form-item" label="赠送金额" prop="giveMoney">
-                  <i-input type="text" placeholder="赠送金额" v-model="formData.giveMoney" />
-                </FormItem>
-                <FormItem class="block-form-item" label="开卡金额" prop="openCardAmount">
+                <FormItem class="inline-form-item" label="开卡金额" prop="openCardAmount">
                   <i-input type="text" placeholder="开卡金额" v-model="formData.openCardAmount" />
                 </FormItem>
-                <FormItem class="block-form-item" label="每消费多少钱" prop="consumptionMoney">
-                  <i-input type="text" placeholder="每消费多少钱" v-model="formData.consumptionMoney" />
+                <FormItem class="inline-form-item" label="赠送金额" prop="giveMoney">
+                  <i-input type="text" placeholder="赠送金额" v-model="formData.giveMoney" />
                 </FormItem>
-                <FormItem class="block-form-item" label="赠送经验上限" prop="giveExperienceMax">
+                <FormItem class="block-form-item" label="消费金额" prop="consumptionMoney">
+                  <i-input type="text" placeholder="消费金额" v-model="formData.consumptionMoney" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="赠送经验" prop="sendExperience">
+                  <i-input type="text" placeholder="赠送经验" v-model="formData.sendExperience" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="赠送积分" prop="sendIntegral">
+                  <i-input type="text" placeholder="赠送积分" v-model="formData.sendIntegral" />
+                </FormItem>
+                <FormItem class="inline-form-item" label="赠送经验上限" prop="giveExperienceMax">
                   <i-input type="text" placeholder="赠送经验上限" v-model="formData.giveExperienceMax" />
                 </FormItem>
-                <FormItem class="block-form-item" label="赠送积分上限" prop="giveIntegralMax">
+                <FormItem class="inline-form-item" label="赠送积分上限" prop="giveIntegralMax">
                   <i-input type="text" placeholder="赠送积分上限" v-model="formData.giveIntegralMax" />
                 </FormItem>
-                <FormItem class="block-form-item" label="推荐奖励经验" prop="recommendExperience">
+                <FormItem class="inline-form-item" label="推荐奖励经验" prop="recommendExperience">
                   <i-input type="text" placeholder="推荐奖励经验" v-model="formData.recommendExperience" />
                 </FormItem>
-                <FormItem class="block-form-item" label="推荐奖励积分" prop="recommendIntegral">
+                <FormItem class="inline-form-item" label="推荐奖励积分" prop="recommendIntegral">
                   <i-input type="text" placeholder="推荐奖励积分" v-model="formData.recommendIntegral" />
                 </FormItem>
                 <FormItem class="block-form-item" label="推荐奖励金额" prop="recommendMoney">
                   <i-input type="text" placeholder="推荐奖励金额" v-model="formData.recommendMoney" />
-                </FormItem>
-                <FormItem class="block-form-item" label="送多少经验" prop="sendExperience">
-                  <i-input type="text" placeholder="送多少经验" v-model="formData.sendExperience" />
-                </FormItem>
-                <FormItem class="block-form-item" label="送多少积分" prop="sendIntegral">
-                  <i-input type="text" placeholder="送多少积分" v-model="formData.sendIntegral" />
                 </FormItem>
                 <FormItem class="block-form-item">
                   <table-com :data="formData.priceList"
