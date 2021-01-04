@@ -47,6 +47,18 @@
                     <place-search @change="positionChange"></place-search>
                   </div>
                 </FormItem>
+                <FormItem class="block-form-item" label="酒店标签" prop="labelList">
+                  <i-button type="primary" @click="checkLabel">选择酒店标签</i-button>
+                  <div class="coupon-tag-wrapper">
+                    <div class="coupon-tag"
+                         v-for="item in formData.labelList" :key="item.id">
+                      <img class="del-icon"  alt=""
+                           src="../../../assets/img/delete.png"
+                           @click.stop="delLabel(item)">
+                      {{item.name}}
+                    </div>
+                  </div>
+                </FormItem>
                 <FormItem class="block-form-item" label="酒店地址" prop="address">
                   <i-input type="text" placeholder="酒店地址" v-model.trim="formData.address" />
                 </FormItem>
@@ -63,6 +75,7 @@
         </div>
       </div>
     </page-board>
+    <labelCheckModel ref="labelCheckModel"></labelCheckModel>
   </div>
 </template>
 
@@ -70,9 +83,11 @@
 import PlaceSearch from '../../../components/PlaceSearch';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { mapActions } from 'vuex';
+import labelCheckModel from '../components/labelCheckModel';
 export default {
   components: {
-    PlaceSearch
+    PlaceSearch,
+    labelCheckModel
   },
   data () {
     const validateNumber = (rule, value, callback) => {
@@ -192,7 +207,12 @@ export default {
       };
       this.$ajax.post({
         apiKey: this.type === 'add' ? 'hotelAdd' : 'hotelUpdate',
-        params: formData,
+        params: {
+          ...this.formData,
+          labelList: this.formData.labelList.map(item => ({
+            labelId: item.id
+          }))
+        },
         loading: false,
         config: {
           headers: { 'Content-Type': 'application/json;charset-UTF-8' }
@@ -230,6 +250,20 @@ export default {
       this.visible = false;
       this.isLoading = false;
       this.type = '';
+    },
+    checkLabel () {
+      this.$refs.labelCheckModel.show({
+        checkedList: this.formData.labelList,
+        confirmFn: (checkedList) => {
+          this.formData.labelList = checkedList;
+        },
+        cancelFn: () => {}
+      });
+    },
+    delLabel (item) {
+      this.formData.labelList = this.formData.labelList.filter(coupon => {
+        return coupon.id !== item.id;
+      });
     }
   }
 };

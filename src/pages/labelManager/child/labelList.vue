@@ -9,7 +9,7 @@
             </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-                <div class="filter-label">商品名称：</div>
+                <div class="filter-label">标签名称：</div>
                 <i-input v-model="filterParams.name" placeholder="商品名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
@@ -64,7 +64,6 @@
 <script>
 import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
   components: {
