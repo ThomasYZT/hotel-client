@@ -36,6 +36,18 @@
                 <FormItem class="block-form-item" label="图片" prop="attachList">
                   <img-uploader v-model="formData.attachList"></img-uploader>
                 </FormItem>
+                <FormItem class="block-form-item" label="酒店标签" prop="labelList">
+                  <i-button type="primary" @click="checkLabel">选择酒店标签</i-button>
+                  <div class="coupon-tag-wrapper">
+                    <div class="coupon-tag"
+                         v-for="item in formData.labelList" :key="item.id">
+                      <img class="del-icon"  alt=""
+                           src="../../../assets/img/delete.png"
+                           @click.stop="delLabel(item)">
+                      {{item.id}}
+                    </div>
+                  </div>
+                </FormItem>
                 <FormItem class="inline-form-item" label="X坐标" prop="baiduX">
                   <i-input type="text" placeholder="X坐标" v-model.trim="formData.baiduX" />
                 </FormItem>
@@ -45,18 +57,6 @@
                 <FormItem class="block-form-item" label="位置搜索">
                   <div class="map-wrapper">
                     <place-search @change="positionChange"></place-search>
-                  </div>
-                </FormItem>
-                <FormItem class="block-form-item" label="酒店标签" prop="labelList">
-                  <i-button type="primary" @click="checkLabel">选择酒店标签</i-button>
-                  <div class="coupon-tag-wrapper">
-                    <div class="coupon-tag"
-                         v-for="item in formData.labelList" :key="item.id">
-                      <img class="del-icon"  alt=""
-                           src="../../../assets/img/delete.png"
-                           @click.stop="delLabel(item)">
-                      {{item.name}}
-                    </div>
                   </div>
                 </FormItem>
                 <FormItem class="block-form-item" label="酒店地址" prop="address">
@@ -295,6 +295,33 @@ export default {
   .map-wrapper {
     height: 300px;
     width: 80%;
+  }
+  .coupon-tag-wrapper {
+    @include flex_layout(row, flex-start, center);
+    margin-top: 10px;
+    .coupon-tag {
+      position: relative;
+      margin-right: 10px;
+      padding: 2px 10px;
+      border-radius: 5px;
+      border: 1px solid #EFEFEF;
+
+      &:hover {
+        .del-icon {
+          display: block;
+        }
+      }
+      .del-icon {
+        position: absolute;
+        display: none;
+        width: 15px;
+        height: 15px;
+        right: -5px;
+        top: -5px;
+        transition: all .1s;
+        cursor: pointer;
+      }
+    }
   }
 }
 

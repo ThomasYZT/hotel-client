@@ -21,7 +21,7 @@
           <table-com ref="Table"
                      :data="tableData"
                      :has-page="false"
-                     :config="couponCheckTableConfig"
+                     :config="labelCheckTableConfig"
                      :getList="getList"
                      @selectChange="onSelectChange">
             <template slot="col0"
@@ -30,7 +30,7 @@
                                :min-width="item.minWidth">
               </el-table-column>
             </template>
-            <template slot="col1"
+            <template slot="col2"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
@@ -55,11 +55,11 @@
 </template>
 
 <script>
-import { tableConfig } from '../../labelManager/child/tableConfig';
+import { labelCheckTableConfig } from '../../labelManager/child/tableConfig';
 export default {
   data () {
     return {
-      tableConfig,
+      labelCheckTableConfig,
       tableData: [],
       checkedList: [],
       filterParams: {
@@ -125,6 +125,7 @@ export default {
           this.checkedList.push(item);
         }
       });
+      console.log(this.checkedList)
     }
   }
 };
