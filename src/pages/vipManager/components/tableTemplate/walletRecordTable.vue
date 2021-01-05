@@ -69,6 +69,14 @@
 import { recordTypeList, walletSourceList } from '../../../../assets/enums/index';
 import { walletRecordTableConfig } from './tableConfig';
 export default {
+  props: {
+    vipInfo: {
+      type: Object,
+      default () {
+        return {};
+      }
+    }
+  },
   data () {
     return {
       walletSourceList,
@@ -87,6 +95,7 @@ export default {
       this.$ajax.post({
         apiKey: 'vipInfoWalletRecord',
         params: {
+          vipUserId: this.vipInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams

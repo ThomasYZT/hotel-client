@@ -36,6 +36,14 @@
 import { recordTypeList, expSourceList } from '../../../../assets/enums/index';
 import { experienceRecordTableConfig } from './tableConfig';
 export default {
+  props: {
+    vipInfo: {
+      type: Object,
+      default () {
+        return {};
+      }
+    }
+  },
   data () {
     return {
       expSourceList,
@@ -54,6 +62,7 @@ export default {
       this.$ajax.post({
         apiKey: 'vipInfoExperienceRecord',
         params: {
+          vipUserId: this.vipInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams

@@ -91,6 +91,14 @@
 import { consumeSourceList, paymentStatusList } from '../../../../assets/enums/index';
 import { consumeRecordTableConfig } from './tableConfig';
 export default {
+  props: {
+    vipInfo: {
+      type: Object,
+      default () {
+        return {};
+      }
+    }
+  },
   data () {
     return {
       paymentStatusList,
@@ -109,6 +117,7 @@ export default {
       this.$ajax.post({
         apiKey: 'vipInfoConsumeRecord',
         params: {
+          vipUserId: this.vipInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams

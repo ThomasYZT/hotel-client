@@ -1,22 +1,22 @@
 <template>
   <Tabs v-model="tabIndex" :animated="false">
     <TabPane label="消费记录" name="#1">
-      <consumeRecordTable v-if="tabIndex === '#1'" />
+      <consumeRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#1'" />
     </TabPane>
     <TabPane label="积分记录" name="#2">
-      <couponRecordTable v-if="tabIndex === '#2'" />
+      <couponRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#2'" />
     </TabPane>
     <TabPane label="钱包记录" name="#3">
-      <experienceRecordTable v-if="tabIndex === '#3'" />
+      <experienceRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#3'" />
     </TabPane>
     <TabPane label="经验记录" name="#4">
-      <integralRecordTable v-if="tabIndex === '#4'" />
+      <integralRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#4'" />
     </TabPane>
     <TabPane label="等级记录" name="#5">
-      <levelRecordTable v-if="tabIndex === '#5'" />
+      <levelRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#5'" />
     </TabPane>
     <TabPane label="优惠券记录" name="#6">
-      <walletRecordTable v-if="tabIndex === '#6'" />
+      <walletRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#6'" />
     </TabPane>
   </Tabs>
 </template>
@@ -29,6 +29,14 @@ import integralRecordTable from './integralRecordTable';
 import levelRecordTable from './levelRecordTable';
 import walletRecordTable from './walletRecordTable';
 export default {
+  props: {
+    vipInfo: {
+      type: Object,
+      default () {
+        return {};
+      }
+    }
+  },
   components: {
     consumeRecordTable,
     couponRecordTable,

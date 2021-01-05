@@ -24,6 +24,14 @@
 import { couponExpireStatusList } from '../../../../assets/enums/index';
 import { couponRecordTableConfig } from './tableConfig';
 export default {
+  props: {
+    vipInfo: {
+      type: Object,
+      default () {
+        return {};
+      }
+    }
+  },
   data () {
     return {
       couponExpireStatusList,
@@ -41,6 +49,7 @@ export default {
       this.$ajax.get({
         apiKey: 'vipInfoCouponsRecord',
         params: {
+          vipUserId: this.vipInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams

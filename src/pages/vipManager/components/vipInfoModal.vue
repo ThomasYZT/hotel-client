@@ -87,7 +87,7 @@
             </div>
           </div>
         </div>
-        <tableTemplate></tableTemplate>
+        <tableTemplate :vipInfo="detail"></tableTemplate>
       </div>
     </page-board>
   </div>

@@ -36,6 +36,14 @@
 import { integralSourceList, recordTypeList } from '../../../../assets/enums/index';
 import { integralRecordTableConfig } from './tableConfig';
 export default {
+  props: {
+    vipInfo: {
+      type: Object,
+      default () {
+        return {};
+      }
+    }
+  },
   data () {
     return {
       recordTypeList,
@@ -54,6 +62,7 @@ export default {
       this.$ajax.post({
         apiKey: 'vipInfoIntegralRecord',
         params: {
+          vipUserId: this.vipInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams

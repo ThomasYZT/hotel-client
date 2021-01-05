@@ -11,6 +11,14 @@
 <script>
 import { levelRecordTableConfig } from './tableConfig';
 export default {
+  props: {
+    vipInfo: {
+      type: Object,
+      default () {
+        return {};
+      }
+    }
+  },
   data () {
     return {
       levelRecordTableConfig,
@@ -27,6 +35,7 @@ export default {
       this.$ajax.post({
         apiKey: 'vipInfoLeaveRecord',
         params: {
+          vipUserId: this.vipInfo.id,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams
