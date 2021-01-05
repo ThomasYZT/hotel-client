@@ -245,7 +245,7 @@
       <span slot="footer" class="dialog-footer">
         <i-button v-if="canCloseModal" style="margin-right: 10px" type="primary" @click="payValidate">支 付</i-button>
         <i-button v-if="modalState === modalStatus.checkin" style="margin-right: 10px" type="primary" @click="checkinConfirm">登记入住</i-button>
-        <i-button v-if="canCloseModal" @click="cancel">取 消</i-button>
+        <i-button v-if="modalState === modalStatus.query" @click="cancel">取 消</i-button>
       </span>
     </el-dialog>
 
@@ -532,12 +532,16 @@ export default {
       });
     },
     cancel () {
-      if (this.modalState !== modalStatus.orderPreview) return;
+      if (![modalStatus.orderPreview, modalStatus.query].includes(this.modalState)) return;
       this.cancelFn && this.cancelFn();
       this.reset();
     },
     reset () {
-      this.$refs.Form.forEach(item => item.resetFields());
+      if (this.$refs.Form.length) {
+        this.$refs.Form.forEach(item => item.resetFields());
+      } else {
+        this.$refs.Form.resetFields();
+      }
       this.item = {};
       this.modalState = modalStatus.query;
       this.confirmFn = null;

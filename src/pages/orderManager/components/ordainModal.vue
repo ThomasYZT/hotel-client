@@ -325,6 +325,7 @@ export default {
     },
     checkin () {
       this.$emit('checkin', this.formData.phone);
+      this.reset();
     },
     addItem () {
       this.formData.orderRoomVos.push({});

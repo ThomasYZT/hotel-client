@@ -84,8 +84,6 @@ export default {
       isLoading: false,
       type: '',
       formData: {
-        typeName: '',
-        price: '',
         attachId: 0,
         attachList: []
       },
@@ -130,28 +128,28 @@ export default {
           ...item,
           attributeList: attributeInfo.map(item => item.dictionaryId)
         }, this.formData);
-        
-      if (confirmFn) {
-        this.confirmFn = confirmFn;
-      }
 
-      if (cancelFn) {
-        this.cancelFn = cancelFn;
-      }
-      if (type === 'edit') {
-        this.formData.price = this.$util.toYuan(this.formData.price);
-        this.formData.cashPledge = this.$util.toYuan(this.formData.cashPledge);
-        this.formData.num = item.num;
-      }
+        if (confirmFn) {
+          this.confirmFn = confirmFn;
+        }
 
-      if (type === 'add' || (type === 'edit' && !item.attachId)) {
-        this.visible = true;
-      } else {
-        this.getAttachInfo(item.attachId).then(data => {
-          this.formData.attachList = data;
+        if (cancelFn) {
+          this.cancelFn = cancelFn;
+        }
+        if (type === 'edit') {
+          this.formData.price = this.$util.toYuan(this.formData.price);
+          this.formData.cashPledge = this.$util.toYuan(this.formData.cashPledge);
+          this.formData.num = item.num;
+        }
+
+        if (type === 'add' || (type === 'edit' && !item.attachId)) {
           this.visible = true;
-        });
-      }
+        } else {
+          this.getAttachInfo(item.attachId).then(data => {
+            this.formData.attachList = data;
+            this.visible = true;
+          });
+        }
         this.visible = true;
       }).catch(() => {
         this.$message.error(`获取数据失败`);
@@ -195,8 +193,7 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
-        typeName: '',
-        price: '',
+        attachId: 0,
         attachList: []
       };
       this.confirmFn = null;
@@ -205,7 +202,7 @@ export default {
       this.isLoading = false;
       this.type = '';
     },
-    getRoomTypeAttribute(roomTypeId) {
+    getRoomTypeAttribute (roomTypeId) {
       return new Promise((resolve, reject) => {
         if (this.type === 'add') return resolve([]);
         this.$ajax.get({
@@ -231,7 +228,7 @@ export default {
           },
           loading: false
         }).then(data => {
-           resolve(data || []);
+          resolve(data || []);
         }).catch(err => {
           reject(err);
         });
