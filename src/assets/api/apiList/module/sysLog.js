@@ -1,6 +1,6 @@
 export default {
     module: 'common',
   
-    pageList: '/common/getOperationLogPageList'
+    pageList: '/common/operLogPageList'
   };
   

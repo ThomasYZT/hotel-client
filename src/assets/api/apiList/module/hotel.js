@@ -6,5 +6,6 @@ export default {
   delete: '/hotelInfo/delete',
   update: '/hotelInfo/update',
   getAllList: '/hotelInfo/getByBrand',
-  getHotelAgentTree: '/hotelInfo/GetHotelInfoTree'
+  getHotelAgentTree: '/hotelInfo/GetHotelInfoTree',
+  getByhotelLabel: '/hotelLabel/getByhotelId'
 };

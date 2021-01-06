@@ -44,7 +44,7 @@
                       <img class="del-icon"  alt=""
                            src="../../../assets/img/delete.png"
                            @click.stop="delLabel(item)">
-                      {{item.id}}
+                      {{item.labelName}}
                     </div>
                   </div>
                 </FormItem>
@@ -123,7 +123,8 @@ export default {
         introduce: '',
         baiduX: '0',
         baiduY: '0',
-        attachList: []
+        attachList: [],
+        labelList: []
       },
       confirmFn: null,
       cancelFn: null,
@@ -170,25 +171,38 @@ export default {
     ]),
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || (type === 'edit' && !item)) return;
-      this.formData = defaultsDeep({}, item, this.formData);
-      this.$util.valueToStr(this.formData);
+      // this.formData = defaultsDeep({}, item, this.formData);
+      // this.$util.valueToStr(this.formData);
       this.type = type;
+      this.getHotelLabel(item.id).then(labelList => {
+        this.formData = defaultsDeep({}, {
+          ...item,
+          labelList
+        }, this.formData);
+        this.$util.valueToStr(this.formData);
 
-      if (confirmFn) {
-        this.confirmFn = confirmFn;
-      }
+        if (confirmFn) {
+          this.confirmFn = confirmFn;
+        }
 
-      if (cancelFn) {
-        this.cancelFn = cancelFn;
-      }
-      if (type === 'add' || (type === 'edit' && !item.attachId)) {
-        this.visible = true;
-      } else {
-        this.getAttachInfo(item.attachId).then(data => {
-          this.formData.attachList = data;
+        if (cancelFn) {
+          this.cancelFn = cancelFn;
+        }
+
+        if (type === 'add' || (type === 'edit' && !item.attachId)) {
           this.visible = true;
-        });
-      }
+        } else {
+          this.getAttachInfo(item.attachId).then(data => {
+            this.formData.attachList = data;
+            this.visible = true;
+          });
+        }
+
+        this.visible = true;
+      }).catch(() => {
+        this.$message.error('获取数据失败');
+        this.reset();
+      });
     },
     cancel () {
       this.cancelFn && this.cancelFn();
@@ -263,6 +277,21 @@ export default {
     delLabel (item) {
       this.formData.labelList = this.formData.labelList.filter(coupon => {
         return coupon.id !== item.id;
+      });
+    },
+    getHotelLabel (hotelId) {
+      return new Promise((resolve, reject) => {
+        if (this.type === 'add') return resolve([]);
+        this.$ajax.get({
+          apiKey: 'hotelGetByhotelLabel',
+          params: {
+            hotelId
+          }
+        }).then(res => {
+          resolve(res);
+        }).catch(err => {
+          reject(err);
+        });
       });
     }
   }
