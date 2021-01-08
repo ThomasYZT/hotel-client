@@ -10,7 +10,7 @@ export default {
       iconClass: 'icon-dailishang',
       activePath: `${topName}`,
       isMenu: true,
-      order: 1
+      order: 2
     },
     children: {
       // 菜单列表

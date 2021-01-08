@@ -16,13 +16,31 @@ export const nvllRouterAuth = (to) => {
 
 export const generateRoutes = (menuInfo) => {
   if (menuInfo === 'all') {
-    return routes;
+    return _routeRank(routes.filter(item => item.path !== '/homePage'));
   } else {
-    return routes.filter((routeConfig) => treeTraverse([routeConfig], (item) => {
+    return _routeRank(routes.filter((routeConfig) => treeTraverse([routeConfig], (item) => {
       return !!menuInfo.find(info => info.url === item.path);
-    }));
+    })));
   }
 };
+
+function _routeRank (routes) {
+  return routes ? routes.sort((a, b) => {
+    if (a.meta.order && b.meta.order) {
+      if (a.meta.order > b.meta.order) {
+        return 1;
+      } else {
+        return -1;
+      }
+    } else if (a.meta.order && !b.meta.order) {
+      return -1;
+    } else if (b.meta.order && !a.meta.order) {
+      return 1;
+    } else {
+      return 1;
+    }
+  }) : [];
+}
 
 export const goRoute = (routerInfo) => {
 

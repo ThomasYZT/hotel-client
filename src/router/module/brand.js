@@ -10,7 +10,7 @@ export default {
       iconClass: 'icon-pinpaisheji',
       activePath: `${topName}`,
       isMenu: true,
-      order: 2
+      order: 3
     },
     children: {
       // 菜单列表
