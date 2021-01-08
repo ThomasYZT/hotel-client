@@ -622,3 +622,83 @@ export const consumeTimeTypeList = [
     label: '入住后'
   }
 ];
+
+// 统计类型
+export const statisticType = {
+  totalTurnover: 1,
+  memberRecharge: 2,
+  merchandising: 3,
+  passengerFlow: 4,
+  pay: 5
+};
+
+export const statisticTypeList = [
+  {
+    value: statisticType.totalTurnover,
+    label: '营业总额'
+  },
+  {
+    value: statisticType.memberRecharge,
+    label: '会员充值'
+  },
+  {
+    value: statisticType.merchandising,
+    label: '商品销售'
+  },
+  {
+    value: statisticType.passengerFlow,
+    label: '客流统计'
+  },
+  {
+    value: statisticType.pay,
+    label: '支出汇总'
+  }
+];
+
+export const statePayType = {
+  // 支付类型 0-房费 1-超时房费 2-押金 3-商品 4-赔偿
+  room: 0,
+  timeout: 1,
+  deposit: 2,
+  good: 3,
+  reparation: 4
+};
+
+export const statePayTypeList = [
+  {
+    label: '房费',
+    value: statePayType.room
+  },
+  {
+    label: '超时房费',
+    value: statePayType.timeout
+  },
+  {
+    label: '押金',
+    value: statePayType.deposit
+  },
+  {
+    label: '商品',
+    value: statePayType.good
+  },
+  {
+    label: '赔偿',
+    value: statePayType.reparation
+  }
+];
+
+export const statePayStatus = {
+  fail: 0,
+  success: 1
+};
+
+export const statePayStatusList = [
+  {
+    label: '支付成功',
+    value: statePayStatus.success
+  },
+  {
+    label: '支付失败',
+    value: statePayStatus.fail
+  }
+];
