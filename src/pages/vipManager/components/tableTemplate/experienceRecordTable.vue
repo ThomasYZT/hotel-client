@@ -5,7 +5,7 @@
              :total-size="totalSize"
              :config="experienceRecordTableConfig"
              :getList="getList">
-    <template slot="col0"
+    <template slot="col1"
               slot-scope="{ item }">
       <el-table-column :prop="item.prop"
                        :label="item.label"
@@ -14,18 +14,6 @@
         <template slot-scope="{ row }">
           <span>{{recordTypeList.find(item => item.value === row.type) ?
             recordTypeList.find(item => item.value === row.type).label : ''}}</span>
-        </template>
-      </el-table-column>
-    </template>
-    <template slot="col1"
-              slot-scope="{ item }">
-      <el-table-column :prop="item.prop"
-                       :label="item.label"
-                       :fixed="item.fixed"
-                       :min-width="item.minWidth">
-        <template slot-scope="{ row }">
-          <span>{{expSourceList.find(item => item.value === row.source) ?
-            expSourceList.find(item => item.value === row.source).label : ''}}</span>
         </template>
       </el-table-column>
     </template>

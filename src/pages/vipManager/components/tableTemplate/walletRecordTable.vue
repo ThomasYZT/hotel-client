@@ -5,7 +5,7 @@
              :total-size="totalSize"
              :config="walletRecordTableConfig"
              :getList="getList">
-    <template slot="col1"
+    <template slot="col2"
               slot-scope="{ item }">
       <el-table-column :prop="item.prop"
                        :label="item.label"
@@ -17,29 +17,6 @@
         </template>
       </el-table-column>
     </template>
-    <template slot="col2"
-              slot-scope="{ item }">
-      <el-table-column :prop="item.prop"
-                       :label="item.label"
-                       :fixed="item.fixed"
-                       :min-width="item.minWidth">
-        <template slot-scope="{ row }">
-          <span>{{walletSourceList.find(item => item.value === row.source) ?
-            walletSourceList.find(item => item.value === row.source).label : ''}}</span>
-        </template>
-      </el-table-column>
-    </template>
-    <template slot="col3"
-              slot-scope="{ item }">
-      <el-table-column :prop="item.prop"
-                       :label="item.label"
-                       :fixed="item.fixed"
-                       :min-width="item.minWidth">
-        <template slot-scope="{ row }">
-          <span>{{$util.toYuan(row.orderAmount)}}</span>
-        </template>
-      </el-table-column>
-    </template>
     <template slot="col4"
               slot-scope="{ item }">
       <el-table-column :prop="item.prop"
@@ -47,7 +24,7 @@
                        :fixed="item.fixed"
                        :min-width="item.minWidth">
         <template slot-scope="{ row }">
-          <span>{{$util.toYuan(row.activityDiscount)}}</span>
+          <span>{{$util.toYuan(row.totalAmount)}}</span>
         </template>
       </el-table-column>
     </template>
@@ -58,7 +35,18 @@
                        :fixed="item.fixed"
                        :min-width="item.minWidth">
         <template slot-scope="{ row }">
-          <span>{{$util.toYuan(row.cardDiscount)}}</span>
+          <span>{{$util.toYuan(row.baseAmount)}}</span>
+        </template>
+      </el-table-column>
+    </template>
+    <template slot="col6"
+              slot-scope="{ item }">
+      <el-table-column :prop="item.prop"
+                       :label="item.label"
+                       :fixed="item.fixed"
+                       :min-width="item.minWidth">
+        <template slot-scope="{ row }">
+          <span>{{$util.toYuan(row.giveAmount)}}</span>
         </template>
       </el-table-column>
     </template>

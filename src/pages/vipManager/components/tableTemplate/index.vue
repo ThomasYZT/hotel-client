@@ -4,19 +4,19 @@
       <consumeRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#1'" />
     </TabPane>
     <TabPane label="积分记录" name="#2">
-      <couponRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#2'" />
+      <integralRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#2'" />
     </TabPane>
     <TabPane label="钱包记录" name="#3">
-      <experienceRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#3'" />
+      <walletRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#3'" />
     </TabPane>
     <TabPane label="经验记录" name="#4">
-      <integralRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#4'" />
+      <experienceRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#4'" />
     </TabPane>
     <TabPane label="等级记录" name="#5">
       <levelRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#5'" />
     </TabPane>
     <TabPane label="优惠券记录" name="#6">
-      <walletRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#6'" />
+      <couponRecordTable :vipInfo="vipInfo" v-if="tabIndex === '#6'" />
     </TabPane>
   </Tabs>
 </template>
