@@ -6,6 +6,8 @@
               v-if="!reset"
               size="medium"
               :data="data"
+              :show-summary="showSummary"
+              :summary-method="summaryHandler"
               :height="hasPage && data.length > 0 ? 'calc(100% - 50px)' : '100%'"
               :show-overflow-tooltip="true"
               header-row-class-name="custom-header-row"
@@ -110,6 +112,16 @@ export default {
     indent: {
       type: Number,
       default: 16
+    },
+    showSummary: {
+      type: Boolean,
+      default: false
+    },
+    summaryHandler: {
+      type: Function,
+      default () {
+        return () => {};
+      }
     }
   },
   data () {
@@ -147,6 +159,12 @@ export default {
     window.removeEventListener('resize', this.doLayout);
   },
   watch: {
+    data: {
+      handler () {
+        this.doLayout();
+      },
+      deep: true
+    },
     curSize: {
       handler (val) {
         this.$emit('update:pageSize', val);

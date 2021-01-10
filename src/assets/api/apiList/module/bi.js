@@ -8,5 +8,14 @@ export default {
   outStat: '/bi/outStat',
   paymentStat: '/bi/paymentStat',
   refundStat: '/bi/refundStat',
-  total: '/bi/total'
+  total: '/bi/total',
+  getGoodsSalesCollect: '/bi/getGoodsSalesCollect',
+  getRefundCollect: '/bi/getRefundCollect',
+  getCreditCollect: '/bi/getCreditCollect',
+  getTopUpConsumeCollect: '/bi/getTopUpConsumeCollect',
+  inTotal: '/bi/inTotal',
+  roomStat: '/bi/roomStat',
+  workStat: '/bi/workStat',
+  todayTotal: '/bi/todayTotal',
+  yesterdayTotal: '/bi/yesterdayTotal'
 };

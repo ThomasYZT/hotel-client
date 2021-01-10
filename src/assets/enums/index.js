@@ -702,3 +702,45 @@ export const statePayStatusList = [
     value: statePayStatus.fail
   }
 ];
+
+export const settleStatus = {
+  unPay: 0,
+  payed: 1
+};
+
+export const settleStatusList = [
+  {
+    label: '未支付',
+    value: settleStatus.unPay
+  },
+  {
+    label: '已支付',
+    value: settleStatus.payed
+  }
+];
+
+export const refundStatus = {
+  refunding: 0,
+  success: 1,
+  fail: 2,
+  storage: 3
+};
+
+export const refundStatusList = [
+  {
+    label: '退款中',
+    value: refundStatus.refunding
+  },
+  {
+    label: '退款成功',
+    value: refundStatus.success
+  },
+  {
+    label: '退款失败',
+    value: refundStatus.fail
+  },
+  {
+    label: '暂存未退款',
+    value: refundStatus.storage
+  }
+]
