@@ -17,18 +17,6 @@
         </template>
       </el-table-column>
     </template>
-    <template slot="col7"
-              slot-scope="{ item }">
-      <el-table-column :prop="item.prop"
-                       :label="item.label"
-                       :fixed="item.fixed"
-                       :min-width="item.minWidth">
-        <template slot-scope="{ row }">
-          <span>{{integralSourceList.find(item => item.value === row.source) ?
-            integralSourceList.find(item => item.value === row.source).label : ''}}</span>
-        </template>
-      </el-table-column>
-    </template>
   </table-com>
 </template>
 

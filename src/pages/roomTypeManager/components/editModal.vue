@@ -116,7 +116,6 @@ export default {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || !item) return;
       // this.formData = defaultsDeep({}, item, this.formData);
-      this.$util.valueToStr(this.formData);
       this.type = type;
 
       Promise.all([
@@ -141,6 +140,8 @@ export default {
           this.formData.cashPledge = this.$util.toYuan(this.formData.cashPledge);
           this.formData.num = item.num;
         }
+        
+        this.$util.valueToStr(this.formData);
 
         if (type === 'add' || (type === 'edit' && !item.attachId)) {
           this.visible = true;

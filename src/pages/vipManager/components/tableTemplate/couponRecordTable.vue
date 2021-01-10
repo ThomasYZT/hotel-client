@@ -5,15 +5,27 @@
              :total-size="totalSize"
              :config="couponRecordTableConfig"
              :getList="getList">
-    <template slot="col2"
+    <template slot="col0"
               slot-scope="{ item }">
       <el-table-column :prop="item.prop"
                        :label="item.label"
                        :fixed="item.fixed"
                        :min-width="item.minWidth">
         <template slot-scope="{ row }">
-          <span>{{couponExpireStatusList.find(item => item.value === row.source) ?
-            couponExpireStatusList.find(item => item.value === row.source).label : ''}}</span>
+          <span>{{couponsTypeList.find(item => item.value === row.purpose) ?
+            couponsTypeList.find(item => item.value === row.purpose).label : ''}}</span>
+        </template>
+      </el-table-column>
+    </template>
+    <template slot="col7"
+              slot-scope="{ item }">
+      <el-table-column :prop="item.prop"
+                       :label="item.label"
+                       :fixed="item.fixed"
+                       :min-width="item.minWidth">
+        <template slot-scope="{ row }">
+          <span>{{couponExpireStatusList.find(item => item.value === row.state) ?
+            couponExpireStatusList.find(item => item.value === row.state).label : ''}}</span>
         </template>
       </el-table-column>
     </template>
@@ -21,7 +33,7 @@
 </template>
 
 <script>
-import { couponExpireStatusList } from '../../../../assets/enums/index';
+import { couponsTypeList, couponExpireStatusList } from '../../../../assets/enums/index';
 import { couponRecordTableConfig } from './tableConfig';
 export default {
   props: {
@@ -34,6 +46,7 @@ export default {
   },
   data () {
     return {
+      couponsTypeList,
       couponExpireStatusList,
       couponRecordTableConfig,
       tableData: [],
