@@ -354,7 +354,7 @@ export default {
     };
   },
   methods: {
-    show ({ item, phone, confirmFn, cancelFn }) {
+    show ({ item, phone = '', confirmFn, cancelFn }) {
       if (!item) return;
       this.item = { ...item, userId: 0 };
       if (confirmFn) {

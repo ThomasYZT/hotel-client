@@ -38,6 +38,7 @@
                 <FormItem class="inline-form-item" label="预计住店开始时间" prop="startTime">
                   <i-date-picker v-model="formData.startTime"
                                  :editable="false"
+                                 :options="dateOptions"
                                  transfer
                                  type="datetime"
                                  format="yyyy-MM-dd"
@@ -47,6 +48,7 @@
                 <FormItem class="inline-form-item" label="预计住店结束时间" prop="endTime">
                   <i-date-picker v-model="formData.endTime"
                                  :editable="false"
+                                 :options="dateOptions"
                                  transfer
                                  type="datetime"
                                  format="yyyy-MM-dd"
@@ -195,13 +197,25 @@ export default {
       'userInfo'
     ])
   },
-  data () {
+  data (vm) {
     const validatePhoneNum = (rule, value, callback) => {
       if (!value) callback();
       if (this.$validator.isMobile(value) || this.$validator.isTelephone(value)) {
         callback();
       } else {
         callback(new Error('请输入正确的联系电话'));
+      }
+    };
+
+    const dateCompare = (rule, value, callback) => {
+      if (vm.formData.startTime && vm.formData.endTime) {
+        if (vm.formData.startTime <= vm.formData.endTime) {
+          callback();
+        } else {
+          callback(new Error('结束日期必须大于开始日日期'));
+        }
+      } else {
+        callback();
       }
     };
     return {
@@ -219,7 +233,14 @@ export default {
       orderResult: [],
       formData: {
         userId: 0,
+        startTime: new Date(),
+        endTime: new Date(this.$date().add(1, 'day')),
         orderRoomVos: [{}]
+      },
+      dateOptions: {
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
       },
       confirmFn: null,
       cancelFn: null,
@@ -231,7 +252,8 @@ export default {
           { required: true, type: 'date', message: '请选择预计住店开始时间', trigger: 'blur' }
         ],
         endTime: [
-          { required: true, type: 'date', message: '请选择预计住店结束时间', trigger: 'blur' }
+          { required: true, type: 'date', message: '请选择预计住店结束时间', trigger: ['change', 'blur'] },
+          { validator: dateCompare, trigger: 'blur' }
         ],
         type: [
           { required: true, type: 'number', message: '请选择类型', trigger: 'blur' }
@@ -378,7 +400,7 @@ export default {
       this.cancelFn = null;
       this.visible = false;
       this.isLoading = false;
-    },
+    }
   }
 };
 </script>

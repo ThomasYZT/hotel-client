@@ -48,7 +48,7 @@
                        v-if="[roomStatus.clean, roomStatus.error, roomStatus.outClearing].includes(item.status)"
                        @click.stop="changeStatus(item)">修改状态</div>
                   <div class="desc"
-                       v-if="[roomStatus.reserved].includes(item.status)">{{item.customer || '-'}}</div>
+                       v-if="[roomStatus.reserved, roomStatus.live, roomStatus.hourRoom, roomStatus.outClearing].includes(item.status)">{{item.customer || '-'}}</div>
                 </div>
               </div>
             </div>
@@ -318,9 +318,9 @@ export default {
       this.$refs.checkInModal.show({
         item: {
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
-          hotelUserId: this.userInfo.id,
-          phone
+          hotelUserId: this.userInfo.id
         },
+        phone,
         confirmFn: () => {
           this.getList();
         }
@@ -505,8 +505,8 @@ export default {
           box-sizing: border-box;
           margin: 10px 10px 10px 0;
           padding: 10px 10px;
-          height: 90px;
-          width: 90px;
+          height: 110px;
+          width: 110px;
           font-size: 16px;
           background-color: $lightGreen;
           border-radius: 4px;
