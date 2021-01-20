@@ -6,6 +6,5 @@ export default {
   delete: '/hotelGoods/delete',
   update: '/hotelGoods/update',
   outShelvesGoods: '/hotelGoods/outShelvesGoods',
-  shelvesGoods: '/hotelGoods/shelvesGoods',
-  outStorage: '/hotelGoods/outStorage'
+  shelvesGoods: '/hotelGoods/shelvesGoods'
 };

@@ -1,39 +1,35 @@
 export const tableConfig = [
     {
-      prop: 'name',
-      label: '商品名称',
-      minWidth: '150px',
+      prop: 'roomNumber',
+      label: '房号',
+      width: '130px',
       fixed: 'left'
     },
     {
-      prop: 'code',
-      label: '商品代码',
-      width: '150px'
+      prop: 'name',
+      label: '消费商品',
+      width: '260px'
     },
     {
-        prop: 'unitPrice',
-        label: '单价',
-        width: '100px'
+        prop: 'totalPrice',
+        label: '消费金额',
+        width: '130px'
       },
     {
-      prop: 'number',
-      label: '数量',
-      width: '100px'
-    },
-    {
-      prop: 'totalPrice',
-      label: '总价',
-      width: '100px'
-    },
-    {
       prop: 'methodPayment',
-      label: '付款方式',
-      width: '120px'
+      label: '支付方式',
+      width: '130px'
     },
     {
-        prop: 'createTime',
-        label: '创建时间',
-        width: '160px'
+      prop: 'createTime',
+      label: '出库时间',
+      width: '160px'
+    },
+    {
+      prop: 'operate',
+      label: '操作',
+      fixed: 'right',
+      width: '130px'
     }
   ];
   

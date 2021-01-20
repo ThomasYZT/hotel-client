@@ -1,6 +1,10 @@
 export default {
     module: 'goodsOutStorage',
   
-    pageList: '/hotelGoods/pageList'
+    pageList: '/hotelGoodsOutStorage/pageList',
+    add: '/hotelGoodsOutStorage/add',
+    delete: '/hotelGoodsOutStorage/delete',
+    update: '/hotelGoodsOutStorage/update',
+    getDetail: '/outStorageDetail/getByStorageId'
   };
   

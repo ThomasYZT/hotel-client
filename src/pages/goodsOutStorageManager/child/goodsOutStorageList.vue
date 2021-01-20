@@ -7,14 +7,17 @@
         </div>
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
+             <div class="tool-wrapper left-box">
+              <i-button v-if="showAddBtn" type="primary" @click="addItem">添加</i-button>
+            </div>
             <div class="filter-block right-box">
               <div class="filter-item">
-                <div class="filter-label">商品名称：</div>
-                <i-input v-model="filterParams.name" placeholder="商品名称模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
+                <div class="filter-label">房号：</div>
+                <i-input v-model="filterParams.roomNumber" placeholder="房号模糊查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
               <div class="filter-item">
-                <div class="filter-label">入库时间：</div>
-                <i-date-picker type="daterange" split-panels placeholder="入库时间" @on-change="timeChange"></i-date-picker>
+                <div class="filter-label">出库时间：</div>
+                <i-date-picker type="daterange" split-panels placeholder="出库时间" @on-change="timeChange"></i-date-picker>
               </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
@@ -26,18 +29,61 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
+            <template slot="col2"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{$util.toYuan(row.totalPrice)}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col3"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <span>{{payTypeList.find(item => item.value === String(row.methodPayment)) ?
+                    payTypeList.find(item => item.value === String(row.methodPayment)).label : ''}}</span>
+                </template>
+              </el-table-column>
+            </template>
+            <template slot="col5"
+                      slot-scope="{ item }">
+              <el-table-column :prop="item.prop"
+                               :label="item.label"
+                               :fixed="item.fixed"
+                               :min-width="item.minWidth">
+                <template slot-scope="{ row }">
+                  <div class="operate-block">
+                    <i-button type="primary" class="table-btn" size="small" @click="editItem(row)">编 辑</i-button>
+                    <i-button type="error" class="table-btn" size="small" @click="delClick(row)">删 除</i-button>
+                  </div>
+                </template>
+              </el-table-column>
+            </template>
           </table-com>
         </div>
       </div>
     </div>
+    <editModal ref="editModal"></editModal>
+    <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
 <script>
+import editModal from '../components/editModal';
 import { tableConfig } from './tableConfig.js';
-import { userType } from '../../../assets/enums';
+import { userType, payTypeList } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
+  components: {
+    editModal
+  },
   computed: {
     ...mapGetters([
       'userInfo'
@@ -73,13 +119,14 @@ export default {
   },
   data () {
     return {
+      payTypeList,
       tableConfig,
       tableData: [],
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
       filterParams: {
-        name: '',
+        roomNumber: '',
         startTime: '',
         endTime: ''
       },
@@ -112,6 +159,40 @@ export default {
     timeChange (val) {
       this.filterParams.startTime = val[0] || '';
       this.filterParams.endTime = val[1] || '';
+    },
+    addItem () {
+      this.$refs.editModal.show({
+        type: 'add',
+        item: {
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId
+        },
+        confirmFn: this.getList
+      });
+    },
+    editItem (item) {
+      this.$refs.editModal.show({ type: 'edit', item, confirmFn: this.getList });
+    },
+    delClick (item) {
+      this.$refs.confirmModal.show({
+        title: '警告',
+        content: `是否删除`,
+        confirm: () => {
+          this.delItem(item);
+        }
+      });
+    },
+    delItem (item) {
+      this.$ajax.get({
+        apiKey: 'goodsOutStorageDelete',
+        params: {
+          id: item.id
+        }
+      }).then(() => {
+        this.getList();
+        this.$message.success('删除成功');
+      }).catch(err => {
+        this.$message.error(`删除失败${err.msg ? ': ' + err.msg : ''}`);
+      });
     }
   },
   mounted () {
