@@ -10,5 +10,7 @@ export default {
   cancel: '/order/cancelOrder',
   getByMobile: '/order/getNotStayByMobile',
   stayRoom: '/order/stayRoomOrder',
-  charge: '/order/orderCharge'
+  charge: '/order/orderCharge',
+  breakfast: '/order/breakfast',
+  invoice: '/order/invoice'
 };

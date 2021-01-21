@@ -42,13 +42,19 @@
                      :class="{ 'active': item.id === activeRoom.id }"
                      :style="{ backgroundColor: roowStatusList.find(state => item.status === state.value).bgColor }"
                      @click="onRoomClick(item)">
-                  <div>{{item.roomNumber}}</div>
+                  <div>
+                    <span>{{item.roomNumber}}</span>
+                  </div>
                   <div>{{item.roomTypeName}}</div>
                   <div class="status-btn"
                        v-if="[roomStatus.clean, roomStatus.error, roomStatus.outClearing].includes(item.status)"
                        @click.stop="changeStatus(item)">修改状态</div>
                   <div class="desc"
                        v-if="[roomStatus.reserved, roomStatus.live, roomStatus.hourRoom, roomStatus.outClearing].includes(item.status)">{{item.customer || '-'}}</div>
+
+                  <i-tooltip v-if="item.remark" :content="item.remark" transfer>
+                    <div class="remark-tip">...</div>
+                  </i-tooltip>
                 </div>
               </div>
             </div>
@@ -502,6 +508,7 @@ export default {
         overflow-y: auto;
 
         .room-block {
+          position: relative;
           box-sizing: border-box;
           margin: 10px 10px 10px 0;
           padding: 10px 10px;
@@ -520,6 +527,12 @@ export default {
 
           &.active {
             opacity: .6;
+          }
+
+          .remark-tip {
+            position: absolute;
+            left: 0;
+            bottom: 0;
           }
         }
       }

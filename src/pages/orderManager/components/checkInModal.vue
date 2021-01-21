@@ -69,6 +69,16 @@
                     <div class="info-label">联系电话:</div>
                     <div class="info-content">{{formData.mobile}}</div>
                   </div>
+                  <FormItem class="inline-form-item" label="房价" prop="price">
+                    <i-input type="text"
+                             placeholder="房价"
+                             v-model.trim="formData.price" />
+                  </FormItem>
+                  <FormItem class="inline-form-item" label="押金" prop="cashPledge">
+                    <i-input type="text"
+                             placeholder="押金"
+                             v-model.trim="formData.cashPledge"/>
+                  </FormItem>
                   <div class="form-item-block table-block">
                     <i-button type="primary" style="margin-bottom: 10px" size="small" @click="addGood(formIndex)">添加</i-button>
                     <table-com class="good-table"
@@ -254,10 +264,9 @@
 </template>
 
 <script>
-import { orderTypeList, ordainRoomTypeList, genderList, orderStatus, genderMap } from '../../../assets/enums';
+import { orderTypeList, ordainRoomTypeList, genderList, genderMap } from '../../../assets/enums';
 import { goodsTableConfig, userTableConfig } from './tableConfig';
 import payModal from '../components/payModal';
-import defaultsDeep from 'lodash/defaultsDeep';
 const modalStatus = {
   query: 'query',
   orderPreview: 'orderPreview',
@@ -366,11 +375,13 @@ export default {
       }
       this.getGoodsList(item.hotelId).then(data => {
         this.goodsList = data;
-        if (phone) {
-          this.queryFromData.mobile = phone;
-          this.getByMobile();
-        }
         this.visible = true;
+        this.$nextTick(() => {
+          if (phone) {
+            this.queryFromData.mobile = phone;
+            this.getByMobile();
+          }
+        });
       }).catch(err => {
         this.reset();
         this.$message.error(`获取商品列表失败${err.msg ? ': ' + err.msg : ''}`);
@@ -387,7 +398,11 @@ export default {
         }).then(data => {
           if (data && data.length > 0) {
             this.modalState = modalStatus.orderPreview;
-            this.reserveListFormData = data;
+            this.reserveListFormData = data.map(formData => ({
+              ...formData,
+              price: this.$util.toYuan(formData.price),
+              cashPledge: this.$util.toYuan(formData.cashPledge)
+            }));
             this.reserveListFormData = this.reserveListFormData.map(item => ({
               ...item,
               consumeRecords: []
@@ -434,15 +449,16 @@ export default {
         orderPaymentVos: this.reserveListFormData
           .filter((item, index) => !!this.checkList[index])
           .map(item => ({
-            cashPledge: item.cashPledge,
             orderCode: item.code,
-            roomMoney: item.price,
+            cashPledge: this.$util.toCent(item.cashPledge),
+            roomMoney: this.$util.toCent(item.price),
             consumeRecords: item.consumeRecords
           }))
       };
       this.$refs.payModal.show({
         item,
         showDetail: true,
+        config: { cashPledge: true, roomMoney: true, consume: false },
         confirmFn: () => {
           this.showModal = true;
           this.modalState = modalStatus.checkin;

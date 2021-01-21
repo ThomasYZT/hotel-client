@@ -346,7 +346,7 @@ export default {
       });
     },
     checkin () {
-      this.$emit('checkin', this.formData.phone);
+      this.$emit('checkin', this.formData.mobile);
       this.reset();
     },
     addItem () {
@@ -398,6 +398,7 @@ export default {
       this.orderResult = [];
       this.confirmFn = null;
       this.cancelFn = null;
+      this.isComplete = false;
       this.visible = false;
       this.isLoading = false;
     }

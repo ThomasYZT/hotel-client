@@ -215,7 +215,10 @@ export const orderType = {
   mobile: 1,
   machine: 2,
   miniProgram: 3,
-  other: 4
+  meituan: 4,
+  xiecheng: 5,
+  qunaer: 6,
+  other: 7
 };
 
 export const orderTypeList = [
@@ -234,6 +237,18 @@ export const orderTypeList = [
   {
     label: '小程序',
     value: orderType.miniProgram
+  },
+  {
+    label: '美团',
+    value: orderType.meituan
+  },
+  {
+    label: '携程',
+    value: orderType.xiecheng
+  },
+  {
+    label: '去哪儿',
+    value: orderType.qunaer
   },
   {
     label: '其他',
