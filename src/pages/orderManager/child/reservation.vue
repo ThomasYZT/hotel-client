@@ -18,7 +18,8 @@
                      @click.stop="delTool(item)">
                 <i :class="`iconfont ${item.icon}`"></i>
               </div>
-              {{item.name}}
+              <span>{{item.name}}</span>
+              <span>{{item.keyName}}</span>
             </div>
           </div>
 
@@ -104,7 +105,7 @@
 </template>
 
 <script>
-import { userType, roowStatusList, functionType, functionMapList, roomStatus, orderType } from '../../../assets/enums';
+import { userType, roowStatusList, functionType, functionMapList, roomStatus, orderType, keyCodesList } from '../../../assets/enums';
 import addToolModal from '../components/addToolModal';
 import ordainModal from '../components/ordainModal';
 import checkInModal from '../components/checkInModal';
@@ -363,6 +364,7 @@ export default {
       });
     },
     getTools () {
+      window.removeEventListener('keydown', this.keyEventHandler);
       const addToolConfig = {
         id: functionType.addTool,
         name: '添加工具',
@@ -383,7 +385,20 @@ export default {
       }).catch(() => {
         this.functionList = [addToolConfig];
         this.$message.error('获取工具列表失败');
+      }).finally(() => {
+        this.functionList.forEach((item, index) => {
+          this.$set(item, 'keyName', keyCodesList[index].label);
+          this.$set(item, 'keyValue', keyCodesList[index].value);
+        });
+        this.$nextTick(() => {
+          window.addEventListener('keydown', this.keyEventHandler);
+        });
       });
+    },
+    keyEventHandler (e) {
+      let item = this.functionList.find(item => item.keyValue === e.code);
+      this.onFunctionClick(item);
+      item = null;
     },
     delTool (item) {
       this.$refs.confirmModal.show({
@@ -419,6 +434,9 @@ export default {
       this.getList();
       this.getFloors(this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId);
     }
+  },
+  destroyed () {
+    window.removeEventListener('keydown', this.keyEventHandler);
   }
 };
 </script>
@@ -429,15 +447,15 @@ export default {
     height: 100%;
 
     .operation-wrapper {
-      @include flex_layout(row, flex-start, center);
-      height: 100px !important;
+      @include flex_layout(row, flex-start, flex-start);
+      height: 120px !important;
       overflow-y: auto;
 
       .operate-btn {
         @include flex_layout(column, center, center);
         margin-right: 15px;
         width: 80px;
-        height: 80px;
+        height: 100%;
         cursor: pointer;
         white-space: nowrap;
         .icon-wrapper {
@@ -478,7 +496,7 @@ export default {
       }
     }
     .list-wrapper {
-      height: calc(100% - 150px);
+      height: calc(100% - 170px);
 
       .floor-pagenation {
         @include flex_layout(column, flex-start, center);

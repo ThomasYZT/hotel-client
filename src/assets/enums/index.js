@@ -758,4 +758,55 @@ export const refundStatusList = [
     label: '暂存未退款',
     value: refundStatus.storage
   }
-]
+];
+
+export const keyCodesList = [
+  {
+    value: 'F1',
+    label: 'F1'
+  },
+  {
+    value: 'F2',
+    label: 'F2'
+  },
+  {
+    value: 'F3',
+    label: 'F3'
+  },
+  {
+    value: 'F4',
+    label: 'F4'
+  },
+  {
+    value: 'F5',
+    label: 'F5'
+  },
+  {
+    value: 'F6',
+    label: 'F6'
+  },
+  {
+    value: 'F7',
+    label: 'F7'
+  },
+  {
+    value: 'F8',
+    label: 'F8'
+  },
+  {
+    value: 'F9',
+    label: 'F9'
+  },
+  {
+    value: 'F10',
+    label: 'F10'
+  },
+  {
+    value: 'F11',
+    label: 'F11'
+  },
+  {
+    value: 'F12',
+    label: 'F12'
+  }
+];
