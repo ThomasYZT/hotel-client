@@ -16,6 +16,10 @@
                 <div class="filter-label">订单号：</div>
                 <i-input v-model="filterParams.code" placeholder="订单号查询" clearable @on-clear="getList" search @on-search="getList"></i-input>
               </div>
+              <div class="filter-item">
+                <div class="filter-label">订单时间：</div>
+                <i-date-picker type="daterange" split-panels placeholder="订单时间" @on-change="timeChange"></i-date-picker>
+              </div>
               <i-button class="short-width-btn" shape="circle" type="primary" @click="getList">查询</i-button>
             </div>
           </div>
@@ -149,7 +153,9 @@ export default {
       totalSize: 0,
       filterParams: {
         mobile: '',
-        code: ''
+        code: '',
+        orderBeginDate: '',
+        orderEndDate: ''
       },
       nodeData: {},
       roomTypeList: []
@@ -168,6 +174,10 @@ export default {
       if (!isDefault) {
         this.getList();
       }
+    },
+    timeChange (val) {
+      this.filterParams.orderBeginDate = val[0] || '';
+      this.filterParams.orderEndDate = val[1] || '';
     },
     getList () {
       this.$ajax.get({
