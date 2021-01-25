@@ -397,7 +397,7 @@ export default {
     },
     keyEventHandler (e) {
       let item = this.functionList.find(item => item.keyValue === e.code);
-      this.onFunctionClick(item);
+      item && this.onFunctionClick(item);
       item = null;
     },
     delTool (item) {

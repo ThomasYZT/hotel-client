@@ -76,8 +76,11 @@
                   </FormItem>
                   <FormItem class="inline-form-item" label="押金" prop="cashPledge">
                     <i-input type="text"
+                             style="width: 70%"
                              placeholder="押金"
+                             :disabled="!canModifyCashPledge"
                              v-model.trim="formData.cashPledge"/>
+                    <i-button type="primary" size="small" style="margin-left: 10px" @click="pwdAuth">修改</i-button>
                   </FormItem>
                   <div class="form-item-block table-block">
                     <i-button type="primary" style="margin-bottom: 10px" size="small" @click="addGood(formIndex)">添加</i-button>
@@ -260,6 +263,7 @@
     </el-dialog>
 
     <payModal ref="payModal"></payModal>
+    <pwdModal ref="pwdModal"></pwdModal>
   </div>
 </template>
 
@@ -267,6 +271,7 @@
 import { orderTypeList, ordainRoomTypeList, genderList, genderMap } from '../../../assets/enums';
 import { goodsTableConfig, userTableConfig } from './tableConfig';
 import payModal from '../components/payModal';
+import pwdModal from '../components/pwdModal';
 const modalStatus = {
   query: 'query',
   orderPreview: 'orderPreview',
@@ -274,7 +279,8 @@ const modalStatus = {
 };
 export default {
   components: {
-    payModal
+    payModal,
+    pwdModal
   },
   computed: {
     canCloseModal () {
@@ -330,6 +336,7 @@ export default {
       },
       confirmFn: null,
       cancelFn: null,
+      canModifyCashPledge: false,
       reserveFromRule: {
         type: [
           { required: true, type: 'number', message: '请选择类型', trigger: 'blur' }
@@ -545,6 +552,13 @@ export default {
         }).catch(err => {
           reject(err);
         });
+      });
+    },
+    pwdAuth () {
+      this.$refs.pwdModal.show({
+        successHandler: () => {
+          this.canModifyCashPledge = true;
+        }
       });
     },
     cancel () {

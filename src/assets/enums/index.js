@@ -810,3 +810,15 @@ export const keyCodesList = [
     label: 'F12'
   }
 ];
+
+// 订单发票状态
+export const invoiceStatus = {
+  unPrint: 0,
+  printed: 1
+};
+
+// 早餐发票状态
+export const breakfastStatus = {
+  unPrint: 0,
+  printed: 1
+};

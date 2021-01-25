@@ -75,17 +75,19 @@
           <div>-</div>
           <div class="info-content">
             <div class="info-field">
-              <div class="field-label">是否打印早餐票:</div>
-              <div class="field-info">{{'-'}}</div>
+              <div class="field-label">是否已开订单发票:</div>
+              <div class="field-info">{{orderInfo.invoice === invoiceStatus.printed ? '已开' : '未开'}}</div>
             </div>
             <div class="info-field">
-              <div class="field-label">是否打印发票:</div>
-              <div class="field-info">{{'-'}}</div>
+              <div class="field-label">是否已开早餐发票:</div>
+              <div class="field-info">{{orderInfo.breakfast === breakfastStatus.printed ? '已开' : '未开'}}</div>
             </div>
           </div>
           <div class="info-field" style="margin-top: 20px">
-            <i-button style="margin-right: 10px" type="primary" @click="ptintBreakfastTicket">打印早餐票</i-button>
-            <i-button style="margin-right: 10px" type="primary" @click="ptintTicket">开发票</i-button>
+            <i-button style="margin-right: 10px" type="primary" @click="addCustomer">增加房客</i-button>
+            <i-button style="margin-right: 10px" type="primary" @click="changeRoom">换房</i-button>
+            <i-button style="margin-right: 10px" type="primary" :disabled="orderInfo.breakfast === breakfastStatus.printed" @click="ptintBreakfastTicket">打印早餐票</i-button>
+            <i-button style="margin-right: 10px" type="primary" :disabled="orderInfo.invoice === invoiceStatus.printed" @click="ptintTicket">开发票</i-button>
             <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
             <i-button @click="cancel">取 消</i-button>
           </div>
@@ -94,18 +96,26 @@
     </page-board>
 
     <payModal ref="payModal"></payModal>
+    <addCustomerModal ref="addCustomerModal"></addCustomerModal>
+    <changeRoomModal ref="changeRoomModal"></changeRoomModal>
   </div>
 </template>
 
 <script>
-import { orderStatus, orderTypeList } from '../../../assets/enums/index';
+import { orderStatus, orderTypeList, invoiceStatus, breakfastStatus } from '../../../assets/enums/index';
 import payModal from '../components/checkoutPayModal';
+import addCustomerModal from '../components/addCustomerModal';
+import changeRoomModal from '../components/changeRoomModal';
 export default {
   components: {
-    payModal
+    payModal,
+    addCustomerModal,
+    changeRoomModal
   },
   data () {
     return {
+      invoiceStatus,
+      breakfastStatus,
       orderTypeList,
       visible: false,
       showModal: true,
@@ -124,13 +134,7 @@ export default {
     show ({ item, roomInfo = {}, confirmFn, cancelFn }) {
       this.item = item;
       this.roomInfo = roomInfo;
-      this.getOrderByRoom().then(data => {
-        this.orderInfo = data.order;
-        this.consumeRecords = data.consumeRecords.filter(item => item.status === orderStatus.unPay);
-        this.roomOverVo = {
-          ...data.roomOverVo,
-          price: this.$util.toYuan(data.roomOverVo.price) || 0
-        };
+      this.getOrderByRoom().then(() => {
         if (confirmFn) {
           this.confirmFn = confirmFn;
         }
@@ -177,6 +181,12 @@ export default {
             roomId: this.roomInfo.id
           }
         }).then(data => {
+          this.orderInfo = data.order;
+          this.consumeRecords = data.consumeRecords.filter(item => item.status === orderStatus.unPay);
+          this.roomOverVo = {
+            ...data.roomOverVo,
+            price: this.$util.toYuan(data.roomOverVo.price) || 0
+          };
           resolve(data);
         }).catch(err => {
           reject(err);
@@ -199,7 +209,7 @@ export default {
       });
     },
     ptintBreakfastTicket () {
-      this.$ajax.get({
+      this.$ajax.post({
         apiKey: 'orderBreakfast',
         params: {
           code: this.orderInfo.code
@@ -208,6 +218,8 @@ export default {
         this.$message.success('打印早餐票成功');
       }).catch(() => {
         this.$message.success('打印早餐票失败');
+      }).finally(() => {
+        this.getOrderByRoom();
       });
     },
     ptintTicket () {
@@ -220,6 +232,23 @@ export default {
         this.$message.success('开发票成功');
       }).catch(() => {
         this.$message.success('开发票失败');
+      }).finally(() => {
+        this.getOrderByRoom();
+      });
+    },
+    addCustomer () {
+      this.$refs.addCustomerModal.show({
+        hotelId: this.item.hotelId,
+        code: this.orderInfo.code
+      });
+    },
+    changeRoom () {
+      this.$refs.changeRoomModal.show({
+        hotelId: this.item.hotelId,
+        code: this.orderInfo.code,
+        confirmFn: () => {
+          this.confirmFn();
+        }
       });
     },
     reset () {

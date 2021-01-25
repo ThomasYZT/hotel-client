@@ -12,5 +12,7 @@ export default {
   stayRoom: '/order/stayRoomOrder',
   charge: '/order/orderCharge',
   breakfast: '/order/breakfast',
-  invoice: '/order/invoice'
+  invoice: '/order/invoice',
+  changeRoom: '/order/changeRoom',
+  addCustomer: '/order/addCustomer'
 };
