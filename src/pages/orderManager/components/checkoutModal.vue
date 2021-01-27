@@ -36,6 +36,10 @@
                 orderTypeList.find(item => item.value === orderInfo.orderType).label : '-'}}</div>
             </div>
             <div class="info-field">
+              <div class="field-label">会员等级:</div>
+              <div class="field-info">{{vipLevel || '-'}}</div>
+            </div>
+            <div class="info-field">
               <div class="field-label">备注:</div>
               <div class="field-info">{{orderInfo.remark || '-'}}</div>
             </div>
@@ -86,6 +90,8 @@
           <div class="info-field" style="margin-top: 20px">
             <i-button style="margin-right: 10px" type="primary" @click="addCustomer">增加房客</i-button>
             <i-button style="margin-right: 10px" type="primary" @click="changeRoom">换房</i-button>
+            <i-button style="margin-right: 10px" type="primary" @click="continueRoom">续房</i-button>
+            <i-button style="margin-right: 10px" type="primary" @click="debtOrder">挂账</i-button>
             <i-button style="margin-right: 10px" type="primary" :disabled="orderInfo.breakfast === breakfastStatus.printed" @click="ptintBreakfastTicket">打印早餐票</i-button>
             <i-button style="margin-right: 10px" type="primary" :disabled="orderInfo.invoice === invoiceStatus.printed" @click="ptintTicket">开发票</i-button>
             <i-button style="margin-right: 10px" type="primary" @click="confirm">确 定</i-button>
@@ -98,6 +104,8 @@
     <payModal ref="payModal"></payModal>
     <addCustomerModal ref="addCustomerModal"></addCustomerModal>
     <changeRoomModal ref="changeRoomModal"></changeRoomModal>
+    <continueRoomModal ref="continueRoomModal"></continueRoomModal>
+    <debtOrderModal ref="debtOrderModal"></debtOrderModal>
   </div>
 </template>
 
@@ -106,11 +114,15 @@ import { orderStatus, orderTypeList, invoiceStatus, breakfastStatus } from '../.
 import payModal from '../components/checkoutPayModal';
 import addCustomerModal from '../components/addCustomerModal';
 import changeRoomModal from '../components/changeRoomModal';
+import continueRoomModal from '../components/continueRoomModal';
+import debtOrderModal from '../components/debtOrderModal';
 export default {
   components: {
     payModal,
     addCustomerModal,
-    changeRoomModal
+    changeRoomModal,
+    continueRoomModal,
+    debtOrderModal
   },
   data () {
     return {
@@ -127,7 +139,8 @@ export default {
       consumeRecords: [],
       isReserved: false,
       confirmFn: null,
-      cancelFn: null
+      cancelFn: null,
+      vipLevel: ''
     };
   },
   methods: {
@@ -182,6 +195,7 @@ export default {
           }
         }).then(data => {
           this.orderInfo = data.order;
+          this.vipLevel = data.vipLevel;
           this.consumeRecords = data.consumeRecords.filter(item => item.status === orderStatus.unPay);
           this.roomOverVo = {
             ...data.roomOverVo,
@@ -251,12 +265,30 @@ export default {
         }
       });
     },
+    continueRoom () {
+      this.$refs.continueRoomModal.show({
+        orderInfo: this.orderInfo,
+        roomOverVo: this.roomOverVo,
+        confirmFn: () => {
+          this.confirmFn();
+        }
+      });
+    },
+    debtOrder () {
+      this.$refs.debtOrderModal.show({
+        code: this.orderInfo.code,
+        confirmFn: () => {
+          this.confirmFn();
+        }
+      });
+    },
     reset () {
       this.item = {};
       this.roomInfo = {};
       this.orderInfo = {};
       this.roomOverVo = {};
       this.consumeRecords = [];
+      this.vipLevel = '';
       this.isReserved = false;
       this.confirmFn = null;
       this.cancelFn = null;

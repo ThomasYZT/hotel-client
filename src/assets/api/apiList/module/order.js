@@ -14,5 +14,7 @@ export default {
   breakfast: '/order/breakfast',
   invoice: '/order/invoice',
   changeRoom: '/order/changeRoom',
-  addCustomer: '/order/addCustomer'
+  addCustomer: '/order/addCustomer',
+  continueRoom: '/order/continueRoom',
+  debtOrder: '/order/debtOrder'
 };
