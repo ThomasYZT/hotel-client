@@ -128,6 +128,29 @@ export default {
             }
           }
         }
+      },
+      promotionalManager: {
+        path: '/promotionalManager',
+        component: () => import('../../pages/promotionalManager/index.vue'),
+        redirect: () => { return { name: 'promotional' }; },
+        meta: {
+          menuName: '活动促销管理',
+          iconClass: 'icon-hanglixiang',
+          activePath: `${topName}.promotionalManager`,
+          isMenu: true
+        },
+        children: {
+          menuList: {
+            path: '/promotionalManager/list',
+            name: 'promotional',
+            component: () => import('../../pages/promotionalManager/child/promotional.vue'),
+            meta: {
+              menuName: '活动促销管理',
+              activePath: `${topName}.promotionalManager`,
+              isMenu: false
+            }
+          }
+        }
       }
     }
   }
