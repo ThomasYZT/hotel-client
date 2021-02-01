@@ -42,7 +42,13 @@
                      class="room-block"
                      :class="{ 'active': item.id === activeRoom.id }"
                      :style="{ backgroundColor: roowStatusList.find(state => item.status === state.value).bgColor }"
-                     @click="onRoomClick(item)">
+                     @click="onRoomClick(item)"
+                     @dblclick="onRoomDbClick(item)">
+                  <div class="room-label">
+                    <i v-if="item.checkoutTime && $date(item.checkoutTime).format('YYYY-MM-DD') === $date().format('YYYY-MM-DD')"
+                       class="iconfont icon-renyuanlikai"></i>
+                    <div class="releted-dot" v-if="item.related" :style="{ backgroundColor: `rgb${item.relatedColor}` }"></div>
+                  </div>
                   <div>
                     <span>{{item.roomNumber}}</span>
                   </div>
@@ -113,6 +119,7 @@ import checkoutModal from '../components/checkoutModal';
 import changeStatusModal from '../components/changeStatusModal';
 import addConsumeModal from '../components/addConsumeModal';
 import floorDictionaryMixin from '../../../mixins/floorDictionaryMixin';
+import { repeatFlag } from '../tools';
 import { mapGetters } from 'vuex';
 export default {
   mixins: [floorDictionaryMixin],
@@ -194,6 +201,7 @@ export default {
           }
         }).then(data => {
           this.tableData = data || [];
+          repeatFlag(this.tableData);
         }).catch(err => {
           this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
         });
@@ -426,6 +434,23 @@ export default {
           this.getList();
         }
       });
+    },
+    onRoomDbClick (item) {
+      if (Object.keys(item).length === 0 ||
+        ![roomStatus.live, roomStatus.hourRoom].includes(item.status)) {
+        this.$message.warning('请选择在住房间或钟点房');
+        return;
+      }
+      this.$refs.checkoutModal.show({
+        item: {
+          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+          hotelUserId: this.userInfo.id
+        },
+        roomInfo: item,
+        confirmFn: () => {
+          this.getList();
+        }
+      });
     }
   },
   mounted () {
@@ -536,6 +561,19 @@ export default {
           background-color: $lightGreen;
           border-radius: 4px;
           cursor: pointer;
+
+          .room-label {
+            @include flex_layout(row, flex-end, center);
+            position: absolute;
+            right: 10px;
+            top: 10px;
+
+            .releted-dot {
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+            }
+          }
 
           .status-btn {
             font-size: 14px;
