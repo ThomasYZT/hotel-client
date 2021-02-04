@@ -22,6 +22,17 @@ export default {
           isMenu: true
         }
       },
+      // 房单查询
+      singleRoomManager: {
+        path: '/singleRoomManager/singleRoomList',
+        name: 'singleRoom',
+        component: () => import('../../pages/singleRoomManager/child/singleRoomList.vue'),
+        meta: {
+          menuName: '房单查询',
+          activePath: `${topName}.singleRoomManager`,
+          isMenu: true
+        }
+      },
     }
   }
 };

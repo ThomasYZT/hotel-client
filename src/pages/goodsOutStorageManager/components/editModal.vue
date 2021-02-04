@@ -247,6 +247,8 @@ export default {
           this.getDetail(item.id).then(data => {
             if (data && data.length > 0) {
               this.formData.list = data.map(item => {
+                item.totalPrice = parseInt(item.totalPrice)/100;
+                item.unitPrice = parseInt(item.unitPrice)/100;
                 this.$util.valueToStr(item);
                 return item;
               });

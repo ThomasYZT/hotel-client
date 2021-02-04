@@ -7,5 +7,7 @@ export default {
   update: '/hotelInfo/update',
   getAllList: '/hotelInfo/getByBrand',
   getHotelAgentTree: '/hotelInfo/GetHotelInfoTree',
-  getByhotelLabel: '/hotelLabel/getByhotelId'
+  getByhotelLabel: '/hotelLabel/getByhotelId',
+  updateManagerPwd: '/hotelInfo/updateManagerPwd',
+  isManagerPwd: '/hotelInfo/isManagerPwd'
 };

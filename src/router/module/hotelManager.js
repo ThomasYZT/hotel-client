@@ -135,7 +135,7 @@ export default {
         redirect: () => { return { name: 'promotional' }; },
         meta: {
           menuName: '活动促销管理',
-          iconClass: 'icon-hanglixiang',
+          iconClass: 'icon-jiudian',
           activePath: `${topName}.promotionalManager`,
           isMenu: true
         },
@@ -147,6 +147,29 @@ export default {
             meta: {
               menuName: '活动促销管理',
               activePath: `${topName}.promotionalManager`,
+              isMenu: false
+            }
+          }
+        }
+      },
+      settingManagerPwd: {
+        path: '/settingManagerPwd',
+        component: () => import('../../pages/settingManagerPwd/index.vue'),
+        redirect: () => { return { name: 'settingManagerPwd' }; },
+        meta: {
+          menuName: '店长口令设置',
+          iconClass: 'icon-jiudian',
+          activePath: `${topName}.settingManagerPwd`,
+          isMenu: true
+        },
+        children: {
+          menuList: {
+            path: '/settingManagerPwd/list',
+            name: 'settingManagerPwd',
+            component: () => import('../../pages/settingManagerPwd/child/hotelInfoList.vue'),
+            meta: {
+              menuName: '店长口令设置',
+              activePath: `${topName}.settingManagerPwd`,
               isMenu: false
             }
           }
