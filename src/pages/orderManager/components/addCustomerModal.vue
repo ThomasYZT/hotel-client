@@ -46,7 +46,11 @@
                                        :min-width="item.minWidth">
                         <template slot-scope="{ row, $index }">
                           <FormItem :label-width="0" :prop="'customers.' + $index + '.idCard'">
-                            <i-input type="text" placeholder="请输入身份证号码" v-model.trim="row.idCard" />
+                            <i-input type="text"
+                                     search enter-button
+                                     placeholder="请输入身份证号码"
+                                     v-model.trim="row.idCard"
+                                     @on-search="getByIdCard(row.idCard, $index)" />
                           </FormItem>
                         </template>
                       </el-table-column>
@@ -149,6 +153,25 @@ export default {
       }).then(res => {
         if (res) {
           this.$set(this.formData.customers[$index], 'idCard', res.idCard);
+          this.$set(this.formData.customers[$index], 'name', res.name);
+          this.$set(this.formData.customers[$index], 'sex', res.sex);
+        } else {
+          return Promise.reject(new Error());
+        }
+      }).catch(() => {
+        this.$message.error('查询不到此用户，请手动填写信息');
+      });
+    },
+    getByIdCard (idCard, $index) {
+      if (!idCard) return;
+      this.$ajax.get({
+        apiKey: 'vipUserGetByIdCard',
+        params: {
+          idCard
+        }
+      }).then(res => {
+        if (res) {
+          this.$set(this.formData.customers[$index], 'phone', res.phone);
           this.$set(this.formData.customers[$index], 'name', res.name);
           this.$set(this.formData.customers[$index], 'sex', res.sex);
         } else {

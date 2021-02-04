@@ -64,19 +64,20 @@
             </div>
           </div>
           <div class="info-header">商品消费信息:</div>
-          <div v-if="consumeRecords.length > 0"
-               class="info-content"
-               v-for="item in consumeRecords"
-               :key="item.id">
-            <div class="info-field">
-              <div class="field-label">商品名称</div>
-              <div class="field-info">{{item.goodsName || '-'}}</div>
+          <template v-if="consumeRecords.length > 0">
+            <div class="info-content"
+                 v-for="item in consumeRecords"
+                 :key="item.id">
+              <div class="info-field">
+                <div class="field-label">商品名称</div>
+                <div class="field-info">{{item.goodsName || '-'}}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-info">单价:{{item.unitPrice || '-'}}，数量:{{item.num || '-'}}</div>
+              </div>
             </div>
-            <div class="info-field">
-              <div class="field-info">单价:{{item.unitPrice || '-'}}，数量:{{item.num || '-'}}</div>
-            </div>
-          </div>
-          <div>-</div>
+          </template>
+          <div v-else>-</div>
           <div class="info-content">
             <div class="info-field">
               <div class="field-label">是否已开订单发票:</div>
@@ -86,6 +87,32 @@
               <div class="field-label">是否已开早餐发票:</div>
               <div class="field-info">{{orderInfo.breakfast === breakfastStatus.printed ? '已开' : '未开'}}</div>
             </div>
+            <div class="info-field">
+              <div class="field-label">应退款:</div>
+              <div class="field-info">{{calcRefundMoney()}}</div>
+            </div>
+            <template v-if="roomLessVo && roomLessVo.refundTime && roomLessVo.stayTime">
+              <div class="info-field">
+                <div class="field-label">入住时间:</div>
+                <div class="field-info">{{roomLessVo.stayTime}}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">退房时间:</div>
+                <div class="field-info">{{roomLessVo.refundTime}}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">订单金额:</div>
+                <div class="field-info">{{roomLessVo.price}}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">终点房金额:</div>
+                <div class="field-info">{{roomLessVo.hoursRoomPrice}}</div>
+              </div>
+              <div class="info-field">
+                <div class="field-label">应退金额:</div>
+                <div class="field-info">{{roomLessVo.refundPrice}}</div>
+              </div>
+            </template>
           </div>
           <div class="info-field" style="margin-top: 20px">
             <i-button style="margin-right: 10px" type="primary" @click="addCustomer">增加房客</i-button>
@@ -106,6 +133,16 @@
     <changeRoomModal ref="changeRoomModal"></changeRoomModal>
     <continueRoomModal ref="continueRoomModal"></continueRoomModal>
     <debtOrderModal ref="debtOrderModal"></debtOrderModal>
+    <confirmModal ref="confirmModal">
+      <div slot="content">
+        <div v-if="leaveEarly">
+          客户为提前离店，确认要退房结账吗？
+          <p style="color: red">离店日期：{{$date(orderInfo.latestTfTime * 1000).format('YYYY-MM-DD')}}</p>
+          <p style="color: red">当前营业日：{{$date().format('YYYY-MM-DD')}}</p>
+        </div>
+        <span>确定要退房结账吗？</span>
+      </div>
+    </confirmModal>
   </div>
 </template>
 
@@ -116,13 +153,23 @@ import addCustomerModal from '../components/addCustomerModal';
 import changeRoomModal from '../components/changeRoomModal';
 import continueRoomModal from '../components/continueRoomModal';
 import debtOrderModal from '../components/debtOrderModal';
+import confirmModal from '../components/checkoutConfirmModal.vue';
 export default {
   components: {
     payModal,
     addCustomerModal,
     changeRoomModal,
     continueRoomModal,
-    debtOrderModal
+    debtOrderModal,
+    confirmModal
+  },
+  computed: {
+    leaveEarly () {
+      return this.$date(this.$date().format('YYYY-MM-DD'))
+        .isBefore(
+          this.$date(this.orderInfo.latestTfTime * 1000).format('YYYY-MM-DD')
+        );
+    }
   },
   data () {
     return {
@@ -137,6 +184,7 @@ export default {
       orderInfo: {},
       roomOverVo: {},
       consumeRecords: [],
+      roomLessVo: {},
       isReserved: false,
       confirmFn: null,
       cancelFn: null,
@@ -165,26 +213,30 @@ export default {
       this.reset();
     },
     confirm () {
-      if (this.roomOverVo.price || this.consumeRecords.length > 0) {
-        this.showModal = false;
-        this.$refs.payModal.show({
-          item: this.item,
-          orderInfo: this.orderInfo,
-          consumeRecords: this.consumeRecords,
-          roomOverVo: {
-            ...this.roomOverVo,
-            price: this.$util.toCent(this.roomOverVo.price) || 0
-          },
-          confirmFn: () => {
+      this.$refs.confirmModal.show({
+        confirm: () => {
+          if (this.roomOverVo.price || this.consumeRecords.length > 0) {
+            this.showModal = false;
+            this.$refs.payModal.show({
+              item: this.item,
+              orderInfo: this.orderInfo,
+              consumeRecords: this.consumeRecords,
+              roomOverVo: {
+                ...this.roomOverVo,
+                price: this.$util.toCent(this.roomOverVo.price) || 0
+              },
+              confirmFn: () => {
+                this.checkout();
+              },
+              cancelFn: () => {
+                this.showModal = true;
+              }
+            });
+          } else {
             this.checkout();
-          },
-          cancelFn: () => {
-            this.showModal = true;
           }
-        });
-      } else {
-        this.checkout();
-      }
+        }
+      });
     },
     getOrderByRoom () {
       return new Promise((resolve, reject) => {
@@ -201,6 +253,7 @@ export default {
             ...data.roomOverVo,
             price: this.$util.toYuan(data.roomOverVo.price) || 0
           };
+          this.roomLessVo = data.RoomLessVo || {};
           resolve(data);
         }).catch(err => {
           reject(err);
@@ -282,11 +335,17 @@ export default {
         }
       });
     },
+    calcRefundMoney () {
+      return `¥${this.$util.toYuan(this.orderInfo.cashPledge -
+        this.consumeRecords.reduce((pre, cur) => pre + (cur.unitPrice * cur.num), 0) -
+        this.roomOverVo.price)}`;
+    },
     reset () {
       this.item = {};
       this.roomInfo = {};
       this.orderInfo = {};
       this.roomOverVo = {};
+      this.roomLessVo = {};
       this.consumeRecords = [];
       this.vipLevel = '';
       this.isReserved = false;

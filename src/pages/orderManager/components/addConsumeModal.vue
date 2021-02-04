@@ -60,8 +60,15 @@
                             slot-scope="{ item }">
                     <el-table-column :prop="item.prop"
                                      :label="item.label">
-                      <template slot-scope="{ row }">
-                        <span>{{row.unitPrice}}</span>
+                      <template slot-scope="{ row, $index }">
+                        <FormItem v-if="[-1, -2].includes(row.goodsId)"
+                                  :label-width="0"
+                                  :prop="'consumeRecords.' + $index + '.unitPrice'">
+                          <i-input type="text"
+                                   placeholder="金额"
+                                   v-model.trim="row.unitPrice" />
+                        </FormItem>
+                        <span v-else>{{row.unitPrice}}</span>
                       </template>
                     </el-table-column>
                   </template>
@@ -72,7 +79,8 @@
                       <template slot-scope="{ row, $index }">
                         <FormItem :label-width="0"
                                   :prop="'consumeRecords.' + $index + '.num'">
-                          <i-input-number :disabled="row.goodsId === undefined" style="width: 100%;" type="text" placeholder="商品数量" v-model="row.num" />
+                          <i-input-number :disabled="row.goodsId === undefined || [-1, -2].includes(row.goodsId)"
+                                          style="width: 100%;" type="text" placeholder="商品数量" v-model="row.num" />
                         </FormItem>
                       </template>
                     </el-table-column>
@@ -115,7 +123,7 @@ export default {
       item: {},
       goodsList: [],
       formData: {
-        consumeRecords: [],
+        consumeRecords: []
       },
       orderDetail: {},
       confirmFn: null,
@@ -192,7 +200,18 @@ export default {
             pageSize: 99999
           }
         }).then(data => {
-          data = (data.data || []).filter(item => item.status === 1);
+          data = [
+            {
+              id: -1,
+              name: '赔偿',
+              unitPrice: 0
+            },
+            {
+              id: -2,
+              name: '其他杂费',
+              unitPrice: 0
+            }
+          ].concat((data.data || []).filter(item => item.status === 1));
           resolve(data);
         }).catch(err => {
           reject(err);
@@ -209,7 +228,10 @@ export default {
     addConsume () {
       this.$ajax.post({
         apiKey: 'consumeAdd',
-        params: this.formData.consumeRecords,
+        params: this.formData.consumeRecords.map(item => ({
+          ...item,
+          unitPrice: [-1, -2].includes(item.goodsId) ? this.$util.toCent(item.unitPrice) : item.unitPrice
+        })),
         config: {
           headers: { 'Content-Type': 'application/json;charset-UTF-8' }
         }
