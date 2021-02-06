@@ -5,5 +5,6 @@ export default {
   add: '/agreement/add',
   pageList: '/agreement/pageList',
   delete: '/agreement/delete',
-  update: '/agreement/update'
+  update: '/agreement/update',
+  getByHotelId: '/agreement/getByHotelId'
 };

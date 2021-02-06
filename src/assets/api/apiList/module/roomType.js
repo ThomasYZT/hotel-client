@@ -6,5 +6,6 @@ export default {
   delete: '/roomType/delete',
   update: '/roomType/update',
   getAllList: '/roomType/getAllList',
-  getRoomTypeAttribute: '/roomTypeAttribute/getByRoomTypeId'
+  getRoomTypeAttribute: '/roomTypeAttribute/getByRoomTypeId',
+  getAgreementPriceList: '/roomType/getAgreementPriceList'
 };

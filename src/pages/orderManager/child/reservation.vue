@@ -107,6 +107,7 @@
     <checkoutModal ref="checkoutModal"></checkoutModal>
     <changeStatusModal ref="changeStatusModal"></changeStatusModal>
     <addConsumeModal ref="addConsumeModal"></addConsumeModal>
+    <reserveAndCheckInModal ref="reserveAndCheckInModal"></reserveAndCheckInModal>
   </div>
 </template>
 
@@ -118,6 +119,7 @@ import checkInModal from '../components/checkInModal';
 import checkoutModal from '../components/checkoutModal';
 import changeStatusModal from '../components/changeStatusModal';
 import addConsumeModal from '../components/addConsumeModal';
+import reserveAndCheckInModal from '../components/reserveAndCheckInModal';
 import floorDictionaryMixin from '../../../mixins/floorDictionaryMixin';
 import { repeatFlag } from '../tools';
 import { mapGetters } from 'vuex';
@@ -129,7 +131,8 @@ export default {
     checkInModal,
     checkoutModal,
     changeStatusModal,
-    addConsumeModal
+    addConsumeModal,
+    reserveAndCheckInModal
   },
   computed: {
     ...mapGetters([
@@ -436,21 +439,33 @@ export default {
       });
     },
     onRoomDbClick (item) {
-      if (Object.keys(item).length === 0 ||
-        ![roomStatus.live, roomStatus.hourRoom].includes(item.status)) {
-        this.$message.warning('请选择在住房间或钟点房');
-        return;
-      }
-      this.$refs.checkoutModal.show({
-        item: {
-          hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
-          hotelUserId: this.userInfo.id
-        },
-        roomInfo: item,
-        confirmFn: () => {
-          this.getList();
+      if (Object.keys(item).length > 0) {
+        if ([roomStatus.live, roomStatus.hourRoom].includes(item.status)) {
+          this.$refs.checkoutModal.show({
+            item: {
+              hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+              hotelUserId: this.userInfo.id
+            },
+            roomInfo: item,
+            confirmFn: () => {
+              this.getList();
+            }
+          });
+        } else if ([roomStatus.clean].includes(item.status)) {
+          this.$refs.reserveAndCheckInModal.show({
+            item: {
+              hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+              hotelUserId: this.userInfo.id,
+              orderType: orderType.mobile
+            },
+            activeRoom: this.activeRoom,
+            roomTypeList: this.roomTypeList.filter(item => item.id !== 0),
+            confirmFn: () => {
+              this.getList();
+            }
+          });
         }
-      });
+      }
     }
   },
   mounted () {

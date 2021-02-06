@@ -822,3 +822,9 @@ export const breakfastStatus = {
   unPrint: 0,
   printed: 1
 };
+
+// 是否店长改价
+export const isRoomPriceChange = {
+  yes: 1,
+  no: 0
+};

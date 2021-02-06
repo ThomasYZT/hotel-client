@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { payTypeList, payTargetList } from '../../../assets/enums';
+import { payTypeList, payTargetList, couponsType } from '../../../assets/enums';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { mapGetters } from 'vuex';
 export default {
@@ -108,7 +108,7 @@ export default {
   methods: {
     show ({
       item,
-      config = { cashPledge: true, roomMoney: true, consume: true },
+      config = { cashPledge: true, roomMoney: true, consume: true, coupon: null },
       confirmFn,
       cancelFn,
       showDetail = false
@@ -145,15 +145,23 @@ export default {
     },
     calcTotalMoney (item) {
       let sum = 0;
-      if (this.config.cashPledge) {
-        sum += item.orderPaymentVos.reduce((pre, cur) => {
-          return pre + cur.cashPledge;
-        }, 0);
-      }
-
       if (this.config.roomMoney) {
         sum += item.orderPaymentVos.reduce((pre, cur) => {
           return pre + cur.roomMoney;
+        }, 0);
+
+        if (this.config.coupon) {
+          if (this.config.coupon.purpose === couponsType.moneyOff) {
+            sum -= this.config.coupon.subtractAmount;
+          } else if (this.config.coupon.purpose === couponsType.discount) {
+            sum = sum * (this.config.coupon.subtractAmount / 10);
+          }
+        }
+      }
+
+      if (this.config.cashPledge) {
+        sum += item.orderPaymentVos.reduce((pre, cur) => {
+          return pre + cur.cashPledge;
         }, 0);
       }
 
@@ -171,7 +179,7 @@ export default {
       let temp = '<div class="detail">';
       item.orderPaymentVos.forEach(order => {
         temp += `<div><div>订单号：${order.orderCode}</div>`;
-        temp += `<div>${this.config.roomMoney && `<span>房费：${this.$util.toYuan(order.roomMoney)}</span>`} ${this.config.cashPledge && `<span>押金：${this.$util.toYuan(order.cashPledge)}</span>`}</div>`
+        temp += `<div>${this.config.roomMoney && `<span>房费：${this.$util.toYuan(order.roomMoney)}</span>`} ${this.config.cashPledge && `<span>押金：${this.$util.toYuan(order.cashPledge)}</span>`}</div>`;
         temp += `<div>增加消费：`;
         order.consumeRecords.length === 0
           ? temp += '无</div>'
@@ -180,7 +188,15 @@ export default {
           });
         temp += `<span>合计：${this.$util.toYuan(order.roomMoney + order.cashPledge + order.consumeRecords.reduce((p, c) => p + c.unitPrice * c.num, 0))}</span></div></div>`;
       });
-      return temp + `<div>总计：${this.formData.totalMoney}</div></div>`;
+      temp += `<div>总计：${this.formData.totalMoney}</div></div>`
+      if (this.config.coupon) {
+        if (this.config.coupon.purpose === couponsType.moneyOff) {
+          temp += `<div>优惠券信息：满减券 满${this.$util.toYuan(this.config.coupon.fullAmount)}减${this.$util.toYuan(this.config.coupon.subtractAmount)}</div>`;
+        } else if (this.config.coupon.purpose === couponsType.discount) {
+          temp += `<div>优惠券信息：折扣券 ${this.config.coupon.discount}折</div>`;
+        }
+      }
+      return temp;
     },
     submitForm () {
       this.$ajax.post({

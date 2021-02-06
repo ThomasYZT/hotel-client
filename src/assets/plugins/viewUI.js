@@ -27,7 +27,8 @@ import {
   RadioGroup,
   Radio,
   Poptip,
-  CheckboxGroup
+  CheckboxGroup,
+  Divider
 } from 'view-design';
 // 自定义element-ui主题
 import '../../assets/styles/theme/viewUITheme/index.less';
@@ -66,6 +67,7 @@ export default {
     Vue.component('iPoptip', Poptip);
     Vue.component('iCheckboxGroup', CheckboxGroup);
     Vue.component('iTimePicker', TimePicker);
+    Vue.component('iDivider', Divider);
     Vue.prototype.$message = Message;
 
     Message.config({

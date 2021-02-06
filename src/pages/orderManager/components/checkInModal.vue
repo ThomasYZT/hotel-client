@@ -30,123 +30,186 @@
 
         <!-- 订单信息 -->
         <template v-if="modalState === modalStatus.orderPreview">
-          <div v-for="(formData, formIndex) in reserveListFormData"
-               :key="formData.id"
-               class="form-wrapper border-form-wrapper">
-            <i-form ref="Form"
-                    inline
-                    :disabled="isLoading"
-                    :model="formData"
-                    :rules="reserveFromRule"
-                    :label-width="90"
-                    label-position="right">
-              <div class="form-item-wrapper check-board">
-                <div class="check-block">
-                  <i-checkbox v-model="checkList[formIndex]"></i-checkbox>
+          <!-- 协议客户信息 -->
+          <div v-if="agreementUserList && agreementUserList.length > 0" class="border-form-wrapper">
+            <div class="form-item-wrapper">
+              <div class="form-item-block">
+                <div class="block-form-item">
+                  <div class="info-label" style="width: 150px">是否为协议客户:</div>
+                  <div class="info-content">
+                    <i-checkbox v-model="agreementInfo.isAgreementCustomer" @on-change="customerTypeChange"></i-checkbox>
+                  </div>
                 </div>
-                <div class="form-item-block">
-                  <div class="inline-info-item">
-                    <div class="info-label">订单编号:</div>
-                    <div class="info-content">{{formData.code}}</div>
+                <div class="block-form-item" v-if="agreementInfo.isAgreementCustomer">
+                  <div class="info-label" style="width: 150px">协议客户:</div>
+                  <div class="info-content">
+                    <i-select v-model="agreementInfo.agreementId"
+                              style="width: 300px"
+                              transfer
+                              placeholder="请选择协议客户"
+                              @on-change="onAgreementChange">
+                      <i-option v-for="item in agreementUserList"
+                                :value="item.id"
+                                :key="item.id">
+                        {{ item.name }}
+                      </i-option>
+                    </i-select>
                   </div>
-                  <div class="inline-info-item">
-                    <div class="info-label">预定方式:</div>
-                    <div class="info-content">{{orderTypeList.find(item => item.value === formData.orderType).label}}</div>
-                  </div>
-                  <div class="inline-info-item">
-                    <div class="info-label">房间类型:</div>
-                    <div class="info-content">{{formData.roomType}}</div>
-                  </div>
-                  <div class="inline-info-item">
-                    <div class="info-label">房号:</div>
-                    <div class="info-content">{{formData.roomNumber}}</div>
-                  </div>
-                  <div class="inline-info-item">
-                    <div class="info-label">类型:</div>
-                    <div class="info-content">{{ordainRoomTypeList.find(item => item.value === formData.type).label}}</div>
-                  </div>
-                  <div class="inline-info-item">
-                    <div class="info-label">联系电话:</div>
-                    <div class="info-content">{{formData.mobile}}</div>
-                  </div>
-                  <FormItem class="inline-form-item" label="房价" prop="price">
-                    <i-input type="text"
-                             placeholder="房价"
-                             v-model.trim="formData.price" />
-                  </FormItem>
-                  <FormItem class="inline-form-item" label="押金" prop="cashPledge">
-                    <i-input type="text"
-                             style="width: 70%"
-                             placeholder="押金"
-                             :disabled="!canModifyCashPledge"
-                             v-model.trim="formData.cashPledge"/>
-                    <i-button type="primary" size="small" style="margin-left: 10px" @click="pwdAuth">修改</i-button>
-                  </FormItem>
-                  <div class="form-item-block table-block">
-                    <i-button type="primary" style="margin-bottom: 10px" size="small" @click="addGood(formIndex)">添加</i-button>
-                    <table-com class="good-table"
-                               :data="formData.consumeRecords"
-                               :has-page="false"
-                               :config="goodsTableConfig">
-                      <template slot="col0"
-                                slot-scope="{ item }">
-                        <el-table-column :prop="item.prop"
-                                         :label="item.label">
-                          <template slot-scope="{ row, $index }">
-                            <FormItem :label-width="0"
-                                      :prop="'consumeRecords.' + $index + '.goodsName'">
-                              <i-select v-model="row.goodsId"
-                                        transfer
-                                        placeholder="请选择商品"
-                                        @on-change="onGoodChange($event, formIndex,  $index)">
-                                <i-option v-for="item in goodsList"
-                                          :value="item.id"
-                                          :key="item.id">
-                                  {{ item.name }}
-                                </i-option>
-                              </i-select>
-                            </FormItem>
+                </div>
+                <div class="block-form-item" v-if="!agreementInfo.isAgreementCustomer">
+                  <div class="info-label" style="width: 150px">优惠券:</div>
+                  <div class="info-content">
+                    <i-select v-model="couponsInfo.couponsId"
+                              style="width: 300px"
+                              transfer
+                              placeholder="选择优惠券"
+                              @on-change="couponSelected">
+                      <i-option v-for="item in vipCouponList"
+                                :value="item.couponsId"
+                                :label="item.title"
+                                :key="item.couponsId">
+                        <div class="option-content">
+                          <div class="option-block">{{item.title}}</div>
+                          <div class="option-block">{{item.purpose | couponType}}</div>
+                          <template v-if="item.purpose === couponsType.moneyOff">
+                            <div class="option-block">最低消费：{{$util.toYuan(item.fullAmount)}}</div>
+                            <div class="option-block">优惠金额：{{$util.toYuan(item.subtractAmount)}}</div>
                           </template>
-                        </el-table-column>
-                      </template>
-                      <template slot="col1"
-                                slot-scope="{ item }">
-                        <el-table-column :prop="item.prop"
-                                         :label="item.label">
-                          <template slot-scope="{ row }">
-                            <span>{{row.unitPrice}}</span>
-                          </template>
-                        </el-table-column>
-                      </template>
-                      <template slot="col2"
-                                slot-scope="{ item }">
-                        <el-table-column :prop="item.prop"
-                                         :label="item.label">
-                          <template slot-scope="{ row, $index }">
-                            <FormItem :label-width="0"
-                                      :prop="'consumeRecords.' + $index + '.num'">
-                              <i-input-number :disabled="row.goodsId === undefined" style="width: 100%;" type="text" placeholder="商品数量" v-model="row.num" />
-                            </FormItem>
-                          </template>
-                        </el-table-column>
-                      </template>
-                      <template slot="col3"
-                                slot-scope="{ item }">
-                        <el-table-column :prop="item.prop"
-                                         :label="item.label">
-                          <template slot-scope="{ row, $index }">
-                            <div class="operate-block">
-                              <i-button type="error" class="table-btn" size="small" @click="delGood(formIndex, $index)">删除</i-button>
-                            </div>
-                          </template>
-                        </el-table-column>
-                      </template>
-                    </table-com>
+                          <div v-else class="option-block">折扣：{{item.discount}}</div>
+                        </div>
+                      </i-option>
+                    </i-select>
                   </div>
                 </div>
               </div>
-            </i-form>
+            </div>
+            <i-divider />
           </div>
+          <!-- 订单列表 -->
+          <template v-if="!isResetReserveListForm">
+            <div v-for="(formData, formIndex) in reserveListFormData"
+                 :key="formData.id"
+                 class="form-wrapper border-form-wrapper">
+              <i-form ref="Form"
+                      inline
+                      :disabled="isLoading"
+                      :model="formData"
+                      :rules="reserveFromRule"
+                      :label-width="90"
+                      label-position="right">
+                <div class="form-item-wrapper check-board">
+                  <div class="check-block">
+                    <i-checkbox v-model="checkList[formIndex]"></i-checkbox>
+                  </div>
+                  <div class="form-item-block">
+                    <div class="inline-info-item">
+                      <div class="info-label">订单编号:</div>
+                      <div class="info-content">{{formData.code}}</div>
+                    </div>
+                    <div class="inline-info-item">
+                      <div class="info-label">预定方式:</div>
+                      <div class="info-content">{{orderTypeList.find(item => item.value === formData.orderType).label}}</div>
+                    </div>
+                    <div class="inline-info-item">
+                      <div class="info-label">房间类型:</div>
+                      <div class="info-content">{{formData.roomType}}</div>
+                    </div>
+                    <div class="inline-info-item">
+                      <div class="info-label">房号:</div>
+                      <div class="info-content">{{formData.roomNumber}}</div>
+                    </div>
+                    <div class="inline-info-item">
+                      <div class="info-label">类型:</div>
+                      <div class="info-content">{{ordainRoomTypeList.find(item => item.value === formData.type).label}}</div>
+                    </div>
+                    <div class="inline-info-item">
+                      <div class="info-label">联系电话:</div>
+                      <div class="info-content">{{formData.mobile}}</div>
+                    </div>
+                    <FormItem class="inline-form-item" label="房价" prop="price">
+                      <i-input type="text"
+                               style="width: 60%"
+                               placeholder="房价"
+                               :disabled="!canModifyRoomPrice"
+                               v-model.trim="formData.price" />
+                      <i-button type="primary" size="small" style="margin-left: 10px"
+                                :disabled="canModifyRoomPrice"
+                                @click="pwdAuth(formIndex)">修改</i-button>
+                      <i-button type="primary" size="small" style="margin-left: 10px"
+                                :disabled="!canModifyRoomPrice"
+                                @click="priceRestore(formIndex)">恢复</i-button>
+                    </FormItem>
+                    <FormItem class="inline-form-item" label="押金" prop="cashPledge">
+                      <i-input type="text"
+                               placeholder="押金"
+                               v-model.trim="formData.cashPledge"/>
+                    </FormItem>
+                    <div class="form-item-block table-block">
+                      <i-button type="primary" style="margin-bottom: 10px" size="small" @click="addGood(formIndex)">添加</i-button>
+                      <table-com class="good-table"
+                                 :data="formData.consumeRecords"
+                                 :has-page="false"
+                                 :config="goodsTableConfig">
+                        <template slot="col0"
+                                  slot-scope="{ item }">
+                          <el-table-column :prop="item.prop"
+                                           :label="item.label">
+                            <template slot-scope="{ row, $index }">
+                              <FormItem :label-width="0"
+                                        :prop="'consumeRecords.' + $index + '.goodsName'">
+                                <i-select v-model="row.goodsId"
+                                          transfer
+                                          placeholder="请选择商品"
+                                          @on-change="onGoodChange($event, formIndex,  $index)">
+                                  <i-option v-for="item in goodsList"
+                                            :value="item.id"
+                                            :key="item.id">
+                                    {{ item.name }}
+                                  </i-option>
+                                </i-select>
+                              </FormItem>
+                            </template>
+                          </el-table-column>
+                        </template>
+                        <template slot="col1"
+                                  slot-scope="{ item }">
+                          <el-table-column :prop="item.prop"
+                                           :label="item.label">
+                            <template slot-scope="{ row }">
+                              <span>{{row.unitPrice}}</span>
+                            </template>
+                          </el-table-column>
+                        </template>
+                        <template slot="col2"
+                                  slot-scope="{ item }">
+                          <el-table-column :prop="item.prop"
+                                           :label="item.label">
+                            <template slot-scope="{ row, $index }">
+                              <FormItem :label-width="0"
+                                        :prop="'consumeRecords.' + $index + '.num'">
+                                <i-input-number :disabled="row.goodsId === undefined" style="width: 100%;" type="text" placeholder="商品数量" v-model="row.num" />
+                              </FormItem>
+                            </template>
+                          </el-table-column>
+                        </template>
+                        <template slot="col3"
+                                  slot-scope="{ item }">
+                          <el-table-column :prop="item.prop"
+                                           :label="item.label">
+                            <template slot-scope="{ row, $index }">
+                              <div class="operate-block">
+                                <i-button type="error" class="table-btn" size="small" @click="delGood(formIndex, $index)">删除</i-button>
+                              </div>
+                            </template>
+                          </el-table-column>
+                        </template>
+                      </table-com>
+                    </div>
+                  </div>
+                </div>
+              </i-form>
+            </div>
+          </template>
         </template>
         <!-- 登记入住 -->
         <template v-if="modalState === modalStatus.checkin">
@@ -272,10 +335,11 @@
 </template>
 
 <script>
-import { orderTypeList, ordainRoomTypeList, genderList, genderMap } from '../../../assets/enums';
+import { orderTypeList, ordainRoomTypeList, genderList, genderMap, isRoomPriceChange, couponsTypeList, couponsType } from '../../../assets/enums';
 import { goodsTableConfig, userTableConfig } from './tableConfig';
 import payModal from '../components/payModal';
-import pwdModal from '../components/pwdModal';
+import pwdModal from '../components/managerPwdModal';
+import defaultsDeep from 'lodash/defaultsDeep';
 const modalStatus = {
   query: 'query',
   orderPreview: 'orderPreview',
@@ -285,6 +349,11 @@ export default {
   components: {
     payModal,
     pwdModal
+  },
+  filters: {
+    couponType (val) {
+      return couponsTypeList.find(item => item.value === val).label;
+    }
   },
   computed: {
     canCloseModal () {
@@ -300,14 +369,6 @@ export default {
         callback(new Error('请输入正确的联系电话'));
       }
     };
-    const validateIdCard = (rule, value, callback) => {
-      if (!value) callback();
-      if (this.$validator.isIdCard(value)) {
-        callback();
-      } else {
-        callback(new Error('请输入正确身份证号码'));
-      }
-    };
 
     const isNumber = (rule, value, callback) => {
       if (!value) callback();
@@ -318,6 +379,8 @@ export default {
       }
     };
     return {
+      couponsType,
+      isRoomPriceChange,
       goodsTableConfig,
       userTableConfig,
       modalStatus,
@@ -331,6 +394,9 @@ export default {
       goodsList: [],
       modalState: modalStatus.query,
       reserveListFormData: [],
+      reserveListFormDataOrigin: [],
+      vipCouponList: [],
+      agreementUserList: [],
       checkList: [],
       queryFromData: {
         mobile: ''
@@ -340,7 +406,15 @@ export default {
       },
       confirmFn: null,
       cancelFn: null,
-      canModifyCashPledge: false,
+      canModifyRoomPrice: false,
+      isResetReserveListForm: false,
+      agreementInfo: {
+        isAgreementCustomer: false,
+        agreementId: ''
+      },
+      couponsInfo: {
+        couponsId: ''
+      },
       reserveFromRule: {
         type: [
           { required: true, type: 'number', message: '请选择类型', trigger: 'blur' }
@@ -384,6 +458,7 @@ export default {
       if (cancelFn) {
         this.cancelFn = cancelFn;
       }
+      this.getAgreementUserByHotelId(item.hotelId);
       this.getGoodsList(item.hotelId).then(data => {
         this.goodsList = data;
         this.visible = true;
@@ -404,26 +479,99 @@ export default {
         this.$ajax.get({
           apiKey: 'orderGetByMobile',
           params: {
+            hotelId: this.item.hotelId,
             mobile: this.queryFromData.mobile
           }
         }).then(data => {
-          if (data && data.length > 0) {
+          const { orderList, vipCouponList } = data || {};
+          if (orderList?.length > 0) {
             this.modalState = modalStatus.orderPreview;
-            this.reserveListFormData = data.map(formData => ({
+            this.reserveListFormData = orderList.map(formData => ({
               ...formData,
+              isChange: isRoomPriceChange.no,
               price: this.$util.toYuan(formData.price),
-              cashPledge: this.$util.toYuan(formData.cashPledge)
-            }));
-            this.reserveListFormData = this.reserveListFormData.map(item => ({
-              ...item,
+              originPrice: this.$util.toYuan(formData.price),
+              cashPledge: this.$util.toYuan(formData.cashPledge),
               consumeRecords: []
             }));
+            this.reserveListFormDataOrigin = defaultsDeep([], this.reserveListFormData);
+            this.vipCouponList = vipCouponList || [];
           } else {
             return Promise.reject({ msg: '该手机号无预定信息' });
           }
         }).catch(err => {
           this.$message.error(`查询失败${err.msg ? ': ' + err.msg : ''}`);
         });
+      });
+    },
+    couponSelected (couponsId) {
+      if (!couponsId) return;
+      const coupon = this.vipCouponList.find(item => item.couponsId === couponsId);
+      if (coupon.purpose === couponsType.moneyOff) {
+        const total = this.reserveListFormData.reduce((pre, cur) => pre + this.$util.toCent(cur.price), 0);
+        if (total < coupon.fullAmount) {
+          this.$message.warning('不满足条件，无法使用该优惠券');
+          this.couponsInfo.couponsId = '';
+        }
+      }
+    },
+    resetReserveListFormData () {
+      this.reserveListFormData = this.reserveListFormDataOrigin;
+      this.agreementInfo.agreementId = '';
+      this.isResetReserveListForm = true;
+      this.$nextTick(() => {
+        this.couponsInfo.couponsId = '';
+        this.isResetReserveListForm = false;
+      });
+    },
+    customerTypeChange (val) {
+      if (!val) {
+        this.resetReserveListFormData();
+      }
+    },
+    onAgreementChange (agreementId) {
+      if (!agreementId) return;
+      this.getAgreementPriceList({
+        agreementId,
+        hotelId: this.item.hotelId,
+        roomTypeIdList: this.reserveListFormData.map(item => item.roomTypeId).join(',')
+      });
+    },
+    getAgreementUserByHotelId (hotelId) {
+      this.$ajax.get({
+        apiKey: 'agreementGetByHotelId',
+        params: {
+          hotelId
+        },
+        loading: false
+      }).then(res => {
+        this.agreementUserList = res || [];
+      }).catch(() => {
+        this.$message.error('获取协议用户失败');
+      });
+    },
+    getAgreementPriceList ({ agreementId, hotelId, roomTypeIdList }) {
+      this.$ajax.post({
+        apiKey: 'roomTypeGetAgreementPriceList',
+        params: {
+          agreementId,
+          hotelId,
+          roomTypeIdList
+        }
+      }).then(res => {
+        const agreementRoomList = res || [];
+        this.reserveListFormData.forEach(item => {
+          const matchRoom = agreementRoomList.find(agreementRoom => agreementRoom.roomTypeId === item.roomTypeId);
+          Object.assign(item, {
+            ...matchRoom,
+            isPriceRoom: matchRoom.isActivity,
+            price: this.$util.toYuan(matchRoom.price),
+            originPrice: this.$util.toYuan(matchRoom.price),
+            cashPledge: this.$util.toYuan(matchRoom.cashPledge)
+          });
+        });
+      }).catch(() => {
+        this.$message.error('获取协议房信息失败');
       });
     },
     addGood (formIndex) {
@@ -455,6 +603,7 @@ export default {
     },
     payment () {
       this.showModal = false;
+      const coupon = this.vipCouponList.find(item => item.couponsId === this.couponsInfo.couponsId);
       const item = {
         ...this.item,
         orderPaymentVos: this.reserveListFormData
@@ -469,7 +618,7 @@ export default {
       this.$refs.payModal.show({
         item,
         showDetail: true,
-        config: { cashPledge: true, roomMoney: true, consume: false },
+        config: { cashPledge: true, roomMoney: true, consume: false, coupon: coupon },
         confirmFn: () => {
           this.showModal = true;
           this.modalState = modalStatus.checkin;
@@ -478,6 +627,8 @@ export default {
             .map(item => ({
               num: item.customerNum,
               orderCode: item.code,
+              hotelId: this.item.hotelId,
+              couponsId: this.couponsInfo.couponsId,
               customers: [...new Array(2)].map(() => ({}))
             }));
         },
@@ -577,12 +728,18 @@ export default {
         });
       });
     },
-    pwdAuth () {
+    pwdAuth (formIndex) {
       this.$refs.pwdModal.show({
+        hotelId: this.item.hotelId,
         successHandler: () => {
-          this.canModifyCashPledge = true;
+          this.canModifyRoomPrice = true;
+          this.$set(this.reserveListFormData[formIndex], 'isChange', isRoomPriceChange.yes);
         }
       });
+    },
+    priceRestore (formIndex) {
+      this.$set(this.reserveListFormData[formIndex], 'price', this.reserveListFormData[formIndex].originPrice);
+      this.$set(this.reserveListFormData[formIndex], 'isChange', isRoomPriceChange.no);
     },
     cancel () {
       if (![modalStatus.orderPreview, modalStatus.query].includes(this.modalState)) return;
@@ -597,6 +754,7 @@ export default {
       }
       this.item = {};
       this.modalState = modalStatus.query;
+      this.canModifyRoomPrice = false;
       this.confirmFn = null;
       this.cancelFn = null;
       this.visible = false;
@@ -619,7 +777,6 @@ export default {
       width: 100%;
 
       &.border-form-wrapper {
-        padding: 20px 0;
         &:not(:last-child) {
           border-bottom: 1px solid $lightGray;
         }
@@ -671,6 +828,16 @@ export default {
           width: 100%;
         }
       }
+    }
+  }
+
+  .option-content {
+    @include flex_layout(row, flex-start, center);
+    .option-block {
+      margin-right: 10px;
+      background-color: $lightGray;
+      border-radius: 5px;
+      padding: 5px 10px;
     }
   }
 
