@@ -7,7 +7,10 @@
         </div>
         <div class="data-box right-box">
           <div class="operation-wrapper flex-box">
-             <div class="tool-wrapper left-box">
+            <div class="tool-wrapper left-box">
+              <i-button  type="primary" :ghost="allSingle" @click="allClick">全部房单</i-button>
+            </div>
+             <div class="tool-wrapper left-box" style="margin-left:10px;">
               <i-button  type="primary" :ghost="zzfd" @click="zzfdClick">在住房单</i-button>
             </div>
             <div class="tool-wrapper left-box" style="margin-left:10px;">
@@ -17,7 +20,7 @@
               <i-button type="primary" :ghost="jrytdf" @click="jrytdfClick">今日已退房单</i-button>
             </div>
             <div class="filter-block right-box">
-              <i-button class="short-width-btn" style="width:90px;" type="primary" @click="getList">高级查询</i-button>
+              <i-button class="short-width-btn" style="width:90px;" type="primary" @click="AdvancedQuery">高级查询</i-button>
             </div>
           </div>
           <table-com v-if="showTable"
@@ -27,14 +30,14 @@
                      :total-size="totalSize"
                      :config="tableConfig"
                      :getList="getList">
-            <template slot="col2"
+            <template slot="col9"
                       slot-scope="{ item }">
               <el-table-column :prop="item.prop"
                                :label="item.label"
                                :fixed="item.fixed"
                                :min-width="item.minWidth">
                 <template slot-scope="{ row }">
-                  <span>{{$util.toYuan(row.totalPrice)}}</span>
+                  <span>{{$util.toYuan(row.price)}}</span>
                 </template>
               </el-table-column>
             </template>
@@ -42,14 +45,20 @@
         </div>
       </div>
     </div>
+    <highSearch ref="highSearch" @handleGetHighSearch="handleGetHighSearch"></highSearch>
+    <confirmModal ref="confirmModal"></confirmModal>
   </div>
 </template>
 
 <script>
+import highSearch from '../components/highSearch';
 import { tableConfig } from './tableConfig.js';
 import { userType, payTypeList } from '../../../assets/enums';
 import { mapGetters } from 'vuex';
 export default {
+  components: {
+    highSearch
+  },
   computed: {
     ...mapGetters([
       'userInfo'
@@ -78,9 +87,6 @@ export default {
     },
     showTable () {
       return !this.showOrgTree || Object.keys(this.nodeData).length > 0;
-    },
-    showAddBtn () {
-      return (this.showOrgTree && Object.keys(this.nodeData).length > 0) || !this.showOrgTree;
     }
   },
   data () {
@@ -91,13 +97,25 @@ export default {
       zzfd: true,
       ylfd: true,
       jrytdf: true,
+      allSingle: true,
       pageNum: 1,
       pageSize: 10,
       totalSize: 0,
+      type: '',
       filterParams: {
+        code: '',
         roomNumber: '',
-        startTime: '',
-        endTime: ''
+        roomType: '',
+        price: '',
+        customer: '',
+        mobile: '',
+        name: '',
+        phone: '',
+        orderType: '',
+        stayStartTime: '',
+        stayEndTime: '',
+        latestTfStartTime: '',
+        latestTfEndTime: ''
       },
       nodeData: {}
     };
@@ -111,9 +129,10 @@ export default {
     },
     getList () {
       this.$ajax.post({
-        apiKey: 'goodsOutStoragePageList',
+        apiKey: 'orderGetSingleRoomPageList',
         params: {
           hotelId: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+          type: this.type,
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           ...this.filterParams
@@ -125,24 +144,45 @@ export default {
         this.$message.error(`获取数据失败${err.msg ? ': ' + err.msg : ''}`);
       });
     },
-    timeChange (val) {
-      this.filterParams.startTime = val[0] || '';
-      this.filterParams.endTime = val[1] || '';
+    handleGetHighSearch(val) {
+      this.filterParams = val;
+      this.getList ();
+    },
+    AdvancedQuery () {
+      const hotelId = this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId;
+      this.$refs.highSearch.show({hotelId, confirmFn: this.getList });
+    },
+    allClick() {
+        this.allSingle = false;
+        this.zzfd = true;
+        this.ylfd = true;
+        this.jrytdf = true;
+        this.type = 0;
+        this.getList();
     },
     zzfdClick() {
+        this.allSingle = true;
         this.zzfd = false;
         this.ylfd = true;
         this.jrytdf = true;
+        this.type = 1;
+        this.getList();
     },
     ylfdClick() {
+        this.allSingle = true;
         this.zzfd = true;
         this.ylfd = false;
         this.jrytdf = true;
+        this.type = 2;
+        this.getList();
     },
     jrytdfClick() {
+        this.allSingle = true;
         this.zzfd = true;
         this.ylfd = true;
         this.jrytdf = false;
+        this.type = 3;
+        this.getList();
     }
   },
   mounted () {

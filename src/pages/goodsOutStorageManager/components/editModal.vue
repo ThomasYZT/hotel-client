@@ -51,7 +51,7 @@
                                   :label-width="0"
                                   :prop="'list.' + $index + '.goodId'"
                                   :rules="goodIdRule">
-                          <i-select v-model="row.goodId" filterable transfer>
+                          <i-select v-model="row.goodId" filterable transfer placeholder="请选择商品" @on-change="onGoodChange($event,  $index)">
                             <i-option v-for="item in goodsList" :value="String(item.id)" :key="item.id">{{ item.name }}</i-option>
                           </i-select>
                         </FormItem>
@@ -68,8 +68,8 @@
                         <FormItem class="table-form-item"
                                   :label-width="0"
                                   :prop="'list.' + $index + '.unitPrice'"
-                                  :rules="unitPriceRule">
-                          <i-input type="text" placeholder="单价" v-model="row.unitPrice" @on-change="priceChange(row)"></i-input>
+                        >
+                          <i-input type="text" placeholder="单价" disabled v-model="row.unitPrice" @on-change="priceChange(row)"></i-input>
                         </FormItem>
                       </template>
                     </el-table-column>
@@ -189,10 +189,6 @@ export default {
         { required: true, message: '请输入数量', trigger: 'blur' },
         { validator: validateNumber, trigger: 'blur' }
       ],
-      unitPriceRule: [
-        { required: true, message: '请输入单价', trigger: 'blur' },
-        { validator: validateMoney, trigger: 'blur' }
-      ],
       totalPriceRule: [
         { required: true, message: '请输入总价', trigger: 'blur' },
         { validator: validateMoney, trigger: 'blur' }
@@ -230,7 +226,7 @@ export default {
     show ({ type = '', item, confirmFn, cancelFn }) {
       if (!type || !item) return;
       this.getGoodsList(item).then(data => {
-        this.goodsList = data.data || [];
+        this.goodsList = data.data;
         this.formData = defaultsDeep({}, item, this.formData);
         this.$util.valueToStr(this.formData);
 
@@ -281,10 +277,19 @@ export default {
         });
       });
     },
-    getPrice (rowData,item) {
-      alert(111)
-      console.log(item)
-      rowData.unitPrice = item.unitPrice;
+    onGoodChange (goodId, $index) {
+      if (goodId === null || goodId === undefined) return;
+      Object.assign(this.formData.list[$index], this.getGoodParams(goodId));
+    },
+    getGoodParams (goodId) {
+      const goodItem = this.goodsList.find(item => item.id === parseInt(goodId));
+      return {
+        // goodId: goodItem.id,
+        // goodsName: goodItem.name,
+        unitPrice: goodItem.unitPrice,
+        number: 1,
+        totalPrice: parseFloat((goodItem.unitPrice * 1).toFixed(2))
+      };
     },
     priceChange (rowData) {
       rowData.totalPrice = parseFloat((rowData.unitPrice * rowData.number).toFixed(2));
