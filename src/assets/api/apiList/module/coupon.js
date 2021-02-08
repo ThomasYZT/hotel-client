@@ -8,5 +8,6 @@ export default {
   pageList: '/coupons/pageList',
   shelves: '/coupons/shelves',
   update: '/coupons/update',
-  getHotelInfo: '/couponsHotel/getAllList'
+  getHotelInfo: '/couponsHotel/getAllList',
+  getByPhone: '/vipCoupon/getUnUsedVipCouponByPhone'
 };

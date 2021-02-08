@@ -16,5 +16,6 @@ export default {
   changeRoom: '/order/changeRoom',
   addCustomer: '/order/addCustomer',
   continueRoom: '/order/continueRoom',
-  debtOrder: '/order/debtOrder'
+  debtOrder: '/order/debtOrder',
+  submitCheckin: '/order/submitCheckin'
 };

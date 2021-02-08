@@ -3,6 +3,7 @@ export default {
   module: 'room',
 
   add: '/room/add',
+  get: '/room/get',
   pageList: '/room/pageList',
   delete: '/room/delete',
   update: '/room/update',

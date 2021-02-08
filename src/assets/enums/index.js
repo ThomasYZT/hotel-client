@@ -828,3 +828,24 @@ export const isRoomPriceChange = {
   yes: 1,
   no: 0
 };
+
+export const orderModal = {
+  normal: 0,
+  vip: 1,
+  agreement: 2
+};
+
+export const orderModalList = [
+  {
+    label: '普通房',
+    value: orderModal.normal
+  },
+  {
+    label: '会员房',
+    value: orderModal.vip
+  },
+  {
+    label: '协议房',
+    value: orderModal.agreement
+  }
+];

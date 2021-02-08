@@ -458,7 +458,7 @@ export default {
               hotelUserId: this.userInfo.id,
               orderType: orderType.mobile
             },
-            activeRoom: this.activeRoom,
+            activeRoom: item,
             roomTypeList: this.roomTypeList.filter(item => item.id !== 0),
             confirmFn: () => {
               this.getList();
