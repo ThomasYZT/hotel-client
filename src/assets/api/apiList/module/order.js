@@ -1,4 +1,4 @@
-export default {
+ export default {
   module: 'order',
 
   get: '/order/get',
@@ -17,5 +17,6 @@ export default {
   addCustomer: '/order/addCustomer',
   continueRoom: '/order/continueRoom',
   debtOrder: '/order/debtOrder',
-  submitCheckin: '/order/submitCheckin'
+  submitCheckin: '/order/submitCheckin',
+  getSingleRoomPageList: '/order/getSingleRoomPageList'
 };
