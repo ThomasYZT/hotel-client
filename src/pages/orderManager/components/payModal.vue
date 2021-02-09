@@ -150,13 +150,13 @@ export default {
           return pre + cur.roomMoney;
         }, 0);
 
-        if (this.config.coupon) {
-          if (this.config.coupon.purpose === couponsType.moneyOff) {
-            sum -= this.config.coupon.subtractAmount;
-          } else if (this.config.coupon.purpose === couponsType.discount) {
-            sum = sum * (this.config.coupon.subtractAmount / 10);
-          }
-        }
+        // if (this.config.coupon) {
+        //   if (this.config.coupon.purpose === couponsType.moneyOff) {
+        //     sum -= this.config.coupon.subtractAmount;
+        //   } else if (this.config.coupon.purpose === couponsType.discount) {
+        //     sum = sum * (this.config.coupon.subtractAmount / 10);
+        //   }
+        // }
       }
 
       if (this.config.cashPledge) {

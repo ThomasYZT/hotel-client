@@ -56,7 +56,8 @@
                     </i-select>
                   </div>
                 </div>
-                <div class="block-form-item" v-if="!agreementInfo.isAgreementCustomer">
+                <div class="block-form-item"
+                     v-if="!agreementInfo.isAgreementCustomer && vipCouponList && vipCouponList.length > 0">
                   <div class="info-label" style="width: 150px">优惠券:</div>
                   <div class="info-content">
                     <i-select v-model="couponsInfo.couponsId"
@@ -413,7 +414,7 @@ export default {
         agreementId: ''
       },
       couponsInfo: {
-        couponsId: ''
+        couponsId: 0
       },
       reserveFromRule: {
         type: [
@@ -511,7 +512,7 @@ export default {
         const total = this.reserveListFormData.reduce((pre, cur) => pre + this.$util.toCent(cur.price), 0);
         if (total < coupon.fullAmount) {
           this.$message.warning('不满足条件，无法使用该优惠券');
-          this.couponsInfo.couponsId = '';
+          this.couponsInfo.couponsId = 0;
         }
       }
     },
@@ -520,7 +521,7 @@ export default {
       this.agreementInfo.agreementId = '';
       this.isResetReserveListForm = true;
       this.$nextTick(() => {
-        this.couponsInfo.couponsId = '';
+        this.couponsInfo.couponsId = 0;
         this.isResetReserveListForm = false;
       });
     },
@@ -698,7 +699,11 @@ export default {
     checkin () {
       this.$ajax.post({
         apiKey: 'orderCheckin',
-        params: this.checkinListFormData,
+        params: {
+          checkinVos: this.checkinListFormData,
+          couponsId: this.couponsInfo.couponsId,
+          hotelId: this.item.hotelId
+        },
         config: {
           headers: { 'Content-Type': 'application/json;charset-UTF-8' }
         },
@@ -759,6 +764,28 @@ export default {
       this.cancelFn = null;
       this.visible = false;
       this.isLoading = false;
+
+      this.showModal = true;
+      this.goodsList = [];
+      this.reserveListFormData = [];
+      this.reserveListFormDataOrigin = [];
+      this.vipCouponList = [];
+      this.agreementUserList = [];
+      this.checkList = [];
+      this.queryFromData = {
+        mobile: ''
+      };
+      this.checkinListFormData = {
+        sex: genderMap.male
+      };
+      this.isResetReserveListForm = false;
+      this.agreementInfo = {
+        isAgreementCustomer: false,
+        agreementId: ''
+      };
+      this.couponsInfo = {
+        couponsId: 0
+      };
     }
   }
 };

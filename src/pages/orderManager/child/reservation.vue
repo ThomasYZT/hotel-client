@@ -59,7 +59,9 @@
                   <div class="desc"
                        v-if="[roomStatus.reserved, roomStatus.live, roomStatus.hourRoom, roomStatus.outClearing].includes(item.status)">{{item.customer || '-'}}</div>
 
-                  <i-tooltip v-if="item.remark" :content="item.remark" transfer>
+                  <i-tooltip v-if="item.remark &&
+                               ![roomStatus.clean, roomStatus.outClearing, roomStatus.error].includes(item.status)"
+                             :content="item.remark" transfer>
                     <div class="remark-tip">...</div>
                   </i-tooltip>
                 </div>
