@@ -9,5 +9,6 @@ export default {
   update: '/room/update',
   statusStat: '/room/hotelRoomStatusStat',
   updateStatus: '/room/updateStatus',
-  list: '/room/hotelRooms'
+  list: '/room/hotelRooms',
+  currentRoom: '/room/getCurrentRoom'
 };

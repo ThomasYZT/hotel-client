@@ -33,6 +33,28 @@ export default {
           isMenu: true
         }
       },
+      // 当前房态统计
+      currentRoomManager: {
+        path: '/currentRoomManager/currentRoom',
+        name: 'currentRoom',
+        component: () => import('../../pages/currentRoomManager/child/currentRoom.vue'),
+        meta: {
+          menuName: '当前房态统计',
+          activePath: `${topName}.currentRoomManager`,
+          isMenu: true
+        }
+      },
+      // 远期房态统计
+      forwardRoomManager: {
+        path: '/forwardRoomManager/forwardRoom',
+        name: 'forwardRoom',
+        component: () => import('../../pages/forwardRoomManager/child/forwardRoom.vue'),
+        meta: {
+          menuName: '远期房态统计',
+          activePath: `${topName}.forwardRoomManager`,
+          isMenu: true
+        }
+      }
     }
   }
 };
