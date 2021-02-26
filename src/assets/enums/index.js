@@ -31,16 +31,16 @@ export const storageStatusList = [
 ];
 
 export const genderMap = {
-  unknown: 0,
+  // unknown: 0,
   male: 1,
   female: 2
 };
 
 export const genderList = [
-  {
-    label: '未知',
-    value: genderMap.unknown
-  },
+  // {
+  //   label: '未知',
+  //   value: genderMap.unknown
+  // },
   {
     label: '男',
     value: genderMap.male
@@ -97,6 +97,8 @@ export const functionType = {
   systemSetting: 9,
   // 会员设置
   vipSetting: 10,
+    // 会员注册
+    vipAdd: 11,
   // 添加工具
   addTool: -1
 };
@@ -150,6 +152,11 @@ export const functionMapList = [
   {
     label: '会员充值',
     name: functionType.vipSetting,
+    icon: 'icon-huiyuanchongzhi'
+  },
+  {
+    label: '会员注册',
+    name: functionType.vipAdd,
     icon: 'icon-huiyuanchongzhi'
   }
 ];

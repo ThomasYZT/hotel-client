@@ -8,5 +8,6 @@ export default {
   walletRecord: '/vipWalletRecord/pageList',
   experienceRecord: '/vipExperienceRecord/pageList',
   leaveRecord: '/vipLeaveRecord/pageList',
-  couponsRecord: '/vipCoupon/pageList'
+  couponsRecord: '/vipCoupon/pageList',
+  addPc: '/vipInfo/addPc'
 };

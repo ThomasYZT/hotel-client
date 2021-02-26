@@ -10,5 +10,6 @@ export default {
   statusStat: '/room/hotelRoomStatusStat',
   updateStatus: '/room/updateStatus',
   list: '/room/hotelRooms',
-  currentRoom: '/room/getCurrentRoom'
+  currentRoom: '/room/getCurrentRoom',
+  forwardRoomList: '/room/getForwardRoomList'
 };

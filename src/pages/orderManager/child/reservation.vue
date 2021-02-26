@@ -104,6 +104,7 @@
     </div>
     <confirmModal ref="confirmModal"></confirmModal>
     <addToolModal ref="addToolModal"></addToolModal>
+    <addVipInfo ref="addVipInfo"></addVipInfo>
     <ordainModal ref="ordainModal" @checkin="checkin"></ordainModal>
     <checkInModal ref="checkInModal"></checkInModal>
     <checkoutModal ref="checkoutModal"></checkoutModal>
@@ -116,6 +117,7 @@
 <script>
 import { userType, roowStatusList, functionType, functionMapList, roomStatus, orderType, keyCodesList } from '../../../assets/enums';
 import addToolModal from '../components/addToolModal';
+import addVipInfo from '../components/addVipInfo';
 import ordainModal from '../components/ordainModal';
 import checkInModal from '../components/checkInModal';
 import checkoutModal from '../components/checkoutModal';
@@ -129,6 +131,7 @@ export default {
   mixins: [floorDictionaryMixin],
   components: {
     addToolModal,
+    addVipInfo,
     ordainModal,
     checkInModal,
     checkoutModal,
@@ -308,6 +311,21 @@ export default {
           this.$refs.addToolModal.show({
             funcList: this.functionList,
             confirmFn: () => { this.getTools(); }
+          });
+          break;
+          //会员充值
+          case functionType.vipSetting:
+          this.$refs.addToolModal.show({
+            funcList: this.functionList,
+            confirmFn: () => { this.getTools(); }
+          });
+          break;
+          //会员注册
+          case functionType.vipAdd:
+          this.$refs.addVipInfo.show({
+            // funcList: this.functionList,
+            item: this.showOrgTree ? this.nodeData.id : this.userInfo.hotelId,
+            confirmFn: () => { this.getList(); }
           });
           break;
       }
