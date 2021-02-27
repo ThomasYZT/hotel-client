@@ -105,7 +105,7 @@ export const vipListConfig = [
   {
     prop: 'operate',
     label: '操作',
-    minWidth: '80px',
+    minWidth: '60px',
     fixed: 'right'
   }
 ];

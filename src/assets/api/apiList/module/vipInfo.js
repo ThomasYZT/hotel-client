@@ -9,5 +9,6 @@ export default {
   experienceRecord: '/vipExperienceRecord/pageList',
   leaveRecord: '/vipLeaveRecord/pageList',
   couponsRecord: '/vipCoupon/pageList',
-  addPc: '/vipInfo/addPc'
+  addPc: '/vipInfo/addPc',
+  appletTopUpPc: '/vipInfo/appletTopUpPc'
 };

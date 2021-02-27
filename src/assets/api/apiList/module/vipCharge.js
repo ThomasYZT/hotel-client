@@ -8,5 +8,6 @@ export default {
   update: '/vipTopUp/update',
   disable: '/vipTopUp/disableTopUp',
   enable: '/vipTopUp/enableTopUp',
-  getCoupons: '/vipTopUpCoupons/getTopUpCouponsList'
+  getCoupons: '/vipTopUpCoupons/getTopUpCouponsList',
+  getAppletList: '/vipTopUp/getAppletList'
 };

@@ -9,5 +9,6 @@ export default {
   getHotelAgentTree: '/hotelInfo/GetHotelInfoTree',
   getByhotelLabel: '/hotelLabel/getByhotelId',
   updateManagerPwd: '/hotelInfo/updateManagerPwd',
-  isManagerPwd: '/hotelInfo/isManagerPwd'
+  isManagerPwd: '/hotelInfo/isManagerPwd',
+  getBrandId: '/hotelInfo/getBrandId'
 };
