@@ -245,7 +245,9 @@
                                          :label="item.label"
                                          :min-width="item.minWidth">
                           <template slot-scope="{ row, $index }">
-                            <FormItem :label-width="0" :prop="'customers.' + $index + '.phone'">
+                            <FormItem :label-width="0"
+                                      :prop="'customers.' + $index + '.phone'"
+                                      :rules="requireStringRule">
                               <i-input type="text"
                                        search enter-button
                                        placeholder="手机号码"
@@ -261,7 +263,9 @@
                                          :label="item.label"
                                          :min-width="item.minWidth">
                           <template slot-scope="{ row, $index }">
-                            <FormItem :label-width="0" :prop="'customers.' + $index + '.idCard'">
+                            <FormItem :label-width="0"
+                                      :prop="'customers.' + $index + '.idCard'"
+                                      :rules="requireStringRule">
                               <i-input type="text"
                                        search enter-button
                                        placeholder="请输入身份证号码"
@@ -276,7 +280,9 @@
                         <el-table-column :prop="item.prop"
                                          :label="item.label">
                           <template slot-scope="{ row, $index }">
-                            <FormItem :label-width="0" :prop="'customers.' + $index + '.name'">
+                            <FormItem :label-width="0"
+                                      :prop="'customers.' + $index + '.name'"
+                                      :rules="requireStringRule">
                               <i-input type="text" placeholder="请输入姓名" v-model.trim="row.name" />
                             </FormItem>
                           </template>
@@ -288,7 +294,9 @@
                                          :label="item.label">
                           <template slot-scope="{ row, $index }">
                             <div class="operate-block">
-                              <FormItem :label-width="0" :prop="'customers.' + $index + '.sex'">
+                              <FormItem :label-width="0"
+                                        :prop="'customers.' + $index + '.sex'"
+                                        :rules="requireNumberRule">
                                 <i-select v-model="row.sex"
                                           transfer
                                           placeholder="请选择性别">
@@ -445,7 +453,9 @@ export default {
           { required: true, message: '请输入入住人数', trigger: 'blur' },
           { validator: isNumber, trigger: 'blur' }
         ]
-      }
+      },
+      requireStringRule: { required: true, message: `请输入`, trigger: 'blur' },
+      requireNumberRule: { required: true, type: 'number', message: `请输入`, trigger: 'blur' }
     };
   },
   methods: {

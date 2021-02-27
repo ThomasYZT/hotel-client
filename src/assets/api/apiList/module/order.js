@@ -18,5 +18,6 @@
   continueRoom: '/order/continueRoom',
   debtOrder: '/order/debtOrder',
   submitCheckin: '/order/submitCheckin',
-  getSingleRoomPageList: '/order/getSingleRoomPageList'
+  getSingleRoomPageList: '/order/getSingleRoomPageList',
+  updateRemark: '/order/UpdateRemark'
 };

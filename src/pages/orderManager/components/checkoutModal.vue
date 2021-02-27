@@ -12,7 +12,7 @@
             </div>
             <div class="info-field">
               <div class="field-label">入住时间:</div>
-              <div class="field-info">{{$date(new Date(orderInfo.stayTime)).format('YYYY-MM-DD HH:mm:ss') || '-'}}</div>
+              <div class="field-info">{{$date(new Date(orderInfo.stayTime * 1000)).format('YYYY-MM-DD HH:mm:ss') || '-'}}</div>
             </div>
             <div class="info-field">
               <div class="field-label">房间类型:</div>
@@ -41,7 +41,19 @@
             </div>
             <div class="info-field">
               <div class="field-label">备注:</div>
-              <div class="field-info">{{orderInfo.remark || '-'}}</div>
+              <template v-if="status.remark === editStatus.read">
+                <div class="field-info">{{orderInfo.remark || '-'}}</div>
+                <i-button style="margin-left: 10px" type="primary" size="small" @click="remarkEdit">修改</i-button>
+              </template>
+              <template v-else-if="status.remark === editStatus.edit">
+                <div class="field-info" style="flex: 1 0 auto;">
+                  <i-input type="textarea" :rows="2" placeholder="请输入备注" v-model.trim="remark" />
+                  <div style="margin-top: 10px">
+                    <i-button style="margin-right: 10px" size="small" @click="remarkCancel">取消</i-button>
+                    <i-button type="primary" size="small" @click="remarkSave">保存</i-button>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
           <div class="info-header">房间超时消费信息:</div>
@@ -147,7 +159,7 @@
 </template>
 
 <script>
-import { orderStatus, orderTypeList, invoiceStatus, breakfastStatus } from '../../../assets/enums/index';
+import { orderStatus, orderTypeList, invoiceStatus, breakfastStatus, editStatus } from '../../../assets/enums/index';
 import payModal from '../components/checkoutPayModal';
 import addCustomerModal from '../components/addCustomerModal';
 import changeRoomModal from '../components/changeRoomModal';
@@ -173,6 +185,7 @@ export default {
   },
   data () {
     return {
+      editStatus,
       invoiceStatus,
       breakfastStatus,
       orderTypeList,
@@ -188,7 +201,11 @@ export default {
       isReserved: false,
       confirmFn: null,
       cancelFn: null,
-      vipLevel: ''
+      vipLevel: '',
+      status: {
+        remark: editStatus.read
+      },
+      remark: ''
     };
   },
   methods: {
@@ -254,6 +271,7 @@ export default {
             price: this.$util.toYuan(data.roomOverVo.price) || 0
           };
           this.roomLessVo = data.RoomLessVo || {};
+          this.remark = this.orderInfo.remark;
           resolve(data);
         }).catch(err => {
           reject(err);
@@ -339,6 +357,28 @@ export default {
       return `¥${this.$util.toYuan(this.orderInfo.cashPledge -
         this.consumeRecords.reduce((pre, cur) => pre + (cur.unitPrice * cur.num), 0) -
         this.roomOverVo.price)}`;
+    },
+    remarkEdit () {
+      this.$set(this.status, 'remark', editStatus.edit);
+    },
+    remarkCancel () {
+      this.remark = this.orderInfo.remark;
+      this.$set(this.status, 'remark', editStatus.read);
+    },
+    remarkSave () {
+      this.$ajax.post({
+        apiKey: 'orderUpdateRemark',
+        params: {
+          code: this.orderInfo.code,
+          remark: this.remark
+        }
+      }).then(() => {
+        this.status.remark = editStatus.read;
+        this.$message.success('修改成功');
+        this.getOrderByRoom();
+      }).catch(() => {
+        this.$message.error('修改失败');
+      });
     },
     reset () {
       this.item = {};

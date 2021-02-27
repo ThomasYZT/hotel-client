@@ -97,8 +97,8 @@ export const functionType = {
   systemSetting: 9,
   // 会员设置
   vipSetting: 10,
-    // 会员注册
-    vipAdd: 11,
+  // 会员注册
+  vipAdd: 11,
   // 添加工具
   addTool: -1
 };
@@ -856,3 +856,8 @@ export const orderModalList = [
     value: orderModal.agreement
   }
 ];
+
+export const editStatus = {
+  read: 0,
+  edit: 1
+};
