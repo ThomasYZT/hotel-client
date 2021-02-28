@@ -4,5 +4,6 @@ export default {
   pageList: '/work/pageList',
   end: '/work/endWork',
   start: '/work/startWork',
-  status: '/work/workStatus'
+  status: '/work/workStatus',
+  detail: '/work/workDetail'
 };
