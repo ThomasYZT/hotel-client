@@ -95,7 +95,7 @@
                     <i-option v-for="item in agreementUserList"
                               :value="item.id"
                               :key="item.id">
-                      {{ item.name }}
+                      {{ item.companyName }}
                     </i-option>
                   </i-select>
                 </FormItem>
