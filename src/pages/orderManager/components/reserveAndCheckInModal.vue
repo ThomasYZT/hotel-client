@@ -453,6 +453,7 @@ export default {
         }
         this.visible = true;
       }).catch(err => {
+        console.log(err)
         this.reset();
         this.$message.error(`获取商品列表失败${err.msg ? ': ' + err.msg : ''}`);
       });
@@ -675,7 +676,13 @@ export default {
     reset () {
       this.$refs.Form.resetFields();
       this.formData = {
-        userId: 0
+        userId: 0,
+        startTime: new Date(),
+        endTime: new Date(this.$date().add(1, 'day')),
+        otherId: '',
+        model: orderModal.normal,
+        customers: [],
+        consumeRecords: []
       };
 
       this.visible = false;
