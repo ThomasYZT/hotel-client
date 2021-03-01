@@ -29,7 +29,7 @@
                   </i-select>
                 </FormItem>
                 <FormItem class="inline-form-item" label="超时房费" prop="roomMoney">
-                  {{formData.roomMoney || 0}}
+                  {{$util.toYuan(formData.roomMoney) || 0}}
                 </FormItem>
                 <FormItem class="inline-form-item" label="消费金额">
                   {{consumeRecords.reduce((pre, cur) => pre + (cur.unitPrice * cur.num), 0)}}
