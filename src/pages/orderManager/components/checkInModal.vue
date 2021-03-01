@@ -188,7 +188,8 @@
                             <template slot-scope="{ row, $index }">
                               <FormItem :label-width="0"
                                         :prop="'consumeRecords.' + $index + '.num'">
-                                <i-input-number :disabled="row.goodsId === undefined" style="width: 100%;" type="text" placeholder="商品数量" v-model="row.num" />
+                                <i-input-number :disabled="row.goodsId === undefined || [-1, -2].includes(row.goodsId)"
+                                                style="width: 100%;" type="text" placeholder="商品数量" v-model="row.num" />
                               </FormItem>
                             </template>
                           </el-table-column>
@@ -471,7 +472,18 @@ export default {
       }
       this.getAgreementUserByHotelId(item.hotelId);
       this.getGoodsList(item.hotelId).then(data => {
-        this.goodsList = data;
+        this.goodsList = [
+          {
+            id: -1,
+            name: '赔偿',
+            unitPrice: 0
+          },
+          {
+            id: -2,
+            name: '其他杂费',
+            unitPrice: 0
+          }
+        ].concat(data);
         this.visible = true;
         this.$nextTick(() => {
           if (phone) {
